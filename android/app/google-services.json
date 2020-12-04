@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "489886603568",
+    "firebase_url": "https://facility-maintenance-29629.firebaseio.com",
+    "project_id": "facility-maintenance-29629",
+    "storage_bucket": "facility-maintenance-29629.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:489886603568:android:d9e817627b5ae8038710f5",
+        "android_client_info": {
+          "package_name": "com.eso.facility_maintenance"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "489886603568-1l9f207km94amgs5diakopdca3rapmt8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyApjbDDeE9UDi_fGv_GFQUzw3vnzu1xR4Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "489886603568-1l9f207km94amgs5diakopdca3rapmt8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
