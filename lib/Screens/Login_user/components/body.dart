@@ -27,7 +27,8 @@ class _BodyState extends State<Body> {
   String password;
   String parentDbName = "Users";
 
-  final db = FirebaseDatabase.instance.reference().child("Users").orderByChild('id');
+
+
 
 
   // void getUserData()async{
@@ -127,11 +128,7 @@ class _BodyState extends State<Body> {
               RoundedButton(
                 text: "LOGIN",
                 press: () {
-
                   onLogin();
-                    Navigator.of(context).pushNamed('userhome');
-
-
                   // Navigator.of(context).pushNamed('userhome');
                   // print(selectedBuilding);
                   // print(userID);
@@ -158,6 +155,18 @@ class _BodyState extends State<Body> {
     });
   }
   onLogin(){
-    
+   /* final  db = */FirebaseDatabase.instance.reference().child("Users").orderByChild('id').once().then((DataSnapshot snapshot) {
+      print('Data : ${snapshot.value}');
+      Map _map =snapshot.value;
+      Map filteredMap = Map.from(_map)..forEach((k, v) => print(v.toString()));
+      Iterable _iterable =filteredMap.values;
+      Map _mapItems ;
+      _iterable.forEach((element) {
+        _mapItems=element;
+        if(_mapItems["mail"] == userID && _mapItems["password"] == password)
+          Navigator.of(context).pushNamed('userhome');
+        print(_mapItems["id"]);
+      });
+    });
   }
 }
