@@ -8,9 +8,11 @@ import 'package:facility_maintenance/components/rounded_password_field.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../../../SharedPreferences.dart';
 import '../../../constants.dart';
 
 class Body extends StatefulWidget {
+
   const Body({
     Key key,
   }) : super(key: key);
@@ -21,6 +23,7 @@ class Body extends StatefulWidget {
 
 class _BodyState extends State<Body> {
   // final _userid;
+  SharedPreference sharedPreference = SharedPreference();
 
   String selectedBuilding = 'Building No.01';
   String userID;
@@ -161,12 +164,14 @@ class _BodyState extends State<Body> {
       Map filteredMap = Map.from(_map)..forEach((k, v) => print(v.toString()));
       Iterable _iterable =filteredMap.values;
       Map _mapItems ;
-      _iterable.forEach((element) {
+      _iterable.forEach((element) async {
         _mapItems=element;
-        if(_mapItems["mail"] == userID && _mapItems["password"] == password)
-          Navigator.of(context).pushNamed('userhome');
+        if(_mapItems["id"] == userID && _mapItems["password"] == password)
+         await  sharedPreference.addUserId(userID);
         print(_mapItems["id"]);
       });
     });
+    Navigator.of(context).pushNamed('userhome');
+
   }
 }
