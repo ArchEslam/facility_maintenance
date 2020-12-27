@@ -1,3 +1,5 @@
+import 'package:facility_maintenance/components/InfoPage.dart';
+import 'package:facility_maintenance/components/get_data_from_database.dart';
 import 'package:flutter/material.dart';
 import 'package:facility_maintenance/Screens/Home_Page_user/components/background.dart';
 
@@ -80,7 +82,16 @@ class _BodyState extends State<Body> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             InkWell(
-              onTap: (){Navigator.of(context).pushNamed('user_personal_data');},
+              onTap: (){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return InfoPage();
+                    },
+                  ),
+                );
+              },//{Navigator.of(context).pushNamed('user_personal_data');},
               child: buildButton(Icons.person, "Personal Data",
                   "Provide us with your name, email and phone number to contact you."),
             ),

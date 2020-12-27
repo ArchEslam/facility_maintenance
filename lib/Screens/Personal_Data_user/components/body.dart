@@ -3,6 +3,59 @@ import 'package:flutter/material.dart';
 import 'package:facility_maintenance/components/rounded_button.dart';
 import '../../../constants.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:facility_maintenance/Screens/Personal_Data_user/personal_data_user.dart';
+
+
+
+SharedPreference sharedPreference = SharedPreference();
+GlobalKey<FormState> formstate = new GlobalKey<FormState>();
+
+// final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+// _showSnackBar(){
+//   final snackBar = new SnackBar(
+//       content: Row(
+//         children: [
+//           Icon(Icons.thumb_up),
+//           SizedBox(width: 20,),
+//           Text('Your data has been saved successfully'),
+//         ],
+//       ),
+//     duration: Duration(seconds: 3),
+//     backgroundColor: Colors.green,
+//   );
+//   _scaffoldKey.currentState.showSnackBar(snackBar);
+// }
+
+String validglobal (String val){
+  if (val.trim().isEmpty){
+    return "This field can't be empty";
+  }
+}
+String validusername (String val){
+  if (val.trim().isEmpty){
+    return "This field can't be empty";
+  }
+}
+String validmail (String val){
+  if (val.trim().isEmpty){
+    return "This field can't be empty";
+  }
+  if(!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]").hasMatch(val)){
+    return 'Please provide a valid Email';
+  }
+}
+// bool validmail (bool val) val => ! EmailValidator.validate(val, true)
+//     ? 'Please provide a valid email'
+//     : null,
+
+String validphone (String val){
+  if (val.trim().isEmpty){
+    return "This field can't be empty";
+  }
+  if (val.trim().length != 11){
+    return "Your phone must have 11 numbers";
+  }
+}
 
 class Body extends StatelessWidget {
   SharedPreference sharedPreference = SharedPreference();
@@ -13,6 +66,8 @@ class Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+
+
     return SafeArea(
       child: SizedBox(
         width: double.infinity,
@@ -39,11 +94,19 @@ class Body extends StatelessWidget {
                 ),
                 SizedBox(height: size.height * 0.04),
                 PersonalDataForm(nameController,emailController,phoneController),
+                // Padding(
+                //   padding: const EdgeInsets.symmetric(vertical: 15),
+                //   child: Text(
+                //     "You must fill all the previous fields",
+                //     style: TextStyle(color: Colors.redAccent,fontWeight: FontWeight.bold),
+                //     textAlign: TextAlign.center,
+                //   ),
+                // ),
                 SizedBox(height: size.height * 0.08),
                 RoundedButton(
                   text: "Save Data",
                   press: () {
-                    onChangePersonalData(nameController.text,emailController.text,phoneController.text);
+                    saveData(context);
                     // Navigator.of(context).pushNamed('userhome');
                   },
                 )
@@ -53,6 +116,30 @@ class Body extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  saveData(BuildContext context){
+
+    var formdata =formstate.currentState;
+    if(formdata.validate()) {
+      onChangePersonalData(nameController.text,emailController.text,phoneController.text);
+      Scaffold.of(context).showSnackBar(
+        SnackBar(
+          content: Row(
+            children: [
+              Icon(Icons.thumb_up),
+              SizedBox(width: 20,),
+              Text('Your data has been saved successfully'),
+            ],
+          ),
+          duration: Duration(seconds: 3),
+          backgroundColor: Colors.green,
+        ),
+      );
+      // Navigator.of(context).pushNamed('userhome');
+    }else{
+      print('Not Valid');
+    }
   }
 
   onChangePersonalData(String name,String email,String phone) async {
@@ -75,30 +162,39 @@ class PersonalDataForm extends StatefulWidget {
 }
 
 class _PersonalDataFormState extends State<PersonalDataForm> {
+
+  String _phoneHintText = "Enter your phone number";
+  String _emailHintText = "Enter your email address";
+  String _nameHintText = "Enter your full name";
+
+
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
 
     return Form(
+      key: formstate,
       child: Column(
         children: [
-          buildNameFormField(),
+          buildNameFormField(validusername),
           SizedBox(height: size.height * 0.04),
-          buildEmailFormField(),
+          buildEmailFormField(validmail),
           SizedBox(height: size.height * 0.04),
-          buildPhoneFormField()
+          buildPhoneFormField(validphone)
         ],
       ),
     );
   }
 
-  TextFormField buildPhoneFormField() {
+  TextFormField buildPhoneFormField(myvalid) {
     return TextFormField(controller: widget.phoneController,
       keyboardType: TextInputType.phone,
+      validator: myvalid,
       decoration: InputDecoration(
         labelText: "Phone",
-        hintText: "Enter your phone number",
+        hintText: "$_phoneHintText"/*SharedPreference().getUserPhone()*/,
         floatingLabelBehavior: FloatingLabelBehavior.always,
         contentPadding: EdgeInsets.symmetric(
           horizontal: 42,
@@ -115,12 +211,13 @@ class _PersonalDataFormState extends State<PersonalDataForm> {
     );
   }
 
-  TextFormField buildEmailFormField() {
+  TextFormField buildEmailFormField(myvalid) {
     return TextFormField(controller: widget.emailController,
       keyboardType: TextInputType.emailAddress,
+      validator: myvalid,
       decoration: InputDecoration(
         labelText: "Email",
-        hintText: "Enter your email address",
+        hintText: "$_emailHintText"/*SharedPreference().getUserMail()*/,
         floatingLabelBehavior: FloatingLabelBehavior.always,
         contentPadding: EdgeInsets.symmetric(
           horizontal: 42,
@@ -137,12 +234,13 @@ class _PersonalDataFormState extends State<PersonalDataForm> {
     );
   }
 
-  TextFormField buildNameFormField() {
+  TextFormField buildNameFormField(myvalid) {
     return TextFormField(controller: widget.nameController,
       keyboardType: TextInputType.name,
+      validator: myvalid,
       decoration: InputDecoration(
         labelText: "Name",
-        hintText: "Enter your full name",
+        hintText: "$_nameHintText"/*SharedPreference().getUserName()*/,
         floatingLabelBehavior: FloatingLabelBehavior.always,
         contentPadding: EdgeInsets.symmetric(
           horizontal: 42,
@@ -160,27 +258,4 @@ class _PersonalDataFormState extends State<PersonalDataForm> {
   }
 }
 
-/*class CustomSurffixIcon extends StatelessWidget {
-  const CustomSurffixIcon({
-    Key key,
-    @required this.icon,
-  }) : super(key: key);
 
-  final IconData icon;
-
-  @override
-  Widget build(BuildContext context) {
-    return Icon(icon);
-  }
-}
-
-
-"Name"
-"Enter your full name"
-Icons.insert_emoticon
-
-
-final String labeltext,
-    final String hinttext,
-    final IconData icon,
-*/

@@ -1,3 +1,5 @@
+import 'package:facility_maintenance/SharedPreferences.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:facility_maintenance/Screens/Login_user/login_screen.dart';
 import 'package:facility_maintenance/Screens/Signin_employee/components/background.dart';
@@ -6,8 +8,22 @@ import 'package:facility_maintenance/components/rounded_button.dart';
 import 'package:facility_maintenance/components/rounded_input_field.dart';
 import 'package:facility_maintenance/components/rounded_password_field.dart';
 
+class Body extends StatefulWidget {
 
-class Body extends StatelessWidget {
+  const Body({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  _BodyState createState() => _BodyState();
+}
+
+class _BodyState extends State<Body> {
+  SharedPreference sharedPreference = SharedPreference();
+  String employeeID;
+  String password;
+  String parentDbName = "Employees";
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -33,14 +49,20 @@ class Body extends StatelessWidget {
             ),
             RoundedInputField(
               hintText: "Your ID",
-              onChanged: (value) {},
+              onChanged: (value) {
+                employeeID=value;
+              },
             ),
             RoundedPasswordField(
-              onChanged: (value) {},
+              onChanged: (value) {
+                password=value;
+              },
             ),
             RoundedButton(
               text: "SIGN IN",
-              press: () {Navigator.of(context).pushNamed('employeehome');},
+              press: () {
+                onSignIn();
+              },
             ),
             SizedBox(height: size.height * 0.03),
             AlreadyHaveAnAccountCheck(
@@ -57,27 +79,36 @@ class Body extends StatelessWidget {
               },
             ),
             SizedBox(height: size.height * 0.08),
-            /*OrDivider(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                SocalIcon(
-                  iconSrc: "assets/icons/facebook.svg",
-                  press: () {},
-                ),
-                SocalIcon(
-                  iconSrc: "assets/icons/twitter.svg",
-                  press: () {},
-                ),
-                SocalIcon(
-                  iconSrc: "assets/icons/google-plus.svg",
-                  press: () {},
-                ),
-              ],
-            )*/
           ],
         ),
       ),
     );
+  }
+  onSignIn(){
+    /* final  db = */FirebaseDatabase.instance.reference().child("Employees").orderByChild('id').once().then((DataSnapshot snapshot) {
+      //print('Data : ${snapshot.value}');
+      Map _map =snapshot.value;
+      Map filteredMap = Map.from(_map)..forEach((k, v) => print(v.toString()));
+      Iterable _iterable =filteredMap.values;
+      Map _mapItems ;
+      _iterable.forEach((element) async {
+        _mapItems=element;
+        if(_mapItems["id"] == employeeID && _mapItems["password"] == password){
+          Navigator.of(context).pushNamed('employeehome');
+          await  sharedPreference.addEmployeeId(employeeID);
+
+        }else{
+          print("Error");
+        }
+
+
+
+
+        print(_mapItems["id"]);
+
+      });
+    });
+    // Navigator.of(context).pushNamed('employeehome');
+
   }
 }

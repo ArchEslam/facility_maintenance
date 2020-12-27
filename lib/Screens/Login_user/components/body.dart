@@ -29,6 +29,9 @@ class _BodyState extends State<Body> {
   String userID;
   String password;
   String parentDbName = "Users";
+  // String _userName;
+  //
+  // String get userName=> _userName;
 
 
 
@@ -132,6 +135,7 @@ class _BodyState extends State<Body> {
                 text: "LOGIN",
                 press: () {
                   onLogin();
+
                   // Navigator.of(context).pushNamed('userhome');
                   // print(selectedBuilding);
                   // print(userID);
@@ -159,19 +163,31 @@ class _BodyState extends State<Body> {
   }
   onLogin(){
    /* final  db = */FirebaseDatabase.instance.reference().child("Users").orderByChild('id').once().then((DataSnapshot snapshot) {
-      print('Data : ${snapshot.value}');
+      //print('Data : ${snapshot.value}');
       Map _map =snapshot.value;
       Map filteredMap = Map.from(_map)..forEach((k, v) => print(v.toString()));
       Iterable _iterable =filteredMap.values;
       Map _mapItems ;
       _iterable.forEach((element) async {
         _mapItems=element;
-        if(_mapItems["id"] == userID && _mapItems["password"] == password)
+        if(_mapItems["id"] == userID && _mapItems["password"] == password &&_mapItems["building"] == selectedBuilding)
+          Navigator.of(context).pushNamed('userhome');
          await  sharedPreference.addUserId(userID);
-        print(_mapItems["id"]);
+         await  sharedPreference.addUserBldg(selectedBuilding);
+        // print(_mapItems["name"]);
+        // print(_mapItems["phone"]);
+        // print(_mapItems["mail"]);
+        // print(_mapItems["flat"]);
+
+        //await  sharedPreference.addUserName(userName);
+
+        //print(_mapItems["id"]);
+
+
       });
     });
-    Navigator.of(context).pushNamed('userhome');
+   // Navigator.of(context).pushNamed('userhome');
 
   }
 }
+
