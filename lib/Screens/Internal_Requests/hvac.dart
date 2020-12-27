@@ -13,6 +13,7 @@ class HVAC {
   String thumbnailUrl;
 
 
+
   HVAC({
     this.building,
     this.customer,
