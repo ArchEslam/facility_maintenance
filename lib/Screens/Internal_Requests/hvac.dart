@@ -12,6 +12,7 @@ class HVAC {
   String phone;
   String thumbnailUrl;
 
+
   HVAC({
     this.building,
     this.customer,
