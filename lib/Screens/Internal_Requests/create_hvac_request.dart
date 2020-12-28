@@ -2,8 +2,6 @@ import 'dart:io';
 import 'package:facility_maintenance/components/loadingWidget.dart';
 import 'package:facility_maintenance/components/rounded_button.dart';
 import 'package:facility_maintenance/constants.dart';
-import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:facility_maintenance/SharedPreferences.dart';
@@ -41,41 +39,41 @@ class _CreateHVACRequestState extends State<CreateHVACRequest> with AutomaticKee
   displayUserRequestScreen()
   {
     Size size = MediaQuery.of(context).size;
-  return Scaffold(
-      appBar: AppBar(
-        title:
-        Text("Your Requests", style: TextStyle(color: Colors.white)),
-        centerTitle: true,
-        backgroundColor: kPrimaryColor,
-        elevation: 0,
-        leading: IconButton(icon: Icon(Icons.arrow_back), onPressed: (){Navigator.of(context).pushNamed('user_in_sections');}),
-      ),
-      body: SafeArea(
-        child: Container(
-          height: size.height,
-          width: size.width,
-          child: Center(
-            child: Column(
-              children: [
-                SizedBox(
-                  height: size.height*.1,
-                ),
-                SizedBox(
-                  width: size.width,
-                  child: Image.asset("assets/images/flame.png"),
-                ),
-                SizedBox(
-                  height: size.height*.1,
-                ),
-                RoundedButton(
-                  text: "Add New Request",
-                  press: () {takeImage(context);},
-                ),
-              ],
+    return Scaffold(
+        appBar: AppBar(
+          title:
+          Text("Your Requests", style: TextStyle(color: Colors.white)),
+          centerTitle: true,
+          backgroundColor: kPrimaryColor,
+          elevation: 0,
+          leading: IconButton(icon: Icon(Icons.arrow_back), onPressed: (){Navigator.of(context).pushNamed('user_in_sections');}),
+        ),
+        body: SafeArea(
+          child: Container(
+            height: size.height,
+            width: size.width,
+            child: Center(
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: size.height*.1,
+                  ),
+                  SizedBox(
+                    width: size.width,
+                    child: Image.asset("assets/images/flame.png"),
+                  ),
+                  SizedBox(
+                    height: size.height*.1,
+                  ),
+                  RoundedButton(
+                    text: "Add New Request",
+                    press: () {takeImage(context);},
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-      ));
+        ));
   }
 
   takeImage(mContext) {
@@ -172,19 +170,19 @@ class _CreateHVACRequestState extends State<CreateHVACRequest> with AutomaticKee
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 25),
             child: RoundedButton(
-                text: "Add",
-                press:  uploading ? null : ()=> uploadImageAndSaveItemInfo(),
-              ),
+              text: "Add",
+              press:  uploading ? null : ()=> uploadImageAndSaveItemInfo(),
+            ),
           ),
           // SizedBox(height: MediaQuery.of(context).size.width*0.2,),
           Padding(
             padding: const EdgeInsets.only(top: 8.0),
             child: Center(
               child: Container(
-                width: MediaQuery.of(context).size.width*0.8,
+                  width: MediaQuery.of(context).size.width*0.8,
                   child: Text('Thank You! After leaving the request, our team will contact you shortly.',style: TextStyle(fontWeight: FontWeight.bold),)),),
           )
-          ],
+        ],
       ),
 
 
@@ -247,30 +245,30 @@ class _CreateHVACRequestState extends State<CreateHVACRequest> with AutomaticKee
   //     _detailsTextEditingController.clear();
   //   });
 
-    saveItemInfo(String downloadUrl)
-    async {
-      String customerName = await sharedPreference.getUserName();
-      String customerBuilding = await sharedPreference.getUserBldg();
-      String customerFlat = await sharedPreference.getUserFlat();
-      String customerPhone = await sharedPreference.getUserPhone();
-      final itemsRef = FirebaseFirestore.instance.collection("$_documentId Items");
-      itemsRef.doc(_requestId).set({
-        "description": _detailsTextEditingController.text.trim(),
-        "date": _requestDate.trim(),
-        "customer": customerName,
-        "phone":customerPhone,
-        "building": customerBuilding.trim(),
-        "flat": customerFlat.trim(),
-        "price": _price.trim(),
-        "thumbnailUrl": downloadUrl,
-      });
+  saveItemInfo(String downloadUrl)
+  async {
+    String customerName = await sharedPreference.getUserName();
+    String customerBuilding = await sharedPreference.getUserBldg();
+    String customerFlat = await sharedPreference.getUserFlat();
+    String customerPhone = await sharedPreference.getUserPhone();
+    final itemsRef = FirebaseFirestore.instance.collection("$_documentId Items");
+    itemsRef.doc(_requestId).set({
+      "description": _detailsTextEditingController.text.trim(),
+      "date": _requestDate.trim(),
+      "customer": customerName,
+      "phone":customerPhone,
+      "building": customerBuilding.trim(),
+      "flat": customerFlat.trim(),
+      "price": _price.trim(),
+      "thumbnailUrl": downloadUrl,
+    });
 
-      setState(() {
-        file = null;
-        uploading = false;
-        _requestId = DateTime.now().millisecondsSinceEpoch.toString();
-        _detailsTextEditingController.clear();
-      });
+    setState(() {
+      file = null;
+      uploading = false;
+      _requestId = DateTime.now().millisecondsSinceEpoch.toString();
+      _detailsTextEditingController.clear();
+    });
 
-    }
+  }
 }
