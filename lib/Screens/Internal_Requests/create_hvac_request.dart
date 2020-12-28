@@ -135,7 +135,7 @@ class _CreateHVACRequestState extends State<CreateHVACRequest> with AutomaticKee
         centerTitle: true,
         backgroundColor: kPrimaryColor,
         elevation: 0,
-        leading: IconButton(icon: Icon(Icons.arrow_back), onPressed: displayUserRequestScreen),
+        // leading: IconButton(icon: Icon(Icons.arrow_back), onPressed: displayUserRequestScreen),
       ),
       body: ListView(
         children: [
