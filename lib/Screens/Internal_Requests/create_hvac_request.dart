@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:facility_maintenance/components/loadingWidget.dart';
+import 'package:facility_maintenance/components/rounded_button.dart';
 import 'package:facility_maintenance/constants.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/animation.dart';
@@ -56,10 +57,20 @@ class _CreateHVACRequestState extends State<CreateHVACRequest> with AutomaticKee
           child: Center(
             child: Column(
               children: [
-                InkWell(
-                  child: Text("Add New Request"),
-                  onTap: (){takeImage(context);},
-                )
+                SizedBox(
+                  height: size.height*.1,
+                ),
+                SizedBox(
+                  width: size.width,
+                  child: Image.asset("assets/images/flame.png"),
+                ),
+                SizedBox(
+                  height: size.height*.1,
+                ),
+                RoundedButton(
+                  text: "Add New Request",
+                  press: () {takeImage(context);},
+                ),
               ],
             ),
           ),
@@ -158,19 +169,25 @@ class _CreateHVACRequestState extends State<CreateHVACRequest> with AutomaticKee
             ),
           ),
           Divider(color: kPrimaryColor,),
-          Center(
-            child: Container(
-              width: MediaQuery.of(context).size.width*0.6,
-              color: kPrimaryColor,
-              child: FlatButton(
-                  onPressed: uploading ? null : ()=> uploadImageAndSaveItemInfo(),
-                  child: Text("Add",style: TextStyle(color: Colors.white, fontSize: 20.0,fontWeight: FontWeight.bold),)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 25),
+            child: RoundedButton(
+                text: "Add",
+                press:  uploading ? null : ()=> uploadImageAndSaveItemInfo(),
               ),
-            ),
+          ),
+          // SizedBox(height: MediaQuery.of(context).size.width*0.2,),
+          Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: Center(
+              child: Container(
+                width: MediaQuery.of(context).size.width*0.8,
+                  child: Text('Thank You! After leaving the request, our team will contact you shortly.',style: TextStyle(fontWeight: FontWeight.bold),)),),
           )
-
-        ],
+          ],
       ),
+
+
     );
   }
 
