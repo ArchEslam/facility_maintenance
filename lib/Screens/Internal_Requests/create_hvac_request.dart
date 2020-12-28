@@ -212,10 +212,16 @@ class _CreateHVACRequestState extends State<CreateHVACRequest> with AutomaticKee
 
   Future<String> uploadItemImage(mFileImage) async
   {
-    final Reference  reference = FirebaseStorage.instance.ref().child("$_documentId Items");
-    UploadTask uploadTask = reference.child("request_$_requestId.jpg").putFile(mFileImage);
-    String downloadUrl = await (await uploadTask).ref.getDownloadURL();
-    return downloadUrl;
+    try{
+      final Reference  reference = FirebaseStorage.instance.ref().child("$_documentId Items");
+      UploadTask uploadTask = reference.child("request_$_requestId.jpg").putFile(mFileImage);
+      String downloadUrl = await (await uploadTask).ref.getDownloadURL();
+      return downloadUrl;
+
+    }catch(e){
+      print("Uploading xception =${e.toString()}");
+    }
+
   }
 
   // saveItemInfo(String downloadUrl) async {
