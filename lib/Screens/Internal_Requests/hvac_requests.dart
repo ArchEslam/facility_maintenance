@@ -45,7 +45,7 @@ class _HVACRequestsState extends State<HVACRequests> {
                           decoration: BoxDecoration(border:Border(right: BorderSide(color: Colors.grey.withOpacity(0.5)))),
                       padding: EdgeInsets.fromLTRB(0, 5, 0, 10),
                       child: Text(
-                        "Comment",
+                        "Cost: N/A",
                         style: TextStyle(fontSize: 15),                        
                         textAlign: TextAlign.center,
                       ),
@@ -100,7 +100,7 @@ class _HVACRequestsState extends State<HVACRequests> {
                           decoration: BoxDecoration(border:Border(right: BorderSide(color: Colors.grey.withOpacity(0.5)))),
                           padding: EdgeInsets.fromLTRB(0, 5, 0, 10),
                           child: Text(
-                            "Comment",
+                            "Cost: N/A",
                             style: TextStyle(fontSize: 15),
                             textAlign: TextAlign.center,
                           ),

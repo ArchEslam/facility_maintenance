@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:facility_maintenance/components/loadingWidget.dart';
 import 'package:facility_maintenance/components/rounded_button.dart';
 import 'package:facility_maintenance/constants.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:facility_maintenance/SharedPreferences.dart';
@@ -56,18 +57,22 @@ class _CreateHVACRequestState extends State<CreateHVACRequest> with AutomaticKee
               child: Column(
                 children: [
                   SizedBox(
-                    height: size.height*.1,
+                    height: size.height*.05,
                   ),
                   SizedBox(
                     width: size.width,
                     child: Image.asset("assets/images/flame.png"),
                   ),
                   SizedBox(
-                    height: size.height*.1,
+                    height: size.height*.05,
                   ),
                   RoundedButton(
                     text: "Add New Request",
                     press: () {takeImage(context);},
+                  ),
+                  RoundedButton(
+                    text: "Your Previous Requests",
+                    press: () {},
                   ),
                 ],
               ),
@@ -224,51 +229,29 @@ class _CreateHVACRequestState extends State<CreateHVACRequest> with AutomaticKee
 
   }
 
-  // saveItemInfo(String downloadUrl) async {
-  //   var customerName = await sharedPreference.getUserName();
-  //   var customerBuilding = await sharedPreference.getUserBldg();
-  //   var customerFlat = await sharedPreference.getUserFlat();
-  //   var customerPhone = await sharedPreference.getUserPhone();
-  //
-  //   var setItem = FirebaseDatabase.instance
-  //       .reference()
-  //       .child("$_documentId")
-  //       .child(_requestId);
-  //   setItem.setPriority({
-  //     "description": _detailsTextEditingController.text.trim(),
-  //     "date": _requestDate.trim(),
-  //     "customer": customerName,
-  //     "phone":customerPhone,
-  //     "building": customerBuilding.trim(),
-  //     "flat": customerFlat.trim(),
-  //     "price": _price.trim(),
-  //     "thumbnailUrl": downloadUrl,
-  //   });
-  //   setState(() {
-  //     file = null;
-  //     uploading = false;
-  //     _requestId = DateTime.now().millisecondsSinceEpoch.toString();
-  //     _detailsTextEditingController.clear();
-  //   });
+  saveItemInfo(String downloadUrl) async {
+    var customerID = await sharedPreference.getUserId();
+    var customerName = await sharedPreference.getUserName();
+    var customerBuilding = await sharedPreference.getUserBldg();
+    var customerFlat = await sharedPreference.getUserFlat();
+    var customerPhone = await sharedPreference.getUserPhone();
 
-  saveItemInfo(String downloadUrl)
-  async {
-    String customerName = await sharedPreference.getUserName();
-    String customerBuilding = await sharedPreference.getUserBldg();
-    String customerFlat = await sharedPreference.getUserFlat();
-    String customerPhone = await sharedPreference.getUserPhone();
-    final itemsRef = FirebaseFirestore.instance.collection("$_documentId Items");
-    itemsRef.doc(_requestId).set({
-      "description": _detailsTextEditingController.text.trim(),
-      "date": _requestDate.trim(),
-      "customer": customerName,
-      "phone":customerPhone,
-      "building": customerBuilding.trim(),
-      "flat": customerFlat.trim(),
-      "price": _price.trim(),
-      "thumbnailUrl": downloadUrl,
+    var setItem = FirebaseDatabase.instance
+        .reference()
+        .child("$_documentId Requests")
+        .child(_requestId).set({
+          "customer ID": customerID.toString(),
+          "description": _detailsTextEditingController.text.trim(),
+          "date": _requestDate.trim(),
+          "customer": customerName,
+          "phone":customerPhone,
+          "building": customerBuilding.trim(),
+          "flat": customerFlat.trim(),
+          "price": _price.trim(),
+          "employeeName":"N/A",
+          "is solved":false,
+          "thumbnailUrl": downloadUrl,
     });
-
     setState(() {
       file = null;
       uploading = false;
@@ -276,5 +259,34 @@ class _CreateHVACRequestState extends State<CreateHVACRequest> with AutomaticKee
       _detailsTextEditingController.clear();
     });
 
+  // saveItemInfo(String downloadUrl)
+  // async {
+
+  //   String customerName = await sharedPreference.getUserName();
+  //   String customerBuilding = await sharedPreference.getUserBldg();
+  //   String customerFlat = await sharedPreference.getUserFlat();
+  //   String customerPhone = await sharedPreference.getUserPhone();
+  //   final itemsRef = FirebaseFirestore.instance.collection("$_documentId Requests");
+  //   itemsRef.doc(_requestId).set({
+  //     "customer ID": customerID.toString(),
+  //     "description": _detailsTextEditingController.text.trim(),
+  //     "date": _requestDate.trim(),
+  //     "customer": customerName,
+  //     "phone":customerPhone,
+  //     "building": customerBuilding.trim(),
+  //     "flat": customerFlat.trim(),
+  //     "price": _price.trim(),
+  //     "employeeName":"N/A",
+  //     "is solved":false,
+  //     "thumbnailUrl": downloadUrl,
+  //   });
+  //
+  //   setState(() {
+  //     file = null;
+  //     uploading = false;
+  //     _requestId = DateTime.now().millisecondsSinceEpoch.toString();
+  //     _detailsTextEditingController.clear();
+  //   });
+  //
   }
 }
