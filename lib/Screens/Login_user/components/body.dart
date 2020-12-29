@@ -26,8 +26,8 @@ class _BodyState extends State<Body> {
   SharedPreference sharedPreference = SharedPreference();
 
   String selectedBuilding = 'Building No.01';
-  String userID;
-  String password;
+  String userID="00101B01";
+  String password="qwerty1";
   String parentDbName = "Users";
   // String _userName;
   //

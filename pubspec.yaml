@@ -35,7 +35,8 @@ dependencies:
   firebase_storage: ^5.2.0
   shared_preferences: ^0.5.12+4
   image_picker: ^0.6.7+17
-
+  # Material Dialog
+  material_dialog: ^0.0.9
 
 
 dev_dependencies:
@@ -57,7 +58,7 @@ flutter:
   assets:
      - assets/images/
      - assets/icons/
-    
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

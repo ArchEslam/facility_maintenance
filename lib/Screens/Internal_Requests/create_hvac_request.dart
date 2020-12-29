@@ -2,6 +2,8 @@ import 'dart:io';
 import 'package:facility_maintenance/components/loadingWidget.dart';
 import 'package:facility_maintenance/components/rounded_button.dart';
 import 'package:facility_maintenance/constants.dart';
+import 'package:facility_maintenance/model/hvac.dart';
+import 'package:facility_maintenance/widgets/listHVACWidget.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -9,6 +11,7 @@ import 'package:facility_maintenance/SharedPreferences.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:material_dialog/material_dialog.dart';
 
 SharedPreference sharedPreference =SharedPreference();
 
@@ -72,7 +75,10 @@ class _CreateHVACRequestState extends State<CreateHVACRequest> with AutomaticKee
                   ),
                   RoundedButton(
                     text: "Your Previous Requests",
-                    press: () {},
+                    press: () async{
+                      _showHVACrequets(context);
+
+                    },
                   ),
                 ],
               ),
@@ -288,5 +294,101 @@ class _CreateHVACRequestState extends State<CreateHVACRequest> with AutomaticKee
   //     _detailsTextEditingController.clear();
   //   });
   //
+  }
+
+  Future<Null> _showHVACrequets(BuildContext context) async {
+    await showDialog<int>(
+        context: context,
+        builder: (BuildContext dialogContext) {
+          return Theme(
+              data: Theme.of(context)
+                  .copyWith(dialogBackgroundColor: Colors.transparent),
+              child: Dialog(child:
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ListHVACWidget(
+                      listHVAC: demoHVACLis,
+                      getSelectedValues:({HVAC hvac}){
+                        print("selected = ${hvac.toMap()}");
+                      },
+                      onCheckedValue: (bool value){
+
+                      },
+                  ),
+                  ClipOval(
+                    child: Material(
+                      color: Colors.blue, // button color
+                      child: InkWell(
+                        splashColor: Colors.grey, // inkwell color
+                        child: SizedBox(width: 56, height: 56, child: Icon(Icons.close)),
+                        onTap: () {
+                          Navigator.pop(dialogContext);
+
+                        },
+                      ),
+                    ),
+                  )
+                ],
+              )));
+        });
+  }
+  _previousrequestsDialog(BuildContext context) {
+
+    _showDialog<String>(
+      context: context,
+      child: MaterialDialog(
+        borderRadius: 5.0,
+        title: Text(
+          "Previous Requests",
+          style: TextStyle(
+              color:Colors.white),
+        ),
+        headerColor:Colors.amber,
+        backgroundColor:  Colors.white,
+        closeButtonColor:Colors.red,
+        enableCloseButton: true,
+        enableBackButton: false,
+        onCloseButtonClicked: () {
+          Navigator.of(context).pop();
+        },
+        content:
+        Container(
+          color: Colors.transparent,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
+            children: <Widget>[
+//------------------------------------------------------------------------------
+              Padding(
+                padding: const EdgeInsets.only(left: 4.0, right: 4.0),
+                child: Text("Previous Requests"),
+              ),
+              ListHVACWidget(
+                  listHVAC: demoHVACLis,
+                  getSelectedValues:({HVAC hvac}){
+                    print("selected = ${hvac.toMap()}");
+                  },
+                onCheckedValue: (checked){
+                  print("checked value = ${checked}");
+
+                },
+              ),
+//------------------------------------------------------------------------------
+            ],
+          ),
+        )
+      ),
+    );
+  }
+
+  _showDialog<T>({BuildContext context, Widget child}) {
+    showDialog<T>(
+      context: context,
+      builder: (BuildContext context) => child,
+    ).then<void>((T value) {
+      // The value passed to Navigator.pop() or null.
+    });
   }
 }
