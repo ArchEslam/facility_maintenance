@@ -1,7 +1,9 @@
 import 'dart:ffi';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:facility_maintenance/data/repository.dart';
 import 'package:facility_maintenance/model/hvac.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
 import '../injection_container.dart';
@@ -14,6 +16,7 @@ class ListHVACWidget extends StatefulWidget {
   Function(bool checked) onCheckedValue = (checked) {};
 
   ListHVACWidget({this.listHVAC, this.getSelectedValues, this.onCheckedValue, this.userType});
+  DatabaseReference requestsRef = FirebaseDatabase.instance.reference().child("HVAC Requests");
 
   @override
   _ListHVACWidgettState createState() => _ListHVACWidgettState();
@@ -199,6 +202,8 @@ class _ListHVACWidgettState extends State<ListHVACWidget> {
                                 widget.onCheckedValue(newValue);
                                 hvac.isSolved = newValue;
                               });
+                              changeIsSolved(hvac);
+
                             },
                             // controlAffinity: ListTileControlAffinity.leading,  //  <-- leading Checkbox
                           ),
@@ -209,5 +214,19 @@ class _ListHVACWidgettState extends State<ListHVACWidget> {
             ),
           ),
         ));
+  }
+
+  Future<void> changeIsSolved(HVAC hvac) async {
+    try{
+
+      print(hvac.key);
+     await  FirebaseDatabase.instance
+         .reference()
+         .child("HVAC Requests").child(hvac.key).update(hvac.toMap());
+    }catch(e){
+      print("update request error =${e.toString()}");
+    }
+
+
   }
 }

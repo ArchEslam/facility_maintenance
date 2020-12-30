@@ -351,8 +351,23 @@ class _CreateHVACRequestState extends State<CreateHVACRequest> with AutomaticKee
       var KEYS = snap.value.keys;
       var DATA = snap.value;
       listHVAC.clear();
+
       for (var individualKey in KEYS) {
-        HVAC requests = new HVAC.fromMap(DATA[individualKey]);
+        //HVAC requests = new HVAC.fromMap(DATA[individualKey]);
+        HVAC requests = new HVAC(
+          key:individualKey,
+          building:DATA[individualKey]['building'],
+          customer: DATA[individualKey]['customer'],
+          customerId: DATA[individualKey]['customerID'],
+          date: DATA[individualKey]['date'],
+          description: DATA[individualKey]['description'],
+          employeeName: DATA[individualKey]['employeeName'],
+          flat:DATA[individualKey]['flat'],
+          isSolved: DATA[individualKey]['isSolved'],
+          phone: DATA[individualKey]['phone'],
+          price:DATA[individualKey]['price'],
+          thumbnailUrl:  DATA[individualKey]['thumbnailUrl'],);
+
         listHVAC.add(requests);
       }
     });

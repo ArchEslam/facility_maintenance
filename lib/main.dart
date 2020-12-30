@@ -15,6 +15,7 @@ import 'package:facility_maintenance/injection_container.dart' as di;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   await di.init();
   runApp(MyApp());
 }

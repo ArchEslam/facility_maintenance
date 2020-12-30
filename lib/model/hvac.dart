@@ -1,5 +1,6 @@
 class HVAC {
   String building;
+  final key;
   String customer;
   String customerId;
   String date;
@@ -13,6 +14,7 @@ class HVAC {
 
   HVAC(
       {this.building,
+        this.key,
       this.customer,
       this.customerId,
       this.date,

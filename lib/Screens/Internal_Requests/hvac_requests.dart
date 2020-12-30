@@ -12,6 +12,7 @@ class HVACRequests extends StatefulWidget {
 class _HVACRequestsState extends State<HVACRequests> {
 
   List<HVAC> listHVAC=[];
+ int _customerID=1;
   DatabaseReference requestsRef = FirebaseDatabase.instance.reference().child("HVAC Requests");
 @override
   void initState() {
@@ -58,11 +59,33 @@ class _HVACRequestsState extends State<HVACRequests> {
     requestsRef.once().then((DataSnapshot snap) {
       var KEYS = snap.value.keys;
       var DATA = snap.value;
+      print("KEYS ============ ${snap.toString()}");
+
       listHVAC.clear();
       for (var individualKey in KEYS) {
-        HVAC requests = new HVAC.fromMap(DATA[individualKey]);
-        listHVAC.add(requests);
+
+         // HVAC requests = new HVAC.fromMap(DATA[individualKey]);
+        HVAC requests = new HVAC(
+          key:individualKey,
+          building:DATA[individualKey]['building'],
+          customer: DATA[individualKey]['customer'],
+          customerId: DATA[individualKey]['customerID'],
+          date: DATA[individualKey]['date'],
+          description: DATA[individualKey]['description'],
+          employeeName: DATA[individualKey]['employeeName'],
+          flat:DATA[individualKey]['flat'],
+          isSolved: DATA[individualKey]['isSolved'],
+          phone: DATA[individualKey]['phone'],
+          price:DATA[individualKey]['price'],
+          thumbnailUrl:  DATA[individualKey]['thumbnailUrl'],);
+          setState(() {
+            listHVAC.add(requests);
+
+          });
+       // }
+
       }
+      print("listHVAC.length =${listHVAC.length}");
     });
   }
 }
