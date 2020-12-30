@@ -1,4 +1,5 @@
 class User {
+  final String key;
   String id;
   String mail;
   String name;
@@ -6,36 +7,46 @@ class User {
   String phone;
   String building;
   String dicipline;
+  String customer;
+  String flat;
 
   User(
-      {this.id,
+      {this.key,
+      this.id,
       this.mail,
       this.name,
       this.password,
       this.phone,
       this.building,
-      this.dicipline});
+      this.dicipline,
+      this.customer,
+      this.flat});
 
-  factory User.fromJson(Map<String, dynamic> json) {
+  factory User.fromJson({key, Map<dynamic, dynamic> map}) {
     return new User(
-      id: json["id"],
-      mail: json["mail"],
-      name: json["name"],
-      password: json["password"],
-      phone: json["phone"],
-      building: json["building"],
-      dicipline: json["dicipline"],
+      key: key,
+      id: map["id"],
+      mail: map["mail"],
+      name: map["name"],
+      password: map["password"],
+      phone: map["phone"],
+      building: map["building"],
+      dicipline: map["dicipline"],
+      customer: map["customer"],
+      flat: map["flat"],
     );
   }
 
-  factory User.fromMap(Map<dynamic, dynamic> json) => User(
-        id: json["id"],
-        mail: json["mail"],
-        name: json["name"],
-        password: json["password"],
-        phone: json["phone"],
-        building: json["building"],
-        dicipline: json["dicipline"],
+  factory User.fromMap(Map<dynamic, dynamic> map) => User(
+        id: map["id"] ?? "",
+        mail: map["mail"] ?? "",
+        name: map["name"] ?? "",
+        password: map["password"] ?? "",
+        phone: map["phone"] ?? "",
+        building: map["building"] ?? "",
+        dicipline: map["dicipline"] ?? "",
+        customer: map["customer"] ?? "",
+        flat: map["flat"] ?? "",
       );
 
   Map<String, dynamic> toJson() => <String, dynamic>{
@@ -45,5 +56,18 @@ class User {
         'phone': phone,
         'building': building,
         'dicipline': dicipline,
+        'customer': customer,
+        'flat': flat,
+      };
+
+  Map<dynamic, dynamic> toMap() => {
+        'id': id,
+        'mail': mail,
+        'mail': mail,
+        'phone': phone,
+        'building': building,
+        'dicipline': dicipline,
+        'customer': customer,
+        'flat': flat,
       };
 }

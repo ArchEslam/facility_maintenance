@@ -14,43 +14,45 @@ class RepositoryImpl implements Repository {
   });
 
   @override
-  Future<User> get getUserData async {
-    Map valueMap = json.decode(
-        json.encode(await sharedPreference.getString(Preferences.UserData)));
+  User get getUserData {
+    Map<dynamic, dynamic> valueMap =
+        json.decode(sharedPreference.getString(Preferences.UserData));
+    print("user values from pref =${valueMap}");
     User user = User.fromMap(valueMap);
-    return user ?? null;
+    print("test values from pref =${user.name}");
+
+    return user;
   }
 
   @override
-  Future<void> saveUserData(Map<dynamic, dynamic> value) async {
+  void saveUserData(Map<dynamic, dynamic> value) {
     print("==================saveUserData=====================\n $value");
 
     String valueJson = json.encode(value);
     print(
         "==================saveUserData valueJson=====================\n $value");
-    await sharedPreference
-      ..setString(Preferences.UserData, valueJson);
+    sharedPreference.setString(Preferences.UserData, valueJson);
   }
 
   @override
-  Future<bool> get isLogedIn async {
-    return await sharedPreference.getString(Preferences.isLoggedIn) ?? false;
+  bool get isLogedIn {
+    return sharedPreference.getString(Preferences.isLoggedIn) ?? false;
   }
 
   @override
-  Future<void> setLogedIn(bool value) async {
+  void setLogedIn(bool value) {
     print("==================setLogedIn=====================\n $value");
-    await sharedPreference.setBool(Preferences.isLoggedIn, value);
+    sharedPreference.setBool(Preferences.isLoggedIn, value);
   }
 
   @override
-  Future<int> get getUserType async {
-    return await sharedPreference.getInt(Preferences.userType) ?? false;
+  int get getUserType {
+    return sharedPreference.getInt(Preferences.userType) ?? false;
   }
 
   @override
-  Future<void> setUserType(int value) async {
+  void setUserType(int value) {
     print("==================UserType=====================\n $value");
-    await sharedPreference.setInt(Preferences.userType, value);
+    sharedPreference.setInt(Preferences.userType, value);
   }
 }

@@ -1,10 +1,11 @@
 import 'dart:io';
 
-import 'package:facility_maintenance/SharedPreferences.dart';
 import 'package:facility_maintenance/components/loadingWidget.dart';
 import 'package:facility_maintenance/components/rounded_button.dart';
 import 'package:facility_maintenance/constants.dart';
+import 'package:facility_maintenance/data/repository.dart';
 import 'package:facility_maintenance/model/hvac.dart';
+import 'package:facility_maintenance/model/user.dart';
 import 'package:facility_maintenance/widgets/list_hvac_widget.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -12,7 +13,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-SharedPreference sharedPreference = SharedPreference();
+import '../../injection_container.dart';
 
 class CreateHVACRequest extends StatefulWidget {
   @override
@@ -22,6 +23,7 @@ class CreateHVACRequest extends StatefulWidget {
 class _CreateHVACRequestState extends State<CreateHVACRequest>
     with AutomaticKeepAliveClientMixin<CreateHVACRequest> {
   final Future<FirebaseApp> _initialization = Firebase.initializeApp();
+  Repository _repository = sl<Repository>();
 
   bool get wantKeepAlive => true;
   List<HVAC> listHVAC = [];
@@ -270,28 +272,25 @@ class _CreateHVACRequestState extends State<CreateHVACRequest>
   }
 
   saveItemInfo(String downloadUrl) async {
-    var customerID = await sharedPreference.getUserId();
-    var customerName = await sharedPreference.getUserName();
-    var customerBuilding = await sharedPreference.getUserBldg();
-    var customerFlat = await sharedPreference.getUserFlat();
-    var customerPhone = await sharedPreference.getUserPhone();
+    User user = _repository.getUserData;
 
     var setItem = FirebaseDatabase.instance
         .reference()
         .child("$_documentId Requests")
         .child(_requestId)
         .set({
-      "customerID": customerID.toString(),
+      "customerID": user.id.toString(),
       "description": _detailsTextEditingController.text.trim(),
       "date": _requestDate.trim(),
-      "customer": customerName,
-      "phone": customerPhone,
-      "building": customerBuilding.trim(),
-      "flat": customerFlat.trim(),
+      "customer": user.customer,
+      "phone": user.phone,
+      "building": user.building,
+      "flat": user.flat,
       "price": _price.trim(),
       "employeeName": "N/A",
       "isSolved": false,
       "thumbnailUrl": downloadUrl,
+      "customerID": user.id,
     });
     setState(() {
       file = null;
@@ -378,24 +377,17 @@ class _CreateHVACRequestState extends State<CreateHVACRequest>
       var DATA = snap.value;
       listHVAC.clear();
 
+      print("previous Id =${_repository.getUserData}");
       for (var individualKey in KEYS) {
-        //HVAC requests = new HVAC.fromMap(DATA[individualKey]);
-        HVAC requests = new HVAC(
-          key: individualKey,
-          building: DATA[individualKey]['building'],
-          customer: DATA[individualKey]['customer'],
-          customerId: DATA[individualKey]['customerID'],
-          date: DATA[individualKey]['date'],
-          description: DATA[individualKey]['description'],
-          employeeName: DATA[individualKey]['employeeName'],
-          flat: DATA[individualKey]['flat'],
-          isSolved: DATA[individualKey]['isSolved'],
-          phone: DATA[individualKey]['phone'],
-          price: DATA[individualKey]['price'],
-          thumbnailUrl: DATA[individualKey]['thumbnailUrl'],
-        );
+        print("customerID =${DATA[individualKey]['customerID']}");
 
-        listHVAC.add(requests);
+        if (DATA[individualKey]['customerID'] == _repository.getUserData.id) {
+          HVAC requests =
+              new HVAC.fromMap(key: individualKey, map: DATA[individualKey]);
+          setState(() {
+            listHVAC.add(requests);
+          });
+        }
       }
     });
   }

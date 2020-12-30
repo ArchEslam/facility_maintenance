@@ -1,4 +1,3 @@
-import 'package:facility_maintenance/SharedPreferences.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +11,6 @@ class GetPersonalData extends StatefulWidget {
 
 class _GetPersonalDataState extends State<GetPersonalData> {
   List<Data> dataList = [];
-  SharedPreference sharedPreference = SharedPreference();
 
   @override
   void initState() {

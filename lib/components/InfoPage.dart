@@ -1,13 +1,13 @@
 import 'dart:async';
 
-import 'package:facility_maintenance/SharedPreferences.dart';
 import 'package:facility_maintenance/components/rounded_button.dart';
 import 'package:facility_maintenance/constants.dart';
+import 'package:facility_maintenance/data/repository.dart';
+import 'package:facility_maintenance/injection_container.dart';
+import 'package:facility_maintenance/model/user.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-SharedPreference sharedPreference = SharedPreference();
 
 class InfoPage extends StatefulWidget {
   @override
@@ -15,11 +15,19 @@ class InfoPage extends StatefulWidget {
 }
 
 class _InfoPageState extends State<InfoPage> {
-  savePref() async {
-    await sharedPreference.addUserName(_infoName);
-    await sharedPreference.addUserPhone(_infoPhone);
-    await sharedPreference.addUserMail(_infoMail);
-    await sharedPreference.addUserFlat(_infoFlat);
+  Repository _repository = sl<Repository>();
+
+  savePref() {
+    User user = new User(
+        name: _infoName,
+        phone: _infoPhone,
+        mail: _infoMail,
+        building: _infoFlat);
+    print(
+        "user data in InfoPage ============================================\n ${user.toMap()}"
+        "\n============================================");
+    Map<dynamic, dynamic> userMap = user.toMap();
+    _repository.saveUserData(userMap);
   }
 
   StreamSubscription __subscriptionInfo;
@@ -34,7 +42,8 @@ class _InfoPageState extends State<InfoPage> {
   void initState() {
     //FirebaseInfos.getInfo("-KriJ8Sg4lWIoNswKWc4").then(_updateInfo);
 
-    FirebaseInfos.getInfoStream("-KriJ8Sg4lWIoNswKWc4", _updateInfo)
+    FirebaseInfos.getInfoStream(
+            "-KriJ8Sg4lWIoNswKWc4", _updateInfo, _repository)
         .then((StreamSubscription s) => __subscriptionInfo = s);
     super.initState();
   }
@@ -165,7 +174,7 @@ class _InfoPageState extends State<InfoPage> {
     );
   }
 
-  _updateInfo(Info value) {
+  _updateInfo(User value) {
     var name = value.name;
     var phone = value.phone;
     var mail = value.mail;
@@ -181,72 +190,41 @@ class _InfoPageState extends State<InfoPage> {
   }
 }
 
-class Info {
-  final String key;
-  String name;
-  String phone;
-  String mail;
-  String building;
-  String flat;
-
-  Info.fromJson(this.key, Map data) {
-    name = data['name'];
-    if (name == null) {
-      name = '';
-    }
-    phone = data['phone'];
-    if (phone == null) {
-      phone = '';
-    }
-    mail = data['mail'];
-    if (mail == null) {
-      mail = '';
-    }
-    building = data['building'];
-    if (building == null) {
-      building = '';
-    }
-    flat = data['flat'];
-    if (flat == null) {
-      flat = '';
-    }
-  }
-}
-
 class FirebaseInfos {
   /// FirebaseInfos.getInfoStream("-KriJ8Sg4lWIoNswKWc4", _updateInfo)
   /// .then((StreamSubscription s) => __subscriptionInfo = s);
   static Future<StreamSubscription<Event>> getInfoStream(
-      String UserKey, void onData(Info info)) async {
+      String UserKey, void onData(User info), Repository repository) async {
     //String UserKey = await Preferences.getUserKey();
-    var id = await sharedPreference.getUserId();
 
     StreamSubscription<Event> subscription = FirebaseDatabase.instance
         .reference()
         .child("Users")
-        .child(id.toString())
+        .child(repository.getUserData.id.toString())
         .onValue
         .listen((Event event) {
-      var info = new Info.fromJson(event.snapshot.key, event.snapshot.value);
+      var info =
+          new User.fromJson(key: event.snapshot.key, map: event.snapshot.value);
       onData(info);
     });
 
     return subscription;
   }
 
-  static Future<Info> getInfo(String UserKey) async {
-    Completer<Info> completer = new Completer<Info>();
+  static Future<User> getInfo(String UserKey, Repository repository) {
+    Completer<User> completer = new Completer<User>();
 
-    //String UserKey = await Preferences.getUserKey();
-    var id = await sharedPreference.getUserId();
-
+    print(
+        "========getUserData.id==========${repository.getUserData.id.toString()}===============");
     FirebaseDatabase.instance
         .reference()
         .child("Users")
-        .child(id.toString())
+        .child(repository.getUserData.id.toString())
         .once()
         .then((DataSnapshot snapshot) {
-      var info = new Info.fromJson(snapshot.key, snapshot.value);
+      var info = new User.fromJson(key: snapshot.key, map: snapshot.value);
+      print("========info==========${info}===============");
+
       completer.complete(info);
     });
 

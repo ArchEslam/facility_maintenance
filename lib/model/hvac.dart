@@ -26,19 +26,19 @@ class HVAC {
       this.isSolved,
       this.thumbnailUrl});
 
-  factory HVAC.fromMap(Map<dynamic, dynamic> json) => HVAC(
-        building: json["building"],
-        key: [],
-        customer: json["customer"],
-        customerId: json["customerId"],
-        date: json["date"],
-        description: json["description"],
-        employeeName: json["employeeName"],
-        flat: json["flat"],
-        phone: json["phone"],
-        price: json["price"],
-        isSolved: json["isSolved"],
-        thumbnailUrl: json["thumbnailUrl"],
+  factory HVAC.fromMap({key, Map<dynamic, dynamic> map}) => HVAC(
+        building: map["building"],
+        key: key,
+        customer: map["customer"],
+        customerId: map["customerId"],
+        date: map["date"],
+        description: map["description"],
+        employeeName: map["employeeName"],
+        flat: map["flat"],
+        phone: map["phone"],
+        price: map["price"],
+        isSolved: map["isSolved"],
+        thumbnailUrl: map["thumbnailUrl"],
       );
 
   Map<String, dynamic> toMap() => {

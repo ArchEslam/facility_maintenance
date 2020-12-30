@@ -1,8 +1,11 @@
 import 'package:facility_maintenance/constants.dart';
+import 'package:facility_maintenance/data/repository.dart';
 import 'package:facility_maintenance/model/hvac.dart';
 import 'package:facility_maintenance/widgets/list_hvac_widget.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+
+import '../../injection_container.dart';
 
 class HVACRequests extends StatefulWidget {
   @override
@@ -12,6 +15,8 @@ class HVACRequests extends StatefulWidget {
 class _HVACRequestsState extends State<HVACRequests> {
   List<HVAC> listHVAC = [];
   int _customerID = 1;
+  Repository _repository = sl<Repository>();
+
   DatabaseReference requestsRef =
       FirebaseDatabase.instance.reference().child("HVAC Requests");
 
@@ -63,25 +68,14 @@ class _HVACRequestsState extends State<HVACRequests> {
 
       listHVAC.clear();
       for (var individualKey in KEYS) {
-        // if(DATA[individualKey]['customerID']===customerID)
-        // HVAC requests = new HVAC.fromMap(DATA[individualKey]);
-        HVAC requests = new HVAC(
-          key: individualKey,
-          building: DATA[individualKey]['building'],
-          customer: DATA[individualKey]['customer'],
-          customerId: DATA[individualKey]['customerID'],
-          date: DATA[individualKey]['date'],
-          description: DATA[individualKey]['description'],
-          employeeName: DATA[individualKey]['employeeName'],
-          flat: DATA[individualKey]['flat'],
-          isSolved: DATA[individualKey]['isSolved'],
-          phone: DATA[individualKey]['phone'],
-          price: DATA[individualKey]['price'],
-          thumbnailUrl: DATA[individualKey]['thumbnailUrl'],
-        );
-        setState(() {
-          listHVAC.add(requests);
-        });
+        if (DATA[individualKey]['customerID'] == _repository.getUserData.id) {
+          HVAC requests =
+              new HVAC.fromMap(key: individualKey, map: DATA[individualKey]);
+          setState(() {
+            listHVAC.add(requests);
+          });
+        }
+
         // }
 
       }

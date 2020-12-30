@@ -1,4 +1,3 @@
-import 'package:facility_maintenance/SharedPreferences.dart';
 import 'package:facility_maintenance/components/rounded_button.dart';
 import 'package:facility_maintenance/data/repository.dart';
 import 'package:facility_maintenance/model/user.dart';
@@ -60,7 +59,6 @@ String validphone(String val) {
 }
 
 class Body extends StatelessWidget {
-  SharedPreference sharedPreference = SharedPreference();
   TextEditingController phoneController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController nameController = TextEditingController();
@@ -148,7 +146,7 @@ class Body extends StatelessWidget {
   }
 
   onChangePersonalData(String name, String email, String phone) async {
-    User user = await _repository.getUserData;
+    User user = _repository.getUserData;
     var updatedItem = FirebaseDatabase.instance
         .reference()
         .child("Users")

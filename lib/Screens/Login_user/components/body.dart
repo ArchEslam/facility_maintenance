@@ -8,7 +8,6 @@ import 'package:facility_maintenance/data/repository.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
-import '../../../SharedPreferences.dart';
 import '../../../constants.dart';
 import '../../../injection_container.dart';
 
@@ -23,7 +22,6 @@ class Body extends StatefulWidget {
 
 class _BodyState extends State<Body> {
   // final _userid;
-  SharedPreference sharedPreference = SharedPreference();
   Repository _repository = sl<Repository>();
 
   String selectedBuilding = 'Building No.01';
@@ -176,9 +174,7 @@ class _BodyState extends State<Body> {
             _mapItems["password"] == password &&
             _mapItems["building"] == selectedBuilding)
           Navigator.of(context).pushNamed('userhome');
-        await sharedPreference.addUserId(userID);
-        await sharedPreference.addUserBldg(selectedBuilding);
-        _repository.saveUserData(_map);
+        _repository.saveUserData(_mapItems);
         _repository.setLogedIn(true);
         _repository.setUserType(Constants.user);
       });

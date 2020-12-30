@@ -40,19 +40,18 @@
 //
 // }
 
-
 ///////////////////////////////// BACK UP OF create_hvac_request //////////////////////////////////////
 import 'dart:async';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:facility_maintenance/SharedPreferences.dart';
 import 'package:facility_maintenance/constants.dart';
+import 'package:facility_maintenance/data/repository.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-SharedPreference sharedPreference = SharedPreference();
+import '../injection_container.dart';
 
 class CreateHVACRequest extends StatefulWidget {
   @override
@@ -69,6 +68,7 @@ class _CreateHVACRequestState extends State<CreateHVACRequest> {
   String _documentId = "HVAC";
   String _price = "The price has not yet been determined";
   bool uploading = false;
+  Repository _repository = sl<Repository>();
 
   @override
   Widget build(BuildContext context) {
@@ -279,10 +279,9 @@ class _CreateHVACRequestState extends State<CreateHVACRequest> {
   }
 
   saveItemInfo(String downloadUrl) async {
-    String customerName = await sharedPreference.getUserName();
-    String customerBuilding = await sharedPreference.getUserBldg();
-    String customerFlat = await sharedPreference.getUserFlat();
-    String customerPhone = await sharedPreference.getUserPhone();
+    String customerName = _repository.getUserData.name;
+    String customerBuilding = _repository.getUserData.id;
+    String customerPhone = _repository.getUserData.phone;
 
     final itemsRef =
         FirebaseFirestore.instance.collection("$_documentId Items");

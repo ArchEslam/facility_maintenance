@@ -1,14 +1,11 @@
 import 'package:facility_maintenance/Screens/Login_user/login_screen.dart';
 import 'package:facility_maintenance/Screens/Welcome/components/background.dart';
-import 'package:facility_maintenance/SharedPreferences.dart';
 import 'package:facility_maintenance/components/rounded_button.dart';
 import 'package:flutter/material.dart';
 
 //import 'package:flutter_svg/svg.dart';
 
 class Body extends StatelessWidget {
-  SharedPreference sharedPreference = SharedPreference();
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;

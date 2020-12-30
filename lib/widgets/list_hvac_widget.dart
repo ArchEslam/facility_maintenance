@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:facility_maintenance/data/repository.dart';
 import 'package:facility_maintenance/model/hvac.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -34,15 +32,8 @@ class _ListHVACWidgettState extends State<ListHVACWidget> {
   int userType = 0;
   TextEditingController _priceController = TextEditingController();
 
-  Future<Void> _getUserType() async {
-    userType = await _repository.getUserType;
-    print(
-        "userType value ListHVACWidget ================================ ${userType}");
-  }
-
   @override
   void initState() {
-    _getUserType();
     super.initState();
   }
 
@@ -194,7 +185,9 @@ class _ListHVACWidgettState extends State<ListHVACWidget> {
                       children: <Widget>[
                         InkWell(
                           onTap: () {
-                            _buildEditPriceDialog(context, hvac);
+                            if (userType == Constants.employee) {
+                              _buildEditPriceDialog(context, hvac);
+                            }
                           },
                           child: Container(
                             width: container_item_text_width / 3,
@@ -216,11 +209,13 @@ class _ListHVACWidgettState extends State<ListHVACWidget> {
                           child: Checkbox(
                             value: hvac.isSolved ?? false,
                             onChanged: (newValue) {
-                              setState(() {
-                                widget.onCheckedValue(newValue);
-                                hvac.isSolved = newValue;
-                              });
-                              _changeLis(hvac);
+                              if (userType == Constants.employee) {
+                                setState(() {
+                                  widget.onCheckedValue(newValue);
+                                  hvac.isSolved = newValue;
+                                });
+                                _changeLis(hvac);
+                              }
                             },
                             // controlAffinity: ListTileControlAffinity.leading,  //  <-- leading Checkbox
                           ),
