@@ -14,7 +14,7 @@ class HVAC {
 
   HVAC(
       {this.building,
-        this.key,
+      this.key,
       this.customer,
       this.customerId,
       this.date,

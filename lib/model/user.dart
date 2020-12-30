@@ -7,15 +7,14 @@ class User {
   String building;
   String dicipline;
 
-
   User(
       {this.id,
-        this.mail,
-        this.name,
-        this.password,
-        this.phone,
-        this.building,
-        this.dicipline});
+      this.mail,
+      this.name,
+      this.password,
+      this.phone,
+      this.building,
+      this.dicipline});
 
   factory User.fromJson(Map<String, dynamic> json) {
     return new User(
@@ -28,21 +27,23 @@ class User {
       dicipline: json["dicipline"],
     );
   }
+
   factory User.fromMap(Map<dynamic, dynamic> json) => User(
-    id: json["id"],
-    mail: json["mail"],
-    name: json["name"],
-    password: json["password"],
-    phone: json["phone"],
-    building: json["building"],
-    dicipline: json["dicipline"],
-  );
+        id: json["id"],
+        mail: json["mail"],
+        name: json["name"],
+        password: json["password"],
+        phone: json["phone"],
+        building: json["building"],
+        dicipline: json["dicipline"],
+      );
+
   Map<String, dynamic> toJson() => <String, dynamic>{
-    'id': id,
-    'mail': mail,
-    'mail': mail,
-    'phone': phone,
-    'building': building,
-    'dicipline': dicipline,
-  };
+        'id': id,
+        'mail': mail,
+        'mail': mail,
+        'phone': phone,
+        'building': building,
+        'dicipline': dicipline,
+      };
 }

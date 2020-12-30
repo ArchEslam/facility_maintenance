@@ -8,5 +8,4 @@ class Preferences {
   static const String currentLanguage = "currentLanguage";
   static const String currentPageTitle = "currentPageTitle";
   static const String UserData = "UserData";
-
 }

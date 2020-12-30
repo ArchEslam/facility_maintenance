@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:facility_maintenance/Screens/Internal_Sections_employee/components/background.dart';
+import 'package:flutter/material.dart';
+
 import '../../../constants.dart';
 
 class Body extends StatefulWidget {
@@ -42,7 +43,6 @@ class _BodyState extends State<Body> {
             ),
           ),
         );
-        
       }
 
       return Scaffold(
@@ -59,18 +59,21 @@ class _BodyState extends State<Body> {
             child: ListView(
               children: [
                 Container(
-                  height: orientation == Orientation.portrait ?size.height*.88:size.width*.73,
+                  height: orientation == Orientation.portrait
+                      ? size.height * .88
+                      : size.width * .73,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      Expanded(flex: 1,child: SizedBox()),
-                      Expanded(flex: 20,
+                      Expanded(flex: 1, child: SizedBox()),
+                      Expanded(
+                        flex: 20,
                         child: Row(
                           children: [
                             Expanded(
                                 flex: 3,
                                 child: InkWell(
-                                  onTap: (){},
+                                  onTap: () {},
                                   child: buildButton2(
                                       "assets/images/elec.png", "Electricity"),
                                 )),
@@ -78,29 +81,34 @@ class _BodyState extends State<Body> {
                           ],
                         ),
                       ),
-                      Expanded(flex: 1,child: SizedBox()),
-                      Expanded(flex: 20,
+                      Expanded(flex: 1, child: SizedBox()),
+                      Expanded(
+                        flex: 20,
                         child: Row(
                           children: [
                             Expanded(flex: 2, child: Container()),
                             Expanded(
                                 flex: 3,
                                 child: InkWell(
-                                  onTap: (){Navigator.of(context).pushNamed('hvac_requests');},
+                                  onTap: () {
+                                    Navigator.of(context)
+                                        .pushNamed('hvac_requests');
+                                  },
                                   child: buildButton2(
                                       "assets/images/hvac.png", "HVAC"),
                                 )),
                           ],
                         ),
                       ),
-                      Expanded(flex: 1,child: SizedBox()),
-                      Expanded(flex: 20,
+                      Expanded(flex: 1, child: SizedBox()),
+                      Expanded(
+                        flex: 20,
                         child: Row(
                           children: [
                             Expanded(
                                 flex: 3,
                                 child: InkWell(
-                                  onTap: (){},
+                                  onTap: () {},
                                   child: buildButton2(
                                       "assets/images/plumbing.png", "Plumbing"),
                                 )),
@@ -108,7 +116,7 @@ class _BodyState extends State<Body> {
                           ],
                         ),
                       ),
-                      Expanded(flex: 1,child: SizedBox()),
+                      Expanded(flex: 1, child: SizedBox()),
                     ],
                   ),
                 ),

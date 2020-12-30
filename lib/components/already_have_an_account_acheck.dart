@@ -1,9 +1,10 @@
-import 'package:flutter/material.dart';
 import 'package:facility_maintenance/constants.dart';
+import 'package:flutter/material.dart';
 
 class AlreadyHaveAnAccountCheck extends StatelessWidget {
   final bool login;
   final Function press;
+
   const AlreadyHaveAnAccountCheck({
     Key key,
     this.login = true,

@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:facility_maintenance/Screens/Personal_Data_user/components/body.dart';
 import 'package:facility_maintenance/SharedPreferences.dart';
 import 'package:facility_maintenance/components/rounded_button.dart';
 import 'package:facility_maintenance/constants.dart';
@@ -16,11 +15,11 @@ class InfoPage extends StatefulWidget {
 }
 
 class _InfoPageState extends State<InfoPage> {
-  savePref()async{
-    await  sharedPreference.addUserName(_infoName);
-    await  sharedPreference.addUserPhone(_infoPhone);
-    await  sharedPreference.addUserMail(_infoMail);
-    await  sharedPreference.addUserFlat(_infoFlat);
+  savePref() async {
+    await sharedPreference.addUserName(_infoName);
+    await sharedPreference.addUserPhone(_infoPhone);
+    await sharedPreference.addUserMail(_infoMail);
+    await sharedPreference.addUserFlat(_infoFlat);
   }
 
   StreamSubscription __subscriptionInfo;
@@ -51,19 +50,44 @@ class _InfoPageState extends State<InfoPage> {
   @override
   Widget build(BuildContext context) {
     var nameItemTile = new ListTile(
-      title: Center(child: new Text("$_infoName",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: Colors.black),)),
+      title: Center(
+          child: new Text(
+        "$_infoName",
+        style: TextStyle(
+            fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
+      )),
     );
     var phoneItemTile = new ListTile(
-      title: Center(child: new Text("$_infoPhone",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: Colors.black),)),
+      title: Center(
+          child: new Text(
+        "$_infoPhone",
+        style: TextStyle(
+            fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
+      )),
     );
     var mailItemTile = new ListTile(
-      title: Center(child: new Text("$_infoMail",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: Colors.black),)),
+      title: Center(
+          child: new Text(
+        "$_infoMail",
+        style: TextStyle(
+            fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
+      )),
     );
     var buildingItemTile = new ListTile(
-      title: Center(child: new Text("$_infoBuilding",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: Colors.black),)),
+      title: Center(
+          child: new Text(
+        "$_infoBuilding",
+        style: TextStyle(
+            fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
+      )),
     );
     var flatItemTile = new ListTile(
-      title: Center(child: new Text("$_infoFlat",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: Colors.black),)),
+      title: Center(
+          child: new Text(
+        "$_infoFlat",
+        style: TextStyle(
+            fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
+      )),
     );
 
     return new Scaffold(
@@ -73,28 +97,58 @@ class _InfoPageState extends State<InfoPage> {
       body: new ListView(
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.fromLTRB(15.0,15.0,15.0,0),
-            child: Text('Your name is:',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: kPrimaryColor),),
+            padding: const EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 0),
+            child: Text(
+              'Your name is:',
+              style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: kPrimaryColor),
+            ),
           ),
           nameItemTile,
           Padding(
-            padding: const EdgeInsets.fromLTRB(15.0,15.0,15.0,0),
-            child: Text('Your phone number is:',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: kPrimaryColor),),
+            padding: const EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 0),
+            child: Text(
+              'Your phone number is:',
+              style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: kPrimaryColor),
+            ),
           ),
           phoneItemTile,
           Padding(
-            padding: const EdgeInsets.fromLTRB(15.0,15.0,15.0,0),
-            child: Text('Your mail address is:',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: kPrimaryColor),),
+            padding: const EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 0),
+            child: Text(
+              'Your mail address is:',
+              style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: kPrimaryColor),
+            ),
           ),
           mailItemTile,
           Padding(
-            padding: const EdgeInsets.fromLTRB(15.0,15.0,15.0,0),
-            child: Text('Your building number is:',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: kPrimaryColor),),
+            padding: const EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 0),
+            child: Text(
+              'Your building number is:',
+              style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: kPrimaryColor),
+            ),
           ),
           buildingItemTile,
           Padding(
-            padding: const EdgeInsets.fromLTRB(15.0,15.0,15.0,0),
-            child: Text('Your apartment number is:',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: kPrimaryColor),),
+            padding: const EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 0),
+            child: Text(
+              'Your apartment number is:',
+              style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: kPrimaryColor),
+            ),
           ),
           flatItemTile,
           Padding(
@@ -111,15 +165,14 @@ class _InfoPageState extends State<InfoPage> {
     );
   }
 
-
   _updateInfo(Info value) {
     var name = value.name;
     var phone = value.phone;
     var mail = value.mail;
     var building = value.building;
     var flat = value.flat;
-    setState((){
-      _infoName = name ;
+    setState(() {
+      _infoName = name;
       _infoPhone = phone;
       _infoMail = mail;
       _infoBuilding = building;
@@ -127,7 +180,6 @@ class _InfoPageState extends State<InfoPage> {
     });
   }
 }
-
 
 class Info {
   final String key;
@@ -158,20 +210,16 @@ class Info {
     if (flat == null) {
       flat = '';
     }
-
   }
 }
-
-
 
 class FirebaseInfos {
   /// FirebaseInfos.getInfoStream("-KriJ8Sg4lWIoNswKWc4", _updateInfo)
   /// .then((StreamSubscription s) => __subscriptionInfo = s);
-  static Future<StreamSubscription<Event>> getInfoStream(String UserKey,
-      void onData(Info info)) async {
+  static Future<StreamSubscription<Event>> getInfoStream(
+      String UserKey, void onData(Info info)) async {
     //String UserKey = await Preferences.getUserKey();
     var id = await sharedPreference.getUserId();
-
 
     StreamSubscription<Event> subscription = FirebaseDatabase.instance
         .reference()
@@ -185,7 +233,6 @@ class FirebaseInfos {
 
     return subscription;
   }
-
 
   static Future<Info> getInfo(String UserKey) async {
     Completer<Info> completer = new Completer<Info>();
@@ -206,8 +253,6 @@ class FirebaseInfos {
     return completer.future;
   }
 }
-
-
 
 class Preferences {
   static const String USER_KEY = "UserKey";
@@ -230,4 +275,3 @@ class Preferences {
     return UserKey;
   }
 }
-

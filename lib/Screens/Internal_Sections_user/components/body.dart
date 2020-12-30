@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:facility_maintenance/Screens/Internal_Sections_user/components/background.dart';
+import 'package:flutter/material.dart';
+
 import '../../../constants.dart';
 
 class Body extends StatefulWidget {
@@ -52,70 +53,82 @@ class _BodyState extends State<Body> {
           centerTitle: true,
           backgroundColor: kPrimaryColor,
           elevation: 0,
-          leading: IconButton(icon: Icon(Icons.arrow_back), onPressed: (){Navigator.of(context).pushNamed('userhome');}),
+          leading: IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () {
+                Navigator.of(context).pushNamed('userhome');
+              }),
         ),
         body: Background(
           child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-              child: ListView(
-                children: [
-                  Container(
-                    height: orientation == Orientation.portrait ?size.height*.88:size.width*.73,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Expanded(flex: 1,child: SizedBox()),
-                        Expanded(flex: 20,
-                          child: Row(
-                            children: [
-                              Expanded(
-                                  flex: 3,
-                                  child: InkWell(
-                                    onTap: (){},
-                                    child: buildButton2(
-                                        "assets/images/elec.png", "Electricity"),
-                                  )),
-                              Expanded(flex: 2, child: Container()),
-                            ],
-                          ),
+            padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+            child: ListView(
+              children: [
+                Container(
+                  height: orientation == Orientation.portrait
+                      ? size.height * .88
+                      : size.width * .73,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Expanded(flex: 1, child: SizedBox()),
+                      Expanded(
+                        flex: 20,
+                        child: Row(
+                          children: [
+                            Expanded(
+                                flex: 3,
+                                child: InkWell(
+                                  onTap: () {},
+                                  child: buildButton2(
+                                      "assets/images/elec.png", "Electricity"),
+                                )),
+                            Expanded(flex: 2, child: Container()),
+                          ],
                         ),
-                        Expanded(flex: 1,child: SizedBox()),
-                        Expanded(flex: 20,
-                          child: Row(
-                            children: [
-                              Expanded(flex: 2, child: Container()),
-                              Expanded(
-                                  flex: 3,
-                                  child: InkWell(
-                                    onTap: (){Navigator.of(context).pushNamed('create_hvac_request');},
-                                    child: buildButton2(
-                                        "assets/images/hvac.png", "HVAC"),
-                                  )),
-                            ],
-                          ),
+                      ),
+                      Expanded(flex: 1, child: SizedBox()),
+                      Expanded(
+                        flex: 20,
+                        child: Row(
+                          children: [
+                            Expanded(flex: 2, child: Container()),
+                            Expanded(
+                                flex: 3,
+                                child: InkWell(
+                                  onTap: () {
+                                    Navigator.of(context)
+                                        .pushNamed('create_hvac_request');
+                                  },
+                                  child: buildButton2(
+                                      "assets/images/hvac.png", "HVAC"),
+                                )),
+                          ],
                         ),
-                        Expanded(flex: 1,child: SizedBox()),
-                        Expanded(flex: 20,
-                          child: Row(
-                            children: [
-                              Expanded(
-                                  flex: 3,
-                                  child: InkWell(
-                                    onTap: (){},
-                                    child: buildButton2(
-                                        "assets/images/plumbing.png", "Plumbing"),
-                                  )),
-                              Expanded(flex: 2, child: Container()),
-                            ],
-                          ),
+                      ),
+                      Expanded(flex: 1, child: SizedBox()),
+                      Expanded(
+                        flex: 20,
+                        child: Row(
+                          children: [
+                            Expanded(
+                                flex: 3,
+                                child: InkWell(
+                                  onTap: () {},
+                                  child: buildButton2(
+                                      "assets/images/plumbing.png", "Plumbing"),
+                                )),
+                            Expanded(flex: 2, child: Container()),
+                          ],
                         ),
-                        Expanded(flex: 1,child: SizedBox()),
-                      ],
-                    ),
+                      ),
+                      Expanded(flex: 1, child: SizedBox()),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
+          ),
 
           //orientation == Orientation.portrait ? Text('data') : Text('data'),
         ),
