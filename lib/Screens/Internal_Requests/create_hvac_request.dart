@@ -22,6 +22,7 @@ class CreateHVACRequest extends StatefulWidget {
 
 class _CreateHVACRequestState extends State<CreateHVACRequest>
     with AutomaticKeepAliveClientMixin<CreateHVACRequest> {
+
   final Future<FirebaseApp> _initialization = Firebase.initializeApp();
   Repository _repository = sl<Repository>();
 

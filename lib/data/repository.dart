@@ -1,6 +1,7 @@
 import 'package:facility_maintenance/model/user.dart';
 
 abstract class Repository {
+
   void setLogedIn(bool value);
 
   bool get isLogedIn;

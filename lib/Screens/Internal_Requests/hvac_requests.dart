@@ -13,8 +13,8 @@ class HVACRequests extends StatefulWidget {
 }
 
 class _HVACRequestsState extends State<HVACRequests> {
+
   List<HVAC> listHVAC = [];
-  int _customerID = 1;
   Repository _repository = sl<Repository>();
 
   DatabaseReference requestsRef =

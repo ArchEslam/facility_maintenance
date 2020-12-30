@@ -14,6 +14,7 @@ class InfoPage extends StatefulWidget {
   _InfoPageState createState() => new _InfoPageState();
 }
 
+
 class _InfoPageState extends State<InfoPage> {
   Repository _repository = sl<Repository>();
 

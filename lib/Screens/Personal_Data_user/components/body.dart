@@ -59,6 +59,7 @@ String validphone(String val) {
 }
 
 class Body extends StatelessWidget {
+
   TextEditingController phoneController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController nameController = TextEditingController();

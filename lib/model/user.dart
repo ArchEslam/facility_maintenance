@@ -1,4 +1,5 @@
 class User {
+
   final String key;
   String id;
   String mail;

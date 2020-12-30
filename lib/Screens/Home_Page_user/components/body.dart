@@ -14,6 +14,7 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
+
   String selectedBuilding = 'Building No.01';
 
   @override
