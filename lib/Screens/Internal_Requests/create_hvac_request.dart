@@ -3,7 +3,7 @@ import 'package:facility_maintenance/components/loadingWidget.dart';
 import 'package:facility_maintenance/components/rounded_button.dart';
 import 'package:facility_maintenance/constants.dart';
 import 'package:facility_maintenance/model/hvac.dart';
-import 'package:facility_maintenance/widgets/listHVACWidget.dart';
+import 'package:facility_maintenance/widgets/list_hvac_widget.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -24,6 +24,7 @@ class _CreateHVACRequestState extends State<CreateHVACRequest> with AutomaticKee
 {
   final Future<FirebaseApp> _initialization = Firebase.initializeApp();
   bool get wantKeepAlive => true;
+  List<HVAC> listHVAC;
 
   File file;
 
@@ -34,11 +35,17 @@ class _CreateHVACRequestState extends State<CreateHVACRequest> with AutomaticKee
   String _documentId = "HVAC";
   String _price = "The price has not yet been determined";
   bool uploading = false;
-
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getDocs();
+  }
   @override
   Widget build(BuildContext context) {
     return file == null ? displayUserRequestScreen() : displayRequestCreationScreen();
   }
+
 
   displayUserRequestScreen()
   {
@@ -296,6 +303,14 @@ class _CreateHVACRequestState extends State<CreateHVACRequest> with AutomaticKee
   //
   }
 
+  Future getDocs() async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection("Employees").get();
+    for (int i = 0; i < querySnapshot.docs.length; i++) {
+      var a = querySnapshot.docs[i];
+      print(a.id);
+    }
+  }
+
   Future<Null> _showHVACrequets(BuildContext context) async {
     await showDialog<int>(
         context: context,
@@ -308,15 +323,17 @@ class _CreateHVACRequestState extends State<CreateHVACRequest> with AutomaticKee
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  ListHVACWidget(
-                      listHVAC: demoHVACLis,
+                  streamBuilderHVC(),
+                /*  ListHVACWidget(
+                   listHVAC:listHVAC,
                       getSelectedValues:({HVAC hvac}){
                         print("selected = ${hvac.toMap()}");
                       },
                       onCheckedValue: (bool value){
 
                       },
-                  ),
+                  )*/
+                 // hcvDataSnapshot(context) ,
                   ClipOval(
                     child: Material(
                       color: Colors.blue, // button color
@@ -334,55 +351,69 @@ class _CreateHVACRequestState extends State<CreateHVACRequest> with AutomaticKee
               )));
         });
   }
-  _previousrequestsDialog(BuildContext context) {
+  Widget hcvDataSnapshot(BuildContext context) {
+    return Container(
+      height: 40,
+      child: FutureBuilder<QuerySnapshot>(
+          future: FirebaseFirestore.instance.collection('Employees').get(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              final List<DocumentSnapshot> documents = snapshot.data.docs;
 
-    _showDialog<String>(
-      context: context,
-      child: MaterialDialog(
-        borderRadius: 5.0,
-        title: Text(
-          "Previous Requests",
-          style: TextStyle(
-              color:Colors.white),
-        ),
-        headerColor:Colors.amber,
-        backgroundColor:  Colors.white,
-        closeButtonColor:Colors.red,
-        enableCloseButton: true,
-        enableBackButton: false,
-        onCloseButtonClicked: () {
-          Navigator.of(context).pop();
-        },
-        content:
-        Container(
-          color: Colors.transparent,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.max,
-            children: <Widget>[
-//------------------------------------------------------------------------------
-              Padding(
-                padding: const EdgeInsets.only(left: 4.0, right: 4.0),
-                child: Text("Previous Requests"),
-              ),
-              ListHVACWidget(
-                  listHVAC: demoHVACLis,
-                  getSelectedValues:({HVAC hvac}){
-                    print("selected = ${hvac.toMap()}");
-                  },
-                onCheckedValue: (checked){
-                  print("checked value = ${checked}");
+              print(snapshot.data.docs);
+              documents.forEach((doc) {
+                HVAC hvac = HVAC(
+                  building: doc["building"],
+                  customer:doc["customer"] ,
+                  customerId:doc["customer ID"] ,
+                  date: doc["date"],
+                  description:doc["description"] ,
+                  flat: doc["flat"],
+                  phone: doc["phone"],
+                  price: doc["price"],
+                  isSolved:doc["is solved"] ,
+                  thumbnailUrl:doc["thumbnailUrl"] ,
+                );
+                listHVAC.add(hvac);
+              });
 
-                },
-              ),
-//------------------------------------------------------------------------------
-            ],
-          ),
-        )
-      ),
+              return   Text("Loading");
+            } else {
+              return Text("Loading");
+            }
+          }),
     );
   }
+  Widget streamBuilderHVC(){
+    CollectionReference users = FirebaseFirestore.instance.collection('Employees');
 
+  return Container(
+    height: 300,
+    child: StreamBuilder<QuerySnapshot>(
+      stream: users.snapshots(),
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (snapshot.hasError) {
+          return Text('Something went wrong',style: TextStyle(color: Colors.white,fontSize: 32));
+        }
+
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Text("Loading",style: TextStyle(color: Colors.white,fontSize: 32),);
+        }
+
+        return new ListView(
+          children: snapshot.data.docs.map((DocumentSnapshot document) {
+            print(document.data()['dicipline']);
+            return Row(children: [
+              Text(document.data()['dicipline'],style: TextStyle(color: Colors.white,fontSize: 32)),
+              Text(document.data()['mail'],style: TextStyle(color: Colors.white,fontSize: 32)),
+
+            ],);
+          }).toList(),
+        );
+      },
+    ),
+  );
+  }
   _showDialog<T>({BuildContext context, Widget child}) {
     showDialog<T>(
       context: context,

@@ -1,5 +1,7 @@
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:facility_maintenance/model/hvac.dart';
+import 'package:facility_maintenance/widgets/progress_indicator_widget.dart';
 import 'package:flutter/material.dart';
 
 
@@ -21,8 +23,25 @@ class _ListHVACWidgettState extends State<ListHVACWidget>
 {
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    return _cardListItem(context);
+    return FutureBuilder<QuerySnapshot>(
+        future: FirebaseFirestore.instance.collection('HVAC Requests').get(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            // <3> Retrieve `List<DocumentSnapshot>` from snapshot
+            final List<DocumentSnapshot> documents = snapshot.data.docs;
+            return ListView(
+                children: documents
+                    .map((doc) => Card(
+                  child: ListTile(
+                    title: Text(doc['text']),
+                    subtitle: Text(doc['email']),
+                  ),
+                ))
+                    .toList());
+          } else if (snapshot.hasError) {
+            return CustomProgressIndicatorWidget();
+            }
+            });
   }
   Widget _cardListItem(BuildContext context) {
     double _containe_width;
