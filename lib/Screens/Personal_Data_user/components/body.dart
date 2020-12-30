@@ -1,15 +1,11 @@
-import 'package:facility_maintenance/SharedPreferences.dart';
+import 'package:facility_maintenance/components/rounded_button.dart';
 import 'package:facility_maintenance/data/repository.dart';
 import 'package:facility_maintenance/model/user.dart';
-import 'package:flutter/material.dart';
-import 'package:facility_maintenance/components/rounded_button.dart';
-import '../../../constants.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:facility_maintenance/Screens/Personal_Data_user/personal_data_user.dart';
+import 'package:flutter/material.dart';
 
+import '../../../constants.dart';
 import '../../../injection_container.dart';
-
-
 
 GlobalKey<FormState> formstate = new GlobalKey<FormState>();
 
@@ -29,21 +25,23 @@ GlobalKey<FormState> formstate = new GlobalKey<FormState>();
 //   _scaffoldKey.currentState.showSnackBar(snackBar);
 // }
 
-String validglobal (String val){
-  if (val.trim().isEmpty){
+String validglobal(String val) {
+  if (val.trim().isEmpty) {
     return "This field can't be empty";
   }
 }
-String validusername (String val){
-  if (val.trim().isEmpty){
+
+String validusername(String val) {
+  if (val.trim().isEmpty) {
     return "This field can't be empty";
   }
 }
-String validmail (String val){
-  if (val.trim().isEmpty){
+
+String validmail(String val) {
+  if (val.trim().isEmpty) {
     return "This field can't be empty";
   }
-  if(!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]").hasMatch(val)){
+  if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]").hasMatch(val)) {
     return 'Please provide a valid Email';
   }
 }
@@ -51,26 +49,25 @@ String validmail (String val){
 //     ? 'Please provide a valid email'
 //     : null,
 
-String validphone (String val){
-  if (val.trim().isEmpty){
+String validphone(String val) {
+  if (val.trim().isEmpty) {
     return "This field can't be empty";
   }
-  if (val.trim().length != 11){
+  if (val.trim().length != 11) {
     return "Your phone must have 11 numbers";
   }
 }
 
 class Body extends StatelessWidget {
-  SharedPreference sharedPreference = SharedPreference();
-  TextEditingController phoneController=TextEditingController();
-  TextEditingController emailController=TextEditingController();
-  TextEditingController nameController=TextEditingController();
-  Repository _repository= sl<Repository>();
+
+  TextEditingController phoneController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
+  Repository _repository = sl<Repository>();
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-
 
     return SafeArea(
       child: SizedBox(
@@ -97,7 +94,8 @@ class Body extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: size.height * 0.04),
-                PersonalDataForm(nameController,emailController,phoneController),
+                PersonalDataForm(
+                    nameController, emailController, phoneController),
                 // Padding(
                 //   padding: const EdgeInsets.symmetric(vertical: 15),
                 //   child: Text(
@@ -122,17 +120,19 @@ class Body extends StatelessWidget {
     );
   }
 
-  saveData(BuildContext context){
-
-    var formdata =formstate.currentState;
-    if(formdata.validate()) {
-      onChangePersonalData(nameController.text,emailController.text,phoneController.text);
+  saveData(BuildContext context) {
+    var formdata = formstate.currentState;
+    if (formdata.validate()) {
+      onChangePersonalData(
+          nameController.text, emailController.text, phoneController.text);
       Scaffold.of(context).showSnackBar(
         SnackBar(
           content: Row(
             children: [
               Icon(Icons.thumb_up),
-              SizedBox(width: 20,),
+              SizedBox(
+                width: 20,
+              ),
               Text('Your data has been saved successfully'),
             ],
           ),
@@ -141,18 +141,22 @@ class Body extends StatelessWidget {
         ),
       );
       // Navigator.of(context).pushNamed('userhome');
-    }else{
+    } else {
       print('Not Valid');
     }
   }
 
-  onChangePersonalData(String name,String email,String phone) async {
-    User user= await _repository.getUserData;
+  onChangePersonalData(String name, String email, String phone) async {
+    User user = _repository.getUserData;
     var updatedItem = FirebaseDatabase.instance
         .reference()
         .child("Users")
         .child(user.id.toString());
-    updatedItem.update({'name': name ,'mail': email,'phone':phone,});
+    updatedItem.update({
+      'name': name,
+      'mail': email,
+      'phone': phone,
+    });
   }
 }
 
@@ -160,23 +164,22 @@ class PersonalDataForm extends StatefulWidget {
   TextEditingController phoneController;
   TextEditingController emailController;
   TextEditingController nameController;
-  PersonalDataForm(this.nameController,this.emailController,this.phoneController);
+
+  PersonalDataForm(
+      this.nameController, this.emailController, this.phoneController);
+
   @override
   _PersonalDataFormState createState() => _PersonalDataFormState();
 }
 
 class _PersonalDataFormState extends State<PersonalDataForm> {
-
   String _phoneHintText = "Enter your phone number";
   String _emailHintText = "Enter your email address";
   String _nameHintText = "Enter your full name";
 
-
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-
 
     return Form(
       key: formstate,
@@ -193,12 +196,13 @@ class _PersonalDataFormState extends State<PersonalDataForm> {
   }
 
   TextFormField buildPhoneFormField(myvalid) {
-    return TextFormField(controller: widget.phoneController,
+    return TextFormField(
+      controller: widget.phoneController,
       keyboardType: TextInputType.phone,
       validator: myvalid,
       decoration: InputDecoration(
         labelText: "Phone",
-        hintText: "$_phoneHintText"/*SharedPreference().getUserPhone()*/,
+        hintText: "$_phoneHintText" /*SharedPreference().getUserPhone()*/,
         floatingLabelBehavior: FloatingLabelBehavior.always,
         contentPadding: EdgeInsets.symmetric(
           horizontal: 42,
@@ -216,12 +220,13 @@ class _PersonalDataFormState extends State<PersonalDataForm> {
   }
 
   TextFormField buildEmailFormField(myvalid) {
-    return TextFormField(controller: widget.emailController,
+    return TextFormField(
+      controller: widget.emailController,
       keyboardType: TextInputType.emailAddress,
       validator: myvalid,
       decoration: InputDecoration(
         labelText: "Email",
-        hintText: "$_emailHintText"/*SharedPreference().getUserMail()*/,
+        hintText: "$_emailHintText" /*SharedPreference().getUserMail()*/,
         floatingLabelBehavior: FloatingLabelBehavior.always,
         contentPadding: EdgeInsets.symmetric(
           horizontal: 42,
@@ -239,12 +244,13 @@ class _PersonalDataFormState extends State<PersonalDataForm> {
   }
 
   TextFormField buildNameFormField(myvalid) {
-    return TextFormField(controller: widget.nameController,
+    return TextFormField(
+      controller: widget.nameController,
       keyboardType: TextInputType.name,
       validator: myvalid,
       decoration: InputDecoration(
         labelText: "Name",
-        hintText: "$_nameHintText"/*SharedPreference().getUserName()*/,
+        hintText: "$_nameHintText" /*SharedPreference().getUserName()*/,
         floatingLabelBehavior: FloatingLabelBehavior.always,
         contentPadding: EdgeInsets.symmetric(
           horizontal: 42,
@@ -261,5 +267,3 @@ class _PersonalDataFormState extends State<PersonalDataForm> {
     );
   }
 }
-
-

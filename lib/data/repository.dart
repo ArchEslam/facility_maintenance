@@ -1,18 +1,16 @@
-import 'dart:async';
-import 'dart:convert';
-
 import 'package:facility_maintenance/model/user.dart';
 
-
 abstract class Repository {
-  // data source object
-   // shared pref object
-  // constructor
-  Future<void> setLogedIn(bool value);
-  Future<bool> get isLogedIn;
-  Future<void> setUserType(int value);
-  Future<int> get getUserType;
 
-  Future<void> saveUserData(Map<dynamic, dynamic>  userMap);
-  Future<User> get getUserData;
+  void setLogedIn(bool value);
+
+  bool get isLogedIn;
+
+  void setUserType(int value);
+
+  int get getUserType;
+
+  void saveUserData(Map<dynamic, dynamic> userMap);
+
+  User get getUserData;
 }

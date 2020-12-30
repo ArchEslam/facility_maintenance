@@ -1,6 +1,7 @@
+import 'package:facility_maintenance/Screens/Home_Page_employee/components/background.dart';
 import 'package:facility_maintenance/test_Screens/ViewRequests.dart';
 import 'package:flutter/material.dart';
-import 'package:facility_maintenance/Screens/Home_Page_employee/components/background.dart';
+
 import '../../../constants.dart';
 
 class Body extends StatefulWidget {
@@ -13,7 +14,6 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
-  
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +25,7 @@ class _BodyState extends State<Body> {
         return Padding(
           padding: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
           child: Container(
-            margin: EdgeInsets.symmetric(vertical: 10),            
+            margin: EdgeInsets.symmetric(vertical: 10),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(29),
               child: Container(
@@ -78,17 +78,30 @@ class _BodyState extends State<Body> {
       return Background(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[            
+          children: <Widget>[
             InkWell(
-              onTap: (){Navigator.push(context,MaterialPageRoute(builder: (context) {
-              return ViewRequests();
-              },),);},
-              child: buildButton(Icons.settings, "General Maintenances of All Facilities",
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return ViewRequests();
+                    },
+                  ),
+                );
+              },
+              child: buildButton(
+                  Icons.settings,
+                  "General Maintenances of All Facilities",
                   "View all costumers' maintenance requests for any of the public utilites in all buildings."),
             ),
             InkWell(
-              onTap: (){Navigator.of(context).pushNamed('employee_in_sections');},
-              child: buildButton(Icons.store, "Internal Maintenances of Your Appartment",
+              onTap: () {
+                Navigator.of(context).pushNamed('employee_in_sections');
+              },
+              child: buildButton(
+                  Icons.store,
+                  "Internal Maintenances of Your Appartment",
                   "View all costumers' maintenance requests for Plumbing, HVAC and Electricity in all appartments."),
             ),
           ],

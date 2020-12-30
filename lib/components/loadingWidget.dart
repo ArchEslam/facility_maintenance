@@ -5,7 +5,9 @@ circularProgress() {
   return Container(
     alignment: Alignment.center,
     padding: EdgeInsets.only(top: 12),
-    child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation(kPrimaryColor),),
+    child: CircularProgressIndicator(
+      valueColor: AlwaysStoppedAnimation(kPrimaryColor),
+    ),
   );
 }
 
@@ -13,6 +15,8 @@ linearProgress() {
   return Container(
     alignment: Alignment.center,
     padding: EdgeInsets.only(top: 12),
-    child: LinearProgressIndicator(valueColor: AlwaysStoppedAnimation(kPrimaryColor),),
+    child: LinearProgressIndicator(
+      valueColor: AlwaysStoppedAnimation(kPrimaryColor),
+    ),
   );
 }

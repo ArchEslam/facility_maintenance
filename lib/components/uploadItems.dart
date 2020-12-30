@@ -40,21 +40,18 @@
 //
 // }
 
-
 ///////////////////////////////// BACK UP OF create_hvac_request //////////////////////////////////////
-
-import 'dart:io';
 import 'dart:async';
-import 'package:facility_maintenance/components/loadingWidget.dart';
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:facility_maintenance/constants.dart';
-import 'package:flutter/animation.dart';
+import 'package:facility_maintenance/data/repository.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:facility_maintenance/SharedPreferences.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
-SharedPreference sharedPreference =SharedPreference();
+import '../injection_container.dart';
 
 class CreateHVACRequest extends StatefulWidget {
   @override
@@ -62,16 +59,16 @@ class CreateHVACRequest extends StatefulWidget {
 }
 
 class _CreateHVACRequestState extends State<CreateHVACRequest> {
-
   File file;
 
-  TextEditingController _detailsTextEditingController =TextEditingController();
-  TextEditingController _priceTextEditingController =TextEditingController();
+  TextEditingController _detailsTextEditingController = TextEditingController();
+  TextEditingController _priceTextEditingController = TextEditingController();
   String _requestId = DateTime.now().millisecondsSinceEpoch.toString();
   String _requestDate = DateTime.now().toString();
   String _documentId = "HVAC";
   String _price = "The price has not yet been determined";
   bool uploading = false;
+  Repository _repository = sl<Repository>();
 
   @override
   Widget build(BuildContext context) {
@@ -79,11 +76,12 @@ class _CreateHVACRequestState extends State<CreateHVACRequest> {
     return Scaffold(
         appBar: AppBar(
           title:
-          Text("Create a Request", style: TextStyle(color: Colors.white)),
+              Text("Create a Request", style: TextStyle(color: Colors.white)),
           centerTitle: true,
           backgroundColor: kPrimaryColor,
           elevation: 0,
-          leading: IconButton(icon: Icon(Icons.arrow_back), onPressed: clearInfo),
+          leading:
+              IconButton(icon: Icon(Icons.arrow_back), onPressed: clearInfo),
         ),
         body: SafeArea(
           child: Stack(
@@ -111,7 +109,9 @@ class _CreateHVACRequestState extends State<CreateHVACRequest> {
                       //   ),
                       // ),
                       Container(
-                        decoration: BoxDecoration(border: Border(top: BorderSide(color: Colors.grey))),
+                        decoration: BoxDecoration(
+                            border:
+                                Border(top: BorderSide(color: Colors.grey))),
                         padding: EdgeInsets.fromLTRB(5, 7, 5, 0),
                         height: 65,
                         width: size.width,
@@ -122,9 +122,17 @@ class _CreateHVACRequestState extends State<CreateHVACRequest> {
                                 hintText: "Write your Request here",
                                 filled: true,
                                 fillColor: Colors.grey[200],
-                                prefixIcon: IconButton(icon:Icon(Icons.camera_alt),onPressed: (){takeImage(context);},),
-                                suffixIcon: IconButton(icon:Icon(Icons.send),
-                                  onPressed:uploading ? null : ()=> uploadImageAndSaveItemInfo(),
+                                prefixIcon: IconButton(
+                                  icon: Icon(Icons.camera_alt),
+                                  onPressed: () {
+                                    takeImage(context);
+                                  },
+                                ),
+                                suffixIcon: IconButton(
+                                  icon: Icon(Icons.send),
+                                  onPressed: uploading
+                                      ? null
+                                      : () => uploadImageAndSaveItemInfo(),
                                   //{Navigator.of(context).pushNamed('userhome');},
                                 ),
                                 contentPadding: EdgeInsets.all(5),
@@ -138,36 +146,47 @@ class _CreateHVACRequestState extends State<CreateHVACRequest> {
                   )),
               Positioned(
                   child: Container(
-                    width: MediaQuery.of(context).size.width-20,
-                    height: MediaQuery.of(context).size.height-150,
-                    child: SingleChildScrollView(
-                      child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 8),
-                          child:Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              ListTile(
-                                title:Row(
-                                  children: [
-                                    Icon(Icons.person,color: kPrimaryColor,),
-                                    SizedBox(width: 8,),
-                                    Text('Eslam El Sherif',style: TextStyle(color: kPrimaryColor,fontWeight: FontWeight.bold),),
-                                  ],
+                width: MediaQuery.of(context).size.width - 20,
+                height: MediaQuery.of(context).size.height - 150,
+                child: SingleChildScrollView(
+                  child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 8),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          ListTile(
+                            title: Row(
+                              children: [
+                                Icon(
+                                  Icons.person,
+                                  color: kPrimaryColor,
                                 ),
-                                subtitle: Container(
-                                  margin: EdgeInsets.only(top: 8),
-                                  padding: const EdgeInsets.all(10),
-                                  color: Colors.grey[100],
-                                  child: Text("Request Description",style: TextStyle(color: Colors.black),),
+                                SizedBox(
+                                  width: 8,
                                 ),
+                                Text(
+                                  'Eslam El Sherif',
+                                  style: TextStyle(
+                                      color: kPrimaryColor,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            ),
+                            subtitle: Container(
+                              margin: EdgeInsets.only(top: 8),
+                              padding: const EdgeInsets.all(10),
+                              color: Colors.grey[100],
+                              child: Text(
+                                "Request Description",
+                                style: TextStyle(color: Colors.black),
                               ),
-
-                            ],
-                          )
-                      ),
-                    ),
-                  ))
-
+                            ),
+                          ),
+                        ],
+                      )),
+                ),
+              ))
             ],
           ),
         ));
@@ -176,61 +195,71 @@ class _CreateHVACRequestState extends State<CreateHVACRequest> {
   takeImage(mContext) {
     return showDialog(
         context: mContext,
-        builder: (con)
-        {
+        builder: (con) {
           return SimpleDialog(
-            title: Text("Image of your request",style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),),
+            title: Text(
+              "Image of your request",
+              style:
+                  TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+            ),
             children: [
               SimpleDialogOption(
-                child: Text("Capture with Camera",style: TextStyle(color: kPrimaryColor),),
+                child: Text(
+                  "Capture with Camera",
+                  style: TextStyle(color: kPrimaryColor),
+                ),
                 onPressed: capturePhotoWithCamera,
               ),
               SimpleDialogOption(
-                child: Text("Select from Gallery",style: TextStyle(color: kPrimaryColor),),
+                child: Text(
+                  "Select from Gallery",
+                  style: TextStyle(color: kPrimaryColor),
+                ),
                 onPressed: pickPhotoFromGallery,
               ),
               SimpleDialogOption(
-                child: Text("Cancel",style: TextStyle(color: kPrimaryColor),),
-                onPressed: (){
+                child: Text(
+                  "Cancel",
+                  style: TextStyle(color: kPrimaryColor),
+                ),
+                onPressed: () {
                   Navigator.pop(context);
                 },
               ),
             ],
           );
-        }
-    );
+        });
   }
 
-  capturePhotoWithCamera() async
-  {
+  capturePhotoWithCamera() async {
     Navigator.pop(context);
-    final imagefile = await ImagePicker().getImage(source: ImageSource.camera,maxHeight: 680.0,maxWidth: 970.0);
-
-    setState(() {
-      file = File (imagefile.path);
-    });
-  }
-
-  pickPhotoFromGallery() async
-  {
-    Navigator.pop(context);
-    final imagefile = await ImagePicker().getImage(source: ImageSource.gallery,);
+    final imagefile = await ImagePicker().getImage(
+        source: ImageSource.camera, maxHeight: 680.0, maxWidth: 970.0);
 
     setState(() {
       file = File(imagefile.path);
     });
   }
 
-  clearInfo()
-  {
+  pickPhotoFromGallery() async {
+    Navigator.pop(context);
+    final imagefile = await ImagePicker().getImage(
+      source: ImageSource.gallery,
+    );
+
+    setState(() {
+      file = File(imagefile.path);
+    });
+  }
+
+  clearInfo() {
     setState(() {
       file = null;
       _detailsTextEditingController.clear();
     });
   }
 
-  uploadImageAndSaveItemInfo() async
-  {
+  uploadImageAndSaveItemInfo() async {
     setState(() {
       uploading = true;
     });
@@ -239,23 +268,23 @@ class _CreateHVACRequestState extends State<CreateHVACRequest> {
 
     saveItemInfo(imageDownloadUrl);
   }
-  Future<String> uploadItemImage(mFileImage) async
-  {
-    final Reference  reference = FirebaseStorage.instance.ref().child("$_documentId Items");
-    UploadTask uploadTask = reference.child("request_$_requestId.jpg").putFile(mFileImage);
+
+  Future<String> uploadItemImage(mFileImage) async {
+    final Reference reference =
+        FirebaseStorage.instance.ref().child("$_documentId Items");
+    UploadTask uploadTask =
+        reference.child("request_$_requestId.jpg").putFile(mFileImage);
     String downloadUrl = await (await uploadTask).ref.getDownloadURL();
     return downloadUrl;
   }
 
-  saveItemInfo(String downloadUrl)
-  async {
-    String customerName = await sharedPreference.getUserName();
-    String customerBuilding = await sharedPreference.getUserBldg();
-    String customerFlat = await sharedPreference.getUserFlat();
-    String customerPhone = await sharedPreference.getUserPhone();
+  saveItemInfo(String downloadUrl) async {
+    String customerName = _repository.getUserData.name;
+    String customerBuilding = _repository.getUserData.id;
+    String customerPhone = _repository.getUserData.phone;
 
-
-    final itemsRef = FirebaseFirestore.instance.collection("$_documentId Items");
+    final itemsRef =
+        FirebaseFirestore.instance.collection("$_documentId Items");
     itemsRef.doc(_requestId).set({
       "description": _detailsTextEditingController.text.trim(),
       "date": _requestDate.trim(),
@@ -274,5 +303,3 @@ class _CreateHVACRequestState extends State<CreateHVACRequest> {
     });
   }
 }
-
-

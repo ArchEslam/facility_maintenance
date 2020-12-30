@@ -1,21 +1,17 @@
-import 'package:facility_maintenance/data/repository.dart';
-import 'package:facility_maintenance/model/user.dart';
-import 'package:flutter/material.dart';
 import 'package:facility_maintenance/Screens/Login_user/components/background.dart';
 import 'package:facility_maintenance/Screens/Signin_employee/signin_screen.dart';
 import 'package:facility_maintenance/components/already_have_an_account_acheck.dart';
 import 'package:facility_maintenance/components/rounded_button.dart';
 import 'package:facility_maintenance/components/rounded_input_field.dart';
 import 'package:facility_maintenance/components/rounded_password_field.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:facility_maintenance/data/repository.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import '../../../SharedPreferences.dart';
+import 'package:flutter/material.dart';
+
 import '../../../constants.dart';
 import '../../../injection_container.dart';
 
 class Body extends StatefulWidget {
-
   const Body({
     Key key,
   }) : super(key: key);
@@ -25,33 +21,30 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
+
   // final _userid;
-  SharedPreference sharedPreference = SharedPreference();
-  Repository _repository= sl<Repository>();
+  Repository _repository = sl<Repository>();
 
   String selectedBuilding = 'Building No.01';
-  String userID="00101B01";
-  String password="qwerty1";
+  String userID = "00101B01";
+  String password = "qwerty1";
   String parentDbName = "Users";
+
   // String _userName;
   //
   // String get userName=> _userName;
 
-
-
-
-
   // void getUserData()async{
   //   final userdata= await db.parentDbNam ;
   // }
-
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return OrientationBuilder(builder: (context, orientation) {
       return Background(
-        child: ListView(children: [
+          child: ListView(
+        children: [
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
@@ -68,8 +61,7 @@ class _BodyState extends State<Body> {
               SizedBox(height: size.height * 0.03),
               Container(
                 margin: EdgeInsets.symmetric(vertical: 10),
-                padding:
-                EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                 width: size.width * 0.8,
                 decoration: BoxDecoration(
                   color: kPrimaryLightColor,
@@ -78,8 +70,7 @@ class _BodyState extends State<Body> {
                 child: Row(
                   children: [
                     Padding(
-                      padding:
-                      const EdgeInsets.fromLTRB(0.0, 0.0, 15.0, 0.0),
+                      padding: const EdgeInsets.fromLTRB(0.0, 0.0, 15.0, 0.0),
                       child: Icon(
                         Icons.account_balance,
                         color: kPrimaryColor,
@@ -127,12 +118,12 @@ class _BodyState extends State<Body> {
               RoundedInputField(
                 hintText: "Your ID",
                 onChanged: (value) {
-                  userID=value;
+                  userID = value;
                 },
               ),
               RoundedPasswordField(
                 onChanged: (value) {
-                  password=value;
+                  password = value;
                 },
               ),
               RoundedButton(
@@ -161,31 +152,34 @@ class _BodyState extends State<Body> {
               ),
             ],
           ),
-        ],)
-      );
+        ],
+      ));
     });
   }
-  onLogin(){
-   /* final  db = */FirebaseDatabase.instance.reference().child("Users").orderByChild('id').once().then((DataSnapshot snapshot) {
+
+  onLogin() {
+    /* final  db = */ FirebaseDatabase.instance
+        .reference()
+        .child("Users")
+        .orderByChild('id')
+        .once()
+        .then((DataSnapshot snapshot) {
       //print('Data : ${snapshot.value}');
-      Map _map =snapshot.value;
+      Map _map = snapshot.value;
       Map filteredMap = Map.from(_map)..forEach((k, v) => print(v.toString()));
-      Iterable _iterable =filteredMap.values;
-      Map _mapItems ;
+      Iterable _iterable = filteredMap.values;
+      Map _mapItems;
       _iterable.forEach((element) async {
-        _mapItems=element;
-        if(_mapItems["id"] == userID && _mapItems["password"] == password &&_mapItems["building"] == selectedBuilding)
+        _mapItems = element;
+        if (_mapItems["id"] == userID &&
+            _mapItems["password"] == password &&
+            _mapItems["building"] == selectedBuilding)
           Navigator.of(context).pushNamed('userhome');
-         await  sharedPreference.addUserId(userID);
-         await  sharedPreference.addUserBldg(selectedBuilding);
-        _repository.saveUserData(_map) ;
+        _repository.saveUserData(_mapItems);
         _repository.setLogedIn(true);
         _repository.setUserType(Constants.user);
-
       });
     });
-   // Navigator.of(context).pushNamed('userhome');
-
+    // Navigator.of(context).pushNamed('userhome');
   }
 }
-
