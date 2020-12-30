@@ -28,6 +28,7 @@ class HVAC {
 
   factory HVAC.fromMap(Map<dynamic, dynamic> json) => HVAC(
         building: json["building"],
+        key: [],
         customer: json["customer"],
         customerId: json["customerId"],
         date: json["date"],
