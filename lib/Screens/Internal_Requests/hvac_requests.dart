@@ -64,6 +64,7 @@ class _HVACRequestsState extends State<HVACRequests> {
       listHVAC.clear();
       for (var individualKey in KEYS) {
 
+       // if(DATA[individualKey]['customerID']===customerID)
          // HVAC requests = new HVAC.fromMap(DATA[individualKey]);
         HVAC requests = new HVAC(
           key:individualKey,
