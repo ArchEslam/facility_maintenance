@@ -1,3 +1,4 @@
+import 'package:facility_maintenance/test_Screens/ViewRequests.dart';
 import 'package:flutter/material.dart';
 import 'package:facility_maintenance/Screens/Home_Page_employee/components/background.dart';
 import '../../../constants.dart';
@@ -79,7 +80,9 @@ class _BodyState extends State<Body> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[            
             InkWell(
-              onTap: (){},
+              onTap: (){Navigator.push(context,MaterialPageRoute(builder: (context) {
+              return ViewRequests();
+              },),);},
               child: buildButton(Icons.settings, "General Maintenances of All Facilities",
                   "View all costumers' maintenance requests for any of the public utilites in all buildings."),
             ),

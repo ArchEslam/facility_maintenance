@@ -253,7 +253,7 @@ class _CreateHVACRequestState extends State<CreateHVACRequest> with AutomaticKee
         .reference()
         .child("$_documentId Requests")
         .child(_requestId).set({
-          "customer ID": customerID.toString(),
+          "customerID": customerID.toString(),
           "description": _detailsTextEditingController.text.trim(),
           "date": _requestDate.trim(),
           "customer": customerName,
@@ -262,7 +262,7 @@ class _CreateHVACRequestState extends State<CreateHVACRequest> with AutomaticKee
           "flat": customerFlat.trim(),
           "price": _price.trim(),
           "employeeName":"N/A",
-          "is solved":false,
+          "isSolved":false,
           "thumbnailUrl": downloadUrl,
     });
     setState(() {
@@ -281,7 +281,7 @@ class _CreateHVACRequestState extends State<CreateHVACRequest> with AutomaticKee
   //   String customerPhone = await sharedPreference.getUserPhone();
   //   final itemsRef = FirebaseFirestore.instance.collection("$_documentId Requests");
   //   itemsRef.doc(_requestId).set({
-  //     "customer ID": customerID.toString(),
+  //     "customerID": customerID.toString(),
   //     "description": _detailsTextEditingController.text.trim(),
   //     "date": _requestDate.trim(),
   //     "customer": customerName,
@@ -290,7 +290,7 @@ class _CreateHVACRequestState extends State<CreateHVACRequest> with AutomaticKee
   //     "flat": customerFlat.trim(),
   //     "price": _price.trim(),
   //     "employeeName":"N/A",
-  //     "is solved":false,
+  //     "isSolved":false,
   //     "thumbnailUrl": downloadUrl,
   //   });
   //
