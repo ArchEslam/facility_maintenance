@@ -209,25 +209,25 @@ class FirebaseInfos {
 
 
 
-class Preferences {
-  static const String USER_KEY = "UserKey";
-
-  static Future<bool> setUserKey(String UserKey) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString(USER_KEY, UserKey);
-    return prefs.commit();
-  }
-
-  static Future<String> getUserKey() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String UserKey = prefs.getString(USER_KEY);
-
-    // workaround - simulate a login setting this
-    if (UserKey == null) {
-      UserKey = "00101B01";
-    }
-
-    return UserKey;
-  }
-}
+// class Preferences {
+//   static const String USER_KEY = "UserKey";
+//
+//   static Future<bool> setUserKey(String UserKey) async {
+//     SharedPreferences prefs = await SharedPreferences.getInstance();
+//     prefs.setString(USER_KEY, UserKey);
+//     return prefs.commit();
+//   }
+//
+//   static Future<String> getUserKey() async {
+//     SharedPreferences prefs = await SharedPreferences.getInstance();
+//     String UserKey = prefs.getString(USER_KEY);
+//
+//     // workaround - simulate a login setting this
+//     if (UserKey == null) {
+//       UserKey = "00101B01";
+//     }
+//
+//     return UserKey;
+//   }
+// }
 
