@@ -1,13 +1,16 @@
 import 'package:facility_maintenance/SharedPreferences.dart';
+import 'package:facility_maintenance/data/repository.dart';
+import 'package:facility_maintenance/model/user.dart';
 import 'package:flutter/material.dart';
 import 'package:facility_maintenance/components/rounded_button.dart';
 import '../../../constants.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:facility_maintenance/Screens/Personal_Data_user/personal_data_user.dart';
 
+import '../../../injection_container.dart';
 
 
-SharedPreference sharedPreference = SharedPreference();
+
 GlobalKey<FormState> formstate = new GlobalKey<FormState>();
 
 // final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -62,6 +65,7 @@ class Body extends StatelessWidget {
   TextEditingController phoneController=TextEditingController();
   TextEditingController emailController=TextEditingController();
   TextEditingController nameController=TextEditingController();
+  Repository _repository= sl<Repository>();
 
   @override
   Widget build(BuildContext context) {
@@ -143,11 +147,11 @@ class Body extends StatelessWidget {
   }
 
   onChangePersonalData(String name,String email,String phone) async {
-    var id = await sharedPreference.getUserId();
+    User user= await _repository.getUserData;
     var updatedItem = FirebaseDatabase.instance
         .reference()
         .child("Users")
-        .child(id.toString());
+        .child(user.id.toString());
     updatedItem.update({'name': name ,'mail': email,'phone':phone,});
   }
 }

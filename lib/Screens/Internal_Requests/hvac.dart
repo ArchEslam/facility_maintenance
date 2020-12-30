@@ -39,6 +39,18 @@ class HVAC {
     phone = json['phone'];
     thumbnailUrl = json['thumbnailUrl'];
   }
+  HVAC.fromMap(Map<dynamic, dynamic>json, this.building, this.customer, this.date, this.description, this.employeeName, this.flat, this.price, this.isSolved, this.phone, this.thumbnailUrl){
+    building = json['building'];
+    customer = json['customer'];
+    date = json['date'];
+    description = json['description'];
+    employeeName = json['employeeName'];
+    flat = json['flat'];
+    price = json['price'];
+    isSolved = json['isSolved'];
+    phone = json['phone'];
+    thumbnailUrl = json['thumbnailUrl'];
+  }
 
   Map<String, dynamic> toJson()
   {

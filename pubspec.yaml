@@ -37,7 +37,8 @@ dependencies:
   image_picker: ^0.6.7+17
   # Material Dialog
   material_dialog: ^0.0.9
-
+  # Service locator
+  get_it: any
 
 dev_dependencies:
   flutter_test:

@@ -2,6 +2,8 @@ import 'package:facility_maintenance/Screens/Personal_Data_user/personal_data_us
 import 'package:facility_maintenance/constants.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'Screens/Home_Page_employee/home_employee.dart';
 import 'Screens/Home_Page_user/home_user.dart';
 import 'Screens/Internal_Requests/create_hvac_request.dart';
@@ -9,10 +11,11 @@ import 'Screens/Internal_Requests/hvac_requests.dart';
 import 'Screens/Internal_Sections_employee/internal_sections_employee.dart';
 import 'Screens/Internal_Sections_user/internal_sections_user.dart';
 import 'Screens/Welcome/welcome_screen.dart';
+import 'package:facility_maintenance/injection_container.dart' as di;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await di.init();
   runApp(MyApp());
 }
 

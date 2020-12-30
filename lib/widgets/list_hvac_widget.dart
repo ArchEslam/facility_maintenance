@@ -1,5 +1,10 @@
+import 'dart:ffi';
+
+import 'package:facility_maintenance/data/repository.dart';
 import 'package:facility_maintenance/model/hvac.dart';
 import 'package:flutter/material.dart';
+
+import '../injection_container.dart';
 
 class ListHVACWidget extends StatefulWidget {
   final List<HVAC> listHVAC;
@@ -15,6 +20,18 @@ class ListHVACWidget extends StatefulWidget {
 }
 
 class _ListHVACWidgettState extends State<ListHVACWidget> {
+  Repository _repository= sl<Repository>();
+  int userType=0;
+
+  Future<Void> _getUserType() async{
+      userType= await _repository.getUserType;
+    print("userType value ListHVACWidget ================================ ${userType}");
+  }
+  @override
+  void initState() {
+    _getUserType();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -81,12 +98,12 @@ class _ListHVACWidgettState extends State<ListHVACWidget> {
           onPressed();
         },
         child: Padding(
-          padding: const EdgeInsets.only(top: 4.0, right: 4.0, left: 4.0),
+          padding: const EdgeInsets.only(top: 4.0, right: 4.0, left: 4.0,bottom: 6),
           child: Container(
             // margin: EdgeInsets.symmetric(horizontal: 4),
             // padding: EdgeInsets.all(4),
             decoration: BoxDecoration(
-                color: Colors.white, borderRadius: BorderRadius.circular(8)),
+                color: Colors.grey[100], borderRadius: BorderRadius.circular(8)),
             // height: container_item_height,
             // _container_lis_height,
             child: Column(
@@ -138,7 +155,7 @@ class _ListHVACWidgettState extends State<ListHVACWidget> {
                         ),
                       ]),
                 ),
-
+                //------------------------------------------------------------
                 Padding(
                   padding: const EdgeInsets.all(2.0),
                   child: Image(
@@ -146,6 +163,7 @@ class _ListHVACWidgettState extends State<ListHVACWidget> {
                     fit: BoxFit.fill,
                   ),
                 ),
+                //------------------------------------------------------------
                 Container(
                   height: 2,
                   color: Colors.grey[200],

@@ -1,3 +1,5 @@
+import 'package:facility_maintenance/data/repository.dart';
+import 'package:facility_maintenance/model/user.dart';
 import 'package:flutter/material.dart';
 import 'package:facility_maintenance/Screens/Login_user/components/background.dart';
 import 'package:facility_maintenance/Screens/Signin_employee/signin_screen.dart';
@@ -10,6 +12,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../../SharedPreferences.dart';
 import '../../../constants.dart';
+import '../../../injection_container.dart';
 
 class Body extends StatefulWidget {
 
@@ -24,6 +27,7 @@ class Body extends StatefulWidget {
 class _BodyState extends State<Body> {
   // final _userid;
   SharedPreference sharedPreference = SharedPreference();
+  Repository _repository= sl<Repository>();
 
   String selectedBuilding = 'Building No.01';
   String userID="00101B01";
@@ -174,15 +178,9 @@ class _BodyState extends State<Body> {
           Navigator.of(context).pushNamed('userhome');
          await  sharedPreference.addUserId(userID);
          await  sharedPreference.addUserBldg(selectedBuilding);
-        // print(_mapItems["name"]);
-        // print(_mapItems["phone"]);
-        // print(_mapItems["mail"]);
-        // print(_mapItems["flat"]);
-
-        //await  sharedPreference.addUserName(userName);
-
-        //print(_mapItems["id"]);
-
+        _repository.saveUserData(_map) ;
+        _repository.setLogedIn(true);
+        _repository.setUserType(Constants.user);
 
       });
     });
