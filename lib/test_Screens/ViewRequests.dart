@@ -113,7 +113,7 @@ class _ViewRequestsState extends State<ViewRequests> {
                   width: 10,
                 ),
                 new Text(
-                  "Customer ID: $customerID",
+                  "User ID: $customerID",
                   style: Theme.of(context).textTheme.subtitle2,
                   textAlign: TextAlign.center,
                 ),
@@ -129,7 +129,7 @@ class _ViewRequestsState extends State<ViewRequests> {
             Row(
               children: [
                 new Text(
-                  "Customer Name :$customer",
+                  "User Name :$customer",
                   style: Theme.of(context).textTheme.subtitle2,
                   textAlign: TextAlign.center,
                 ),
@@ -137,7 +137,7 @@ class _ViewRequestsState extends State<ViewRequests> {
                   width: 15,
                 ),
                 new Text(
-                  "Customer Phone :$phone",
+                  "Phone :$phone",
                   style: Theme.of(context).textTheme.subtitle2,
                   textAlign: TextAlign.center,
                 ),
@@ -147,7 +147,7 @@ class _ViewRequestsState extends State<ViewRequests> {
               height: 10,
             ),
             new Text(
-              description,
+              "Details: $description",
               style: Theme.of(context).textTheme.subtitle1,
               textAlign: TextAlign.center,
             ),
@@ -155,7 +155,7 @@ class _ViewRequestsState extends State<ViewRequests> {
               height: 10,
             ),
             new Text(
-              "Price: $price",
+              "Price: $price SAR",
               style: Theme.of(context).textTheme.subtitle2,
               textAlign: TextAlign.center,
             ),
@@ -171,7 +171,7 @@ class _ViewRequestsState extends State<ViewRequests> {
               height: 10,
             ),
             new Text(
-              "Is Solved: $isSolved",
+              "Is Solved?:  $isSolved",
               style: Theme.of(context).textTheme.subtitle2,
               textAlign: TextAlign.center,
             ),

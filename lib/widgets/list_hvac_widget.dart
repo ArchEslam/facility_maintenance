@@ -150,36 +150,46 @@ class _ListHVACWidgettState extends State<ListHVACWidget> {
                         ),
                         Padding(
                           padding: const EdgeInsets.all(4.0),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                alignment: Alignment.topLeft,
-                                 width: container_item_text_width,
-                                child: Text(
-                                  //hvac.customer,
-                                  hvac.customer ?? "",
-                                    style: Theme.of(context).textTheme.headline4
+                          child: Container(
+                            width: 210,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  alignment: Alignment.topLeft,
+                                   width: 210,//container_item_text_width,
+                                  child: Text(
+                                    //hvac.customer,
+                                    hvac.customer ?? "",
+                                      style: Theme.of(context).textTheme.headline6
+                                  ),
                                 ),
-                              ),
-                              Container(
-                                width: container_item_text_width,
-                                alignment: Alignment.topLeft,
-                                // width: _container_item_height,
-                                child: Text(
-                                  //hvac.description,
-                                  hvac.description??"",
-                                    style: Theme.of(context).textTheme.subtitle1
+                                Container(
+                                  width: 210,//container_item_text_width,
+                                  alignment: Alignment.topLeft,
+                                  // width: _container_item_height,
+                                  child: Text(
+                                    hvac.date??"",
+                                      style: Theme.of(context).textTheme.subtitle1
+                                    //hvac.description,
+                                    // hvac.description??"",
+                                    //   style: Theme.of(context).textTheme.subtitle1
 
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                       ]),
                 ),
                 //------------------------------------------------------------
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 10),
+                  child: Text(hvac.description??"",
+                      style: Theme.of(context).textTheme.subtitle1),
+                ),
                 Padding(
                   padding: const EdgeInsets.all(2.0),
                   child: Image(
@@ -202,19 +212,19 @@ class _ListHVACWidgettState extends State<ListHVACWidget> {
                       children: <Widget>[
 
                          Container(
-                            width:container_item_text_width,
+                            width:container_item_text_width*1.7,
                             child: Column(
                               children: [
                                 Text(
-                                    "${hvac.isSolved ? "Cost ${hvac.price} " :"N/A"}",
+                                    "${hvac.isSolved ? "Cost: ${hvac.price} SAR " :"N/A"}",
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                     softWrap: false,
                                     style: Theme.of(context).textTheme.subtitle2),
                                 Container(
-                                  width:container_item_text_width,
+                                  width:container_item_text_width*2,
                                   child: Text(
-                                      "${hvac.isSolved ? "Employee Name :${hvac.employeeName}" :""}",
+                                      "${hvac.isSolved ? "Employee Name: ${hvac.employeeName}" :""}",
                                       maxLines: 3,
                                       softWrap: false,
                                       style: Theme.of(context).textTheme.subtitle2),

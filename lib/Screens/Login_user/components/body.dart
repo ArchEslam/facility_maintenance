@@ -25,9 +25,9 @@ class _BodyState extends State<Body> {
   // final _userid;
   Repository _repository = sl<Repository>();
 
-  String selectedBuilding = 'Building No.01';
-  String userID = "00101B01";
-  String password = "qwerty1";
+  String selectedBuilding;// = 'Building No.01';
+  String userID;// = "00101B01";
+  String password;// = "qwerty1";
   String parentDbName = "Users";
 
   // String _userName;

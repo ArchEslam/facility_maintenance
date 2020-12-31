@@ -22,9 +22,9 @@ class Body extends StatefulWidget {
 
 class _BodyState extends State<Body> {
 
-  String employeeID = "E001";
-  String password = "qwerty";
-  String parentDbName = "Employees";
+  String employeeID;// = "E001";
+  String password;// = "qwerty";
+  String parentDbName;// = "Employees";
   Repository _repository = sl<Repository>();
 
   @override
