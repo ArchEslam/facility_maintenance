@@ -1,7 +1,6 @@
-import 'package:facility_maintenance/components/InfoPage.dart';
-import 'package:facility_maintenance/components/get_data_from_database.dart';
-import 'package:flutter/material.dart';
 import 'package:facility_maintenance/Screens/Home_Page_user/components/background.dart';
+import 'package:facility_maintenance/components/InfoPage.dart';
+import 'package:flutter/material.dart';
 
 import '../../../constants.dart';
 
@@ -15,6 +14,7 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
+
   String selectedBuilding = 'Building No.01';
 
   @override
@@ -27,7 +27,7 @@ class _BodyState extends State<Body> {
         return Padding(
           padding: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
           child: Container(
-            margin: EdgeInsets.symmetric(vertical: 10),            
+            margin: EdgeInsets.symmetric(vertical: 10),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(29),
               child: Container(
@@ -82,7 +82,7 @@ class _BodyState extends State<Body> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             InkWell(
-              onTap: (){
+              onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -91,18 +91,24 @@ class _BodyState extends State<Body> {
                     },
                   ),
                 );
-              },//{Navigator.of(context).pushNamed('user_personal_data');},
+              }, //{Navigator.of(context).pushNamed('user_personal_data');},
               child: buildButton(Icons.person, "Personal Data",
                   "Provide us with your name, email and phone number to contact you."),
             ),
             InkWell(
-              onTap: (){},
-              child: buildButton(Icons.settings, "General Maintenances of Your Facility",
+              onTap: () {},
+              child: buildButton(
+                  Icons.settings,
+                  "General Maintenances of Your Facility",
                   "You can request maintenance for any of the public utilites in your building."),
             ),
             InkWell(
-              onTap: (){Navigator.of(context).pushNamed('user_in_sections');},
-              child: buildButton(Icons.store, "Internal Maintenances of Your Appartment",
+              onTap: () {
+                Navigator.of(context).pushNamed('user_in_sections');
+              },
+              child: buildButton(
+                  Icons.store,
+                  "Internal Maintenances of Your Appartment",
                   "You can request maintenance for Plumbing, HVAC and Electricity in your appartment."),
             ),
           ],

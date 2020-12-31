@@ -1,6 +1,9 @@
 import 'package:facility_maintenance/Screens/Personal_Data_user/personal_data_user.dart';
 import 'package:facility_maintenance/constants.dart';
+import 'package:facility_maintenance/injection_container.dart' as di;
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+
 import 'Screens/Home_Page_employee/home_employee.dart';
 import 'Screens/Home_Page_user/home_user.dart';
 import 'Screens/Internal_Requests/create_hvac_request.dart';
@@ -9,8 +12,12 @@ import 'Screens/Internal_Sections_employee/internal_sections_employee.dart';
 import 'Screens/Internal_Sections_user/internal_sections_user.dart';
 import 'Screens/Welcome/welcome_screen.dart';
 
-
-void main() => runApp(MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  await di.init();
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -22,39 +29,37 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: kPrimaryColor,
         scaffoldBackgroundColor: Colors.white,
-        
       ),
       home: WelcomeScreen(),
       routes: {
-            'userhome': (context) {
-              return HomeUserScreen();
-            },
-            'employeehome': (context) {
-              return HomeEmployeeScreen();
-            },
-            'employee_in_sections': (context) {
-              return InternalSectionsEmployee();
-            },
-            'user_in_sections': (context) {
-              return InternalSectionsUser();
-            },
-            'user_personal_data': (context) {
-              return PersonalDataScreen();
-            },
-            'hvac_requests': (context) {
-              return HVACRequests();
-            },
-            'create_hvac_request': (context) {
-              return CreateHVACRequest();
-            },
-            /*'plumbing_requests': (context) {
+        'userhome': (context) {
+          return HomeUserScreen();
+        },
+        'employeehome': (context) {
+          return HomeEmployeeScreen();
+        },
+        'employee_in_sections': (context) {
+          return InternalSectionsEmployee();
+        },
+        'user_in_sections': (context) {
+          return InternalSectionsUser();
+        },
+        'user_personal_data': (context) {
+          return PersonalDataScreen();
+        },
+        'hvac_requests': (context) {
+          return HVACRequests();
+        },
+        'create_hvac_request': (context) {
+          return CreateHVACRequest();
+        },
+        /*'plumbing_requests': (context) {
               return PlumbingRequests();
             },
             'electricity_requests': (context) {
               return ElectricityRequests();
             },*/
-            
-          },
+      },
     );
   }
 }

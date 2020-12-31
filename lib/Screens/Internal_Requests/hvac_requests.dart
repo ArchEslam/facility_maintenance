@@ -1,5 +1,11 @@
 import 'package:facility_maintenance/constants.dart';
+import 'package:facility_maintenance/data/repository.dart';
+import 'package:facility_maintenance/model/hvac.dart';
+import 'package:facility_maintenance/widgets/list_hvac_widget.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+
+import '../../injection_container.dart';
 
 class HVACRequests extends StatefulWidget {
   @override
@@ -7,132 +13,73 @@ class HVACRequests extends StatefulWidget {
 }
 
 class _HVACRequestsState extends State<HVACRequests> {
+
+  List<HVAC> listHVAC = [];
+  Repository _repository = sl<Repository>();
+
+  DatabaseReference requestsRef =
+      FirebaseDatabase.instance.reference().child("HVAC Requests");
+
+  @override
+  void initState() {
+    getData();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     bool checkedBoxValue = false;
     return Scaffold(
-      appBar: AppBar(
-        title: Text("HVAC Requests", style: TextStyle(color: Colors.white)),
-        centerTitle: true,
-        backgroundColor: kPrimaryColor,
-        elevation: 0,
-      ),
-      body: ListView(
-        children: [
-          Card(
+        appBar: AppBar(
+          title: Text("HVAC Requests", style: TextStyle(color: Colors.white)),
+          centerTitle: true,
+          backgroundColor: kPrimaryColor,
+          elevation: 0,
+        ),
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
               children: [
-                ListTile(
-                  leading: CircleAvatar(
-                    child: Icon(Icons.person),
-                  ),
-                  title: Container(
-                    margin: EdgeInsets.only(top: 10),
-                    child: Text("Essam"),
-                  ),
-                  trailing: Icon(Icons.filter_list),
-                  isThreeLine: true,
-                  subtitle: Text(
-                      "I have a problem with the air-conditioner in the reception hall, as it is dropping water from it."),
-                ),
-                Divider(
-                  color: Colors.grey.withOpacity(0.5),
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                        child: Container(
-                          decoration: BoxDecoration(border:Border(right: BorderSide(color: Colors.grey.withOpacity(0.5)))),
-                      padding: EdgeInsets.fromLTRB(0, 5, 0, 10),
-                      child: Text(
-                        "Comment",
-                        style: TextStyle(fontSize: 15),                        
-                        textAlign: TextAlign.center,
+                listHVAC.length == 0
+                    ? Container()
+                    : ListHVACWidget(
+                        listHVAC: listHVAC,
+                        getSelectedValues: ({HVAC hvac}) {
+                          print("selected = ${hvac.toMap()}");
+                        },
+                        onCheckedValue: (bool value) {},
+                        userType: Constants.employee,
                       ),
-                    )),
-                    Expanded(
-                        child: Padding(
-                      padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                      child: CheckboxListTile(
-                          title: Text(
-                            "Solved?",                            
-                            textAlign: TextAlign.end,
-                          ),
-                          //secondary: Icon(Icons.build,color: kPrimaryColor,),
-                          controlAffinity: ListTileControlAffinity.platform,
-                          value: checkedBoxValue,
-                          activeColor: kPrimaryColor,
-                          checkColor: Colors.black,
-                          onChanged: (bool value) {
-                            setState(() {
-                              checkedBoxValue = value;
-                            });
-                          }),
-                    )),
-                  ],
-                )
+                // hcvDataSnapshot(context)
               ],
             ),
           ),
-          Card(
-            child: Column(
-              children: [
-                ListTile(
-                  leading: CircleAvatar(
-                    child: Icon(Icons.person),
-                  ),
-                  title: Container(
-                    margin: EdgeInsets.only(top: 10),
-                    child: Text("Waleed"),
-                  ),
-                  trailing: Icon(Icons.filter_list),
-                  isThreeLine: true,
-                  subtitle: Text(
-                      "My air-conditioner of the Master Bedroom, as it is work well."),
-                ),
-                Divider(
-                  color: Colors.grey.withOpacity(0.5),
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                        child: Container(
-                          decoration: BoxDecoration(border:Border(right: BorderSide(color: Colors.grey.withOpacity(0.5)))),
-                          padding: EdgeInsets.fromLTRB(0, 5, 0, 10),
-                          child: Text(
-                            "Comment",
-                            style: TextStyle(fontSize: 15),
-                            textAlign: TextAlign.center,
-                          ),
-                        )),
-                    Expanded(
-                        child: Padding(
-                          padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                          child: CheckboxListTile(
-                              title: Text(
-                                "Solved?",
-                                textAlign: TextAlign.end,
-                              ),
-                              //secondary: Icon(Icons.build,color: kPrimaryColor,),
-                              controlAffinity: ListTileControlAffinity.platform,
-                              value: checkedBoxValue,
-                              activeColor: kPrimaryColor,
-                              checkColor: Colors.black,
-                              onChanged: (bool value) {
-                                setState(() {
-                                  checkedBoxValue = value;
-                                });
-                              }),
-                        )),
-                  ],
-                )
-              ],
-            ),
-          )
-        ],
-      ),
-    );
+        ));
+  }
+
+  getData() {
+    requestsRef.once().then((DataSnapshot snap) {
+      var KEYS = snap.value.keys;
+      var DATA = snap.value;
+      print("KEYS ============ ${snap.toString()}");
+
+      listHVAC.clear();
+      for (var individualKey in KEYS) {
+        if (DATA[individualKey]['customerID'] == _repository.getUserData.id) {
+          HVAC requests =
+              new HVAC.fromMap(key: individualKey, map: DATA[individualKey]);
+          setState(() {
+            listHVAC.add(requests);
+          });
+        }
+
+        // }
+
+      }
+      print("listHVAC.length =${listHVAC.length}");
+    });
   }
 }
-
-

@@ -18,6 +18,17 @@
 	<string>$(FLUTTER_BUILD_NAME)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.489886603568-ljoua9qelhabm2m8qok1dlilintd9ccv</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
@@ -41,5 +52,25 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+    <key>NSAppleMusicUsageDescription</key>
+        <string>Music!</string>
+        <key>NSCalendarsUsageDescription</key>
+        <string>Calendars</string>
+        <key>NSCameraUsageDescription</key>
+        <string>Take a picture to send to database</string>
+        <key>NSContactsUsageDescription</key>
+        <string>To make call phone </string>
+        <key>NSLocationAlwaysUsageDescription</key>
+        <string>To facilitate access to application services on the map to enable the addition of home and work addresses and to determine the closest services provided.</string>
+        <key>NSLocationWhenInUseUsageDescription</key>
+        <string>To facilitate access to application services on the map to enable the addition of home and work addresses and to determine the closest services provided.</string>
+        <key>NSMotionUsageDescription</key>
+        <string>motion</string>
+        <key>NSPhotoLibraryAddUsageDescription</key>
+        <string>Get his photos from the gallery to be sent to the database</string>
+        <key>NSPhotoLibraryUsageDescription</key>
+        <string>Get his photos from the gallery to be sent to the database</string>
+        <key>NSSpeechRecognitionUsageDescription</key>
+        <string>speech</string>
 </dict>
 </plist>
