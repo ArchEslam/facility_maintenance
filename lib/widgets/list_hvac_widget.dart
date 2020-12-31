@@ -202,13 +202,25 @@ class _ListHVACWidgettState extends State<ListHVACWidget> {
                       children: <Widget>[
 
                          Container(
-                            width:widget.userType == Constants.employee? container_item_text_width / 3:container_item_text_width,
-                            child: Text(
-                                "${hvac.isSolved ? "Cost ${hvac.price} \n Employee Name :${hvac.price};" :"N/A"}",
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                softWrap: false,
-                                style: Theme.of(context).textTheme.subtitle2),
+                            width:container_item_text_width,
+                            child: Column(
+                              children: [
+                                Text(
+                                    "${hvac.isSolved ? "Cost ${hvac.price} " :"N/A"}",
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    softWrap: false,
+                                    style: Theme.of(context).textTheme.subtitle2),
+                                Container(
+                                  width:container_item_text_width,
+                                  child: Text(
+                                      "${hvac.isSolved ? "Employee Name :${hvac.employeeName}" :""}",
+                                      maxLines: 3,
+                                      softWrap: false,
+                                      style: Theme.of(context).textTheme.subtitle2),
+                                ),
+                              ],
+                            ),
                           ),
 
                         widget.userType == Constants.employee?  Container(
