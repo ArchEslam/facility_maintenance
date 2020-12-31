@@ -160,6 +160,7 @@ class _ListHVACWidgettState extends State<ListHVACWidget> {
                                 child: Text(
                                   //hvac.customer,
                                   hvac.customer ?? "",
+                                    style: Theme.of(context).textTheme.headline4
                                 ),
                               ),
                               Container(
@@ -169,6 +170,8 @@ class _ListHVACWidgettState extends State<ListHVACWidget> {
                                 child: Text(
                                   //hvac.description,
                                   hvac.description??"",
+                                    style: Theme.of(context).textTheme.subtitle1
+
                                 ),
                               ),
                             ],
@@ -199,35 +202,44 @@ class _ListHVACWidgettState extends State<ListHVACWidget> {
                       children: <Widget>[
 
                          Container(
-                            width: container_item_text_width / 3,
+                            width:widget.userType == Constants.employee? container_item_text_width / 3:container_item_text_width,
                             child: Text(
-                                "Cost ${hvac.price == "null" ? "N/A" : hvac.price}",
+                                "${hvac.isSolved ? "N/A" :"Cost ${hvac.price}"}",
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 softWrap: false,
                                 style: Theme.of(context).textTheme.subtitle2),
                           ),
 
-                        Container(
+                        widget.userType == Constants.employee?  Container(
                           height: 50,
                           width: 2,
                           color: Colors.grey[200],
-                        ),
-                        Container(
+                        ):Container(),
+                        widget.userType == Constants.employee? Container(
                           // width: _container_item_height,
-                          child: Checkbox(
-                            value: hvac.isSolved ?? false,
-                            onChanged: (newValue) {
-                              if(!hvac.isSolved){
-                                if (widget.userType == Constants.employee) {
-                                  _buildEditPriceDialog(context, hvac);
-                                }
-                              }
-
-                            },
-                            // controlAffinity: ListTileControlAffinity.leading,  //  <-- leading Checkbox
+                          child: Row(
+                            children: [
+                              Checkbox(
+                                value: hvac.isSolved ?? false,
+                                onChanged: (newValue) {
+                                  if(!hvac.isSolved){
+                                    if (widget.userType == Constants.employee) {
+                                      _buildEditPriceDialog(context, hvac);
+                                    }
+                                  }
+                                },
+                                // controlAffinity: ListTileControlAffinity.leading,  //  <-- leading Checkbox
+                              ),
+                              Text(
+                                  "${hvac.isSolved ? "Solved" :"N/A"}",
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  softWrap: false,
+                                  style: Theme.of(context).textTheme.subtitle2),
+                            ],
                           ),
-                        ),
+                        ):Container(),
                       ]),
                 ),
               ],
