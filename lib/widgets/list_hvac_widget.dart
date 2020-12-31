@@ -212,7 +212,7 @@ class _ListHVACWidgettState extends State<ListHVACWidget> {
                       children: <Widget>[
 
                          Container(
-                            width:container_item_text_width*1.7,
+                            width:container_item_text_width*1.4,
                             child: Column(
                               children: [
                                 Text(
@@ -222,7 +222,7 @@ class _ListHVACWidgettState extends State<ListHVACWidget> {
                                     softWrap: false,
                                     style: Theme.of(context).textTheme.subtitle2),
                                 Container(
-                                  width:container_item_text_width*2,
+                                  width:container_item_text_width*1.4,
                                   child: Text(
                                       "${hvac.isSolved ? "Employee Name: ${hvac.employeeName}" :""}",
                                       maxLines: 3,
