@@ -147,11 +147,11 @@ class Body extends StatelessWidget {
   }
 
   onChangePersonalData(String name, String email, String phone) async {
-    User user = _repository.getUserData;
+    print("onChangePersonalData ==== name = $name ,,, email =$email ,,,  phone=$phone");
     var updatedItem = FirebaseDatabase.instance
         .reference()
         .child("Users")
-        .child(user.id.toString());
+        .child(_repository.getUserData.id.toString());
     updatedItem.update({
       'name': name,
       'mail': email,
