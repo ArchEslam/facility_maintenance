@@ -204,7 +204,7 @@ class _ListHVACWidgettState extends State<ListHVACWidget> {
                          Container(
                             width:widget.userType == Constants.employee? container_item_text_width / 3:container_item_text_width,
                             child: Text(
-                                "${hvac.isSolved ? "Cost ${hvac.price}" :"N/A"}",
+                                "${hvac.isSolved ? "Cost ${hvac.price} \n Employee Name :${hvac.price};" :"N/A"}",
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 softWrap: false,
@@ -303,6 +303,7 @@ class _ListHVACWidgettState extends State<ListHVACWidget> {
                   setState(() {
                     hvac.price = _priceController.text.toString();
                     hvac.isSolved=true;
+                    hvac.employeeName= _repository.getUserData.name;
                     _changeLis(hvac,context);
                   });
                 },
