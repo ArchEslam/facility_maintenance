@@ -156,7 +156,7 @@ class _ListHVACWidgettState extends State<ListHVACWidget> {
                             children: [
                               Container(
                                 alignment: Alignment.topLeft,
-                                // width: _container_item_height,
+                                 width: container_item_text_width,
                                 child: Text(
                                   //hvac.customer,
                                   hvac.customer ?? "",
@@ -204,7 +204,7 @@ class _ListHVACWidgettState extends State<ListHVACWidget> {
                          Container(
                             width:widget.userType == Constants.employee? container_item_text_width / 3:container_item_text_width,
                             child: Text(
-                                "${hvac.isSolved ? "N/A" :"Cost ${hvac.price}"}",
+                                "${hvac.isSolved ? "Cost ${hvac.price}" :"N/A"}",
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 softWrap: false,
@@ -258,6 +258,7 @@ class _ListHVACWidgettState extends State<ListHVACWidget> {
           .update(hvac.toMap()).whenComplete(() {
            widget.onCheckedValue(true);
            hvac.isSolved = true;
+           hvac.price=_priceController.text;
            _priceController.text="";
            Navigator.of(dialogContext).pop();
           });
