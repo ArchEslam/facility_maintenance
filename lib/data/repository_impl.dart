@@ -18,7 +18,7 @@ class RepositoryImpl implements Repository {
   User get getUserData {
     Map<dynamic, dynamic> valueMap =
         json.decode(sharedPreference.getString(Preferences.UserData));
-    //print("user values from pref =${valueMap}");
+    print("user values from pref =${valueMap}");
     User user = User.fromMap(valueMap);
    // print("test values from pref =${user.name}");
 

@@ -156,6 +156,17 @@ class Body extends StatelessWidget {
       'name': name,
       'mail': email,
       'phone': phone,
+    }).whenComplete((){
+      Map<String, dynamic> map = <String, dynamic>{
+        'id': _repository.getUserData.id,
+        'mail': email,
+        'phone': phone,
+        'building': _repository.getUserData.building,
+        'dicipline': _repository.getUserData.dicipline,
+        'customer': name,
+        'flat': _repository.getUserData.flat,
+      };
+      _repository.saveUserData(map);
     });
   }
 }
