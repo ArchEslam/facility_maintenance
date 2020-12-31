@@ -273,19 +273,20 @@ class _CreateHVACRequestState extends State<CreateHVACRequest>
 
   saveItemInfo(String downloadUrl) async {
     User user = _repository.getUserData;
+    print("Uploading user name =${user.customer}");
 
     var setItem = FirebaseDatabase.instance
         .reference()
         .child("$_documentId Requests")
         .child(_requestId)
         .set({
-      "customerID": user.id.toString(),
+      "customerID": _repository.getUserData.id.toString(),
       "description": _detailsTextEditingController.text.trim(),
       "date": _requestDate.trim(),
-      "customer": user.customer,
-      "phone": user.phone,
-      "building": user.building,
-      "flat": user.flat,
+      "customer": _repository.getUserData.name,
+      "phone": _repository.getUserData.phone,
+      "building": _repository.getUserData.building,
+      "flat": _repository.getUserData.flat,
       "price": _price.trim(),
       "employeeName": "N/A",
       "isSolved": false,
@@ -297,6 +298,7 @@ class _CreateHVACRequestState extends State<CreateHVACRequest>
       uploading = false;
       _requestId = DateTime.now().millisecondsSinceEpoch.toString();
       _detailsTextEditingController.clear();
+      getData();
     });
 
     // saveItemInfo(String downloadUrl)
