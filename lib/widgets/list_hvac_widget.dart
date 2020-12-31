@@ -289,6 +289,7 @@ class _ListHVACWidgettState extends State<ListHVACWidget> {
                 onPressed: () {
                   setState(() {
                     hvac.price = _priceController.text.toString();
+                    hvac.isSolved=true;
                     _changeLis(hvac,context);
                   });
                 },
