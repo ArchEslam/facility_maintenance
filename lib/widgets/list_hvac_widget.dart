@@ -9,7 +9,6 @@ import '../injection_container.dart';
 
 class ListHVACWidget extends StatefulWidget {
   final List<HVAC> listHVAC;
-  bool checkedValue = false;
   final int userType;
   Function({HVAC hvac}) getSelectedValues = ({hvac}) {};
   Function(bool checked) onCheckedValue = (checked) {};
@@ -28,13 +27,15 @@ class ListHVACWidget extends StatefulWidget {
 }
 
 class _ListHVACWidgettState extends State<ListHVACWidget> {
-  Repository _repository = sl<Repository>();
-  int userType = 0;
+  bool isSolved;
   TextEditingController _priceController = TextEditingController();
+  bool checkedValue = false;
 
   @override
   void initState() {
     super.initState();
+    print("listHVAC length =${widget.listHVAC.length}");
+
   }
 
   @override
@@ -183,13 +184,8 @@ class _ListHVACWidgettState extends State<ListHVACWidget> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        InkWell(
-                          onTap: () {
-                            if (userType == Constants.employee) {
-                              _buildEditPriceDialog(context, hvac);
-                            }
-                          },
-                          child: Container(
+
+                         Container(
                             width: container_item_text_width / 3,
                             child: Text(
                                 "Cost ${hvac.price == "null" ? "N/A" : hvac.price}",
@@ -198,7 +194,7 @@ class _ListHVACWidgettState extends State<ListHVACWidget> {
                                 softWrap: false,
                                 style: Theme.of(context).textTheme.subtitle2),
                           ),
-                        ),
+
                         Container(
                           height: 50,
                           width: 2,
@@ -209,13 +205,12 @@ class _ListHVACWidgettState extends State<ListHVACWidget> {
                           child: Checkbox(
                             value: hvac.isSolved ?? false,
                             onChanged: (newValue) {
-                              if (userType == Constants.employee) {
-                                setState(() {
-                                  widget.onCheckedValue(newValue);
-                                  hvac.isSolved = newValue;
-                                });
-                                _changeLis(hvac);
+                              if(!hvac.isSolved){
+                                if (widget.userType == Constants.employee) {
+                                  _buildEditPriceDialog(context, hvac);
+                                }
                               }
+
                             },
                             // controlAffinity: ListTileControlAffinity.leading,  //  <-- leading Checkbox
                           ),
@@ -228,14 +223,19 @@ class _ListHVACWidgettState extends State<ListHVACWidget> {
         ));
   }
 
-  Future<void> _changeLis(HVAC hvac) async {
+  Future<void> _changeLis(HVAC hvac ,BuildContext dialogContext) async {
     try {
       print(hvac.key);
       await FirebaseDatabase.instance
           .reference()
           .child("HVAC Requests")
           .child(hvac.key)
-          .update(hvac.toMap());
+          .update(hvac.toMap()).whenComplete(() {
+           widget.onCheckedValue(true);
+           hvac.isSolved = true;
+           _priceController.text="";
+           Navigator.of(dialogContext).pop();
+          });
     } catch (e) {
       print("update request error =${e.toString()}");
     }
@@ -276,7 +276,7 @@ class _ListHVACWidgettState extends State<ListHVACWidget> {
                 onPressed: () {
                   setState(() {
                     hvac.price = _priceController.text.toString();
-                    _changeLis(hvac);
+                    _changeLis(hvac,context);
                   });
                 },
                 child: new Text("confirm change",

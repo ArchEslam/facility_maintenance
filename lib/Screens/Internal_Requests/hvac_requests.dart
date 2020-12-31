@@ -67,18 +67,14 @@ class _HVACRequestsState extends State<HVACRequests> {
       print("KEYS ============ ${snap.toString()}");
 
       listHVAC.clear();
-      for (var individualKey in KEYS) {
-        if (DATA[individualKey]['customerID'] == _repository.getUserData.id) {
+      setState(() {
+        for (var individualKey in KEYS) {
           HVAC requests =
-              new HVAC.fromMap(key: individualKey, map: DATA[individualKey]);
-          setState(() {
-            listHVAC.add(requests);
-          });
+          new HVAC.fromMap(key: individualKey, map: DATA[individualKey]);
+          listHVAC.add(requests);
+
         }
-
-        // }
-
-      }
+      });
       print("listHVAC.length =${listHVAC.length}");
     });
   }

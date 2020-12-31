@@ -18,20 +18,19 @@ class RepositoryImpl implements Repository {
   User get getUserData {
     Map<dynamic, dynamic> valueMap =
         json.decode(sharedPreference.getString(Preferences.UserData));
-    print("user values from pref =${valueMap}");
+    //print("user values from pref =${valueMap}");
     User user = User.fromMap(valueMap);
-    print("test values from pref =${user.name}");
+   // print("test values from pref =${user.name}");
 
     return user;
   }
 
   @override
   void saveUserData(Map<dynamic, dynamic> value) {
-    print("==================saveUserData=====================\n $value");
+   // print("==================saveUserData=====================\n $value");
 
     String valueJson = json.encode(value);
-    print(
-        "==================saveUserData valueJson=====================\n $value");
+   // print("==================saveUserData valueJson=====================\n $value");
     sharedPreference.setString(Preferences.UserData, valueJson);
   }
 
@@ -42,7 +41,7 @@ class RepositoryImpl implements Repository {
 
   @override
   void setLogedIn(bool value) {
-    print("==================setLogedIn=====================\n $value");
+   // print("==================setLogedIn=====================\n $value");
     sharedPreference.setBool(Preferences.isLoggedIn, value);
   }
 
@@ -53,7 +52,7 @@ class RepositoryImpl implements Repository {
 
   @override
   void setUserType(int value) {
-    print("==================UserType=====================\n $value");
+  //  print("==================UserType=====================\n $value");
     sharedPreference.setInt(Preferences.userType, value);
   }
 }

@@ -22,7 +22,6 @@ class CreateHVACRequest extends StatefulWidget {
 
 class _CreateHVACRequestState extends State<CreateHVACRequest>
     with AutomaticKeepAliveClientMixin<CreateHVACRequest> {
-
   final Future<FirebaseApp> _initialization = Firebase.initializeApp();
   Repository _repository = sl<Repository>();
 
@@ -378,18 +377,16 @@ class _CreateHVACRequestState extends State<CreateHVACRequest>
       var DATA = snap.value;
       listHVAC.clear();
 
-      print("previous Id =${_repository.getUserData}");
-      for (var individualKey in KEYS) {
-        print("customerID =${DATA[individualKey]['customerID']}");
-
-        if (DATA[individualKey]['customerID'] == _repository.getUserData.id) {
-          HVAC requests =
-              new HVAC.fromMap(key: individualKey, map: DATA[individualKey]);
-          setState(() {
+      print("previous Id =${_repository.getUserData.id}");
+     // setState(() {
+        for (var individualKey in KEYS) {
+          if (DATA[individualKey]['customerId'] == _repository.getUserData.id) {
+            HVAC requests =
+                new HVAC.fromMap(key: individualKey, map: DATA[individualKey]);
             listHVAC.add(requests);
-          });
+          }
         }
-      }
+    //  });
     });
   }
 
