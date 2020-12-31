@@ -18,7 +18,7 @@ class _HVACRequestsState extends State<HVACRequests> {
   Repository _repository = sl<Repository>();
 
   DatabaseReference requestsRef =
-      FirebaseDatabase.instance.reference().child("HVAC Requests");
+  FirebaseDatabase.instance.reference().child("HVAC Requests");
 
   @override
   void initState() {
@@ -46,13 +46,13 @@ class _HVACRequestsState extends State<HVACRequests> {
                 listHVAC.length == 0
                     ? Container()
                     : ListHVACWidget(
-                        listHVAC: listHVAC,
-                        getSelectedValues: ({HVAC hvac}) {
-                          print("selected = ${hvac.toMap()}");
-                        },
-                        onCheckedValue: (bool value) {},
-                        userType: Constants.employee,
-                      ),
+                  listHVAC: listHVAC,
+                  getSelectedValues: ({HVAC hvac}) {
+                    print("selected = ${hvac.toMap()}");
+                  },
+                  onCheckedValue: (bool value) {},
+                  userType: Constants.employee,
+                ),
                 // hcvDataSnapshot(context)
               ],
             ),
@@ -64,18 +64,16 @@ class _HVACRequestsState extends State<HVACRequests> {
     requestsRef.once().then((DataSnapshot snap) {
       var KEYS = snap.value.keys;
       var DATA = snap.value;
-      print("KEYS ============ ${snap.toString()}");
 
       listHVAC.clear();
+      print("previous Id =${_repository.getUserData.id}");
       setState(() {
         for (var individualKey in KEYS) {
           HVAC requests =
           new HVAC.fromMap(key: individualKey, map: DATA[individualKey]);
           listHVAC.add(requests);
-
         }
       });
-      print("listHVAC.length =${listHVAC.length}");
     });
   }
 }
