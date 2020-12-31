@@ -31,7 +31,7 @@ class HVAC {
         building: map["building"],
         key: key,
         customer: map["customer"],
-        customerId: map["customerId"],
+        customerId: map["customerID"],
         date: map["date"],
         description: map["description"],
         employeeName: map["employeeName"],

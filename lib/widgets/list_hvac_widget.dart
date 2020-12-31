@@ -30,10 +30,23 @@ class _ListHVACWidgettState extends State<ListHVACWidget> {
   bool isSolved;
   TextEditingController _priceController = TextEditingController();
   bool checkedValue = false;
+  Repository _repository = sl<Repository>();
 
+  filterList(){
+    print("listHVAC befor filter = ${widget.listHVAC.length}");
+    print("customerId = ${_repository.getUserData.id}");
+
+    if (widget.userType == Constants.user) {
+      setState(() {
+        widget.listHVAC.removeWhere((HVAC hvac) => hvac.customerId != _repository.getUserData.id);
+      });
+      print("listHVAC after filter = ${widget.listHVAC.length}");
+    }
+  }
   @override
   void initState() {
     super.initState();
+    filterList();
     print("listHVAC length =${widget.listHVAC.length}");
 
   }
@@ -155,7 +168,7 @@ class _ListHVACWidgettState extends State<ListHVACWidget> {
                                 // width: _container_item_height,
                                 child: Text(
                                   //hvac.description,
-                                  hvac.description,
+                                  hvac.description??"",
                                 ),
                               ),
                             ],

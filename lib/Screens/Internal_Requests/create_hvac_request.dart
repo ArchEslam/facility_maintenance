@@ -378,15 +378,13 @@ class _CreateHVACRequestState extends State<CreateHVACRequest>
       listHVAC.clear();
 
       print("previous Id =${_repository.getUserData.id}");
-     // setState(() {
+      setState(() {
         for (var individualKey in KEYS) {
-          if (DATA[individualKey]['customerId'] == _repository.getUserData.id) {
             HVAC requests =
                 new HVAC.fromMap(key: individualKey, map: DATA[individualKey]);
             listHVAC.add(requests);
-          }
         }
-    //  });
+      });
     });
   }
 
