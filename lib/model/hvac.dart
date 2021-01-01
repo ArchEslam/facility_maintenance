@@ -45,7 +45,7 @@ class HVAC {
   Map<String, dynamic> toMap() => {
         "building": building,
         "customer": customer,
-        "customerId": customerId,
+        "customerID": customerId,
         "date": date,
         "description": description,
         "employeeName": employeeName,

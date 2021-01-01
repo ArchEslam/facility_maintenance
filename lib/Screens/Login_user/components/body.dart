@@ -26,8 +26,14 @@ class _BodyState extends State<Body> {
   Repository _repository = sl<Repository>();
 
   String selectedBuilding;// = 'Building No.01';
-  String userID;// = "00101B01";
-  String password;// = "qwerty1";
+  String userID = "";
+//  String userID = "00101B01";
+ // String userID =  "00102B01";
+
+  String password ="";
+ // String password = "qwerty1";
+ // String password = "qwerty2";
+
   String parentDbName = "Users";
 
   // String _userName;
@@ -166,18 +172,23 @@ class _BodyState extends State<Body> {
         .then((DataSnapshot snapshot) {
       //print('Data : ${snapshot.value}');
       Map _map = snapshot.value;
-      Map filteredMap = Map.from(_map)..forEach((k, v) => print(v.toString()));
+      Map filteredMap = Map.from(_map)..forEach((k, v) {
+        print(v.toString());
+      });
       Iterable _iterable = filteredMap.values;
       Map _mapItems;
       _iterable.forEach((element) async {
         _mapItems = element;
         if (_mapItems["id"] == userID &&
             _mapItems["password"] == password &&
-            _mapItems["building"] == selectedBuilding)
+            _mapItems["building"] == selectedBuilding){
           Navigator.of(context).pushNamed('userhome');
-        _repository.saveUserData(_mapItems);
-        _repository.setLogedIn(true);
-        _repository.setUserType(Constants.user);
+          _repository.saveUserData(_mapItems);
+          _repository.setLogedIn(true);
+          _repository.setUserType(Constants.user);
+          return;
+        }
+
       });
     });
     // Navigator.of(context).pushNamed('userhome');

@@ -43,6 +43,8 @@ class _CreateHVACRequestState extends State<CreateHVACRequest>
   @override
   void initState() {
     super.initState();
+    print("previous Id =${_repository.getUserData.id}");
+
     getData();
   }
 
@@ -273,32 +275,29 @@ class _CreateHVACRequestState extends State<CreateHVACRequest>
 
   saveItemInfo(String downloadUrl) async {
     User user = _repository.getUserData;
-    print("Uploading user name =${user.customer}");
 
     var setItem = FirebaseDatabase.instance
         .reference()
         .child("$_documentId Requests")
         .child(_requestId)
         .set({
-      "customerID": _repository.getUserData.id.toString(),
+      "customerID": user.id.toString(),
       "description": _detailsTextEditingController.text.trim(),
       "date": _requestDate.trim(),
-      "customer": _repository.getUserData.name,
-      "phone": _repository.getUserData.phone,
-      "building": _repository.getUserData.building,
-      "flat": _repository.getUserData.flat,
+      "customer": user.customer,
+      "phone": user.phone,
+      "building": user.building,
+      "flat": user.flat,
       "price": _price.trim(),
       "employeeName": "N/A",
       "isSolved": false,
       "thumbnailUrl": downloadUrl,
-      "customerID": user.id,
     });
     setState(() {
       file = null;
       uploading = false;
       _requestId = DateTime.now().millisecondsSinceEpoch.toString();
       _detailsTextEditingController.clear();
-      getData();
     });
 
     // saveItemInfo(String downloadUrl)
@@ -374,19 +373,28 @@ class _CreateHVACRequestState extends State<CreateHVACRequest>
   }
 
   getData() {
+    var KEYS ;
+    var DATA ;
     requestsRef.once().then((DataSnapshot snap) {
-      var KEYS = snap.value.keys;
-      var DATA = snap.value;
+       KEYS = snap.value.keys;
+       DATA = snap.value;
       listHVAC.clear();
 
-      print("previous Id =${_repository.getUserData.id}");
-      setState(() {
-        for (var individualKey in KEYS) {
-            HVAC requests =
-                new HVAC.fromMap(key: individualKey, map: DATA[individualKey]);
-            listHVAC.add(requests);
-        }
-      });
+        setState(() {
+       for (var individualKey in KEYS) {
+
+         HVAC requests =
+         new HVAC.fromMap(key: individualKey, map: DATA[individualKey]);
+         print("get requests id =>${requests.customerId} | ${_repository.getUserData.id} <==my id");
+
+         if(requests.customerId.contains(_repository.getUserData.id)){
+           print("get list data in condition =${DATA[individualKey]["customerID"]}");
+           listHVAC.add(requests);
+
+         }}
+       });
+    }).whenComplete((){
+
     });
   }
 

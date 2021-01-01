@@ -15,12 +15,12 @@ class ListHVACWidget extends StatefulWidget {
 
   ListHVACWidget(
       {this.listHVAC,
-      this.getSelectedValues,
-      this.onCheckedValue,
-      this.userType});
+        this.getSelectedValues,
+        this.onCheckedValue,
+        this.userType});
 
   DatabaseReference requestsRef =
-      FirebaseDatabase.instance.reference().child("HVAC Requests");
+  FirebaseDatabase.instance.reference().child("HVAC Requests");
 
   @override
   _ListHVACWidgettState createState() => _ListHVACWidgettState();
@@ -31,30 +31,62 @@ class _ListHVACWidgettState extends State<ListHVACWidget> {
   TextEditingController _priceController = TextEditingController();
   bool checkedValue = false;
   Repository _repository = sl<Repository>();
+  List<HVAC> listHVAC=[];
 
+
+  bool _isloading=false;
   filterList(){
     print("listHVAC befor filter = ${widget.listHVAC.length}");
-    print("customerId = ${_repository.getUserData.id}");
+    print("my id = ${_repository.getUserData.id}");
+    setState(() {
+      listHVAC=widget.listHVAC;
+    for (int i = 0; i < widget.listHVAC.length; i++) {
+      if(widget.listHVAC[i].customerId ==_repository.getUserData.id){
+         // listHVAC.add(widget.listHVAC[i]);
 
-    if (widget.userType == Constants.user) {
-      setState(() {
-        widget.listHVAC.removeWhere((HVAC hvac) => hvac.customerId != _repository.getUserData.id);
-      });
-      print("listHVAC after filter = ${widget.listHVAC.length}");
+        print(
+            "*********************************$i******************************\n customerId is equal\n"
+                "** my id ${_repository.getUserData.id} ** hvac customerId = ${widget.listHVAC[i].customerId} ** name ${widget.listHVAC[i].customer} ** description=${widget.listHVAC[i].description}\n"
+                "======================================================"
+        );
+      }else if(widget.listHVAC[i].customerId !=_repository.getUserData.id){
+        //  listHVAC.add(hvac);
+        print(
+            "*********************************$i******************************customerId is equal\n"
+                "** my id ${_repository.getUserData.id} ** hvac customerId = ${widget.listHVAC[i].customerId} ** name ${widget.listHVAC[i].customer} ** description=${widget.listHVAC[i].description}\n"
+                "======================================================"
+        );
+      }
     }
+    });
   }
   @override
   void initState() {
     super.initState();
-    filterList();
-    print("listHVAC length =${widget.listHVAC.length}");
-
+    if(widget.userType==Constants.user){
+      filterList();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return _cardListItem(context);
+    return widget.listHVAC.length==0?Center(
+      child: Container(
+        decoration: BoxDecoration(
+            color: Colors.grey[100],
+            borderRadius: BorderRadius.circular(8)),
+        child:
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Text(
+            //hvac.customer,
+              "No Requests Add yet",
+              style: Theme.of(context).textTheme.headline5
+          ),
+        ),
+      ),
+    ):_cardListItem(context);
   }
 
   Widget _cardListItem(BuildContext context) {
@@ -81,44 +113,44 @@ class _ListHVACWidgettState extends State<ListHVACWidget> {
         color: Colors.transparent,
         child: SizedBox.expand(
             child: ListView.builder(
-          shrinkWrap: true,
-          itemCount: widget.listHVAC.length,
-          itemBuilder: (BuildContext context, int index) {
-            final HVAC hvac = widget.listHVAC[index];
-            return itemHVAC(
-                context: context,
-                hvac: hvac,
-                container_item_height: _container_item_height,
-                container_item_text_width: _container_item_text_width,
-                onPressed: () {
-                  widget.getSelectedValues(
+              shrinkWrap: true,
+              itemCount: widget.listHVAC.length,
+              itemBuilder: (BuildContext context, int index) {
+                final HVAC hvac = widget.listHVAC[index];
+                return itemHVAC(
+                    context: context,
                     hvac: hvac,
-                  );
-                  Navigator.pop(context);
-                  // getData(null, specailty.id);
-                });
-          },
-          //  scrollDirection: Axis.horizontal,
-        )
-            //),
-            ),
+                    container_item_height: _container_item_height,
+                    container_item_text_width: _container_item_text_width,
+                    onPressed: () {
+                      widget.getSelectedValues(
+                        hvac: hvac,
+                      );
+                      Navigator.pop(context);
+                      // getData(null, specailty.id);
+                    });
+              },
+              //  scrollDirection: Axis.horizontal,
+            )
+          //),
+        ),
       ),
     );
   }
 
   Widget itemHVAC(
       {BuildContext context,
-      Function onPressed,
-      HVAC hvac,
-      double container_item_height,
-      double container_item_text_width}) {
+        Function onPressed,
+        HVAC hvac,
+        double container_item_height,
+        double container_item_text_width}) {
     return InkWell(
         onTap: () {
           onPressed();
         },
         child: Padding(
           padding:
-              const EdgeInsets.only(top: 4.0, right: 4.0, left: 4.0, bottom: 6),
+          const EdgeInsets.only(top: 4.0, right: 4.0, left: 4.0, bottom: 6),
           child: Container(
             // margin: EdgeInsets.symmetric(horizontal: 4),
             // padding: EdgeInsets.all(4),
@@ -150,46 +182,36 @@ class _ListHVACWidgettState extends State<ListHVACWidget> {
                         ),
                         Padding(
                           padding: const EdgeInsets.all(4.0),
-                          child: Container(
-                            width: 210,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  alignment: Alignment.topLeft,
-                                   width: 210,//container_item_text_width,
-                                  child: Text(
-                                    //hvac.customer,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                alignment: Alignment.topLeft,
+                                width: container_item_text_width,
+                                child: Text(
+                                  //hvac.customer,
                                     hvac.customer ?? "",
-                                      style: Theme.of(context).textTheme.headline6
-                                  ),
+                                    style: Theme.of(context).textTheme.headline4
                                 ),
-                                Container(
-                                  width: 210,//container_item_text_width,
-                                  alignment: Alignment.topLeft,
-                                  // width: _container_item_height,
-                                  child: Text(
-                                    hvac.date??"",
-                                      style: Theme.of(context).textTheme.subtitle1
-                                    //hvac.description,
-                                    // hvac.description??"",
-                                    //   style: Theme.of(context).textTheme.subtitle1
+                              ),
+                              Container(
+                                width: container_item_text_width,
+                                alignment: Alignment.topLeft,
+                                // width: _container_item_height,
+                                child: Text(
+                                  //hvac.description,
+                                    hvac.description??"",
+                                    style: Theme.of(context).textTheme.subtitle1
 
-                                  ),
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ),
                       ]),
                 ),
                 //------------------------------------------------------------
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 10),
-                  child: Text(hvac.description??"",
-                      style: Theme.of(context).textTheme.subtitle1),
-                ),
                 Padding(
                   padding: const EdgeInsets.all(2.0),
                   child: Image(
@@ -211,27 +233,27 @@ class _ListHVACWidgettState extends State<ListHVACWidget> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
 
-                         Container(
-                            width:container_item_text_width*1.4,
-                            child: Column(
-                              children: [
-                                Text(
-                                    "${hvac.isSolved ? "Cost: ${hvac.price} SAR " :"N/A"}",
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
+                        Container(
+                          width:container_item_text_width,
+                          child: Column(
+                            children: [
+                              Text(
+                                  "${hvac.isSolved ? "Cost ${hvac.price} " :"N/A"}",
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  softWrap: false,
+                                  style: Theme.of(context).textTheme.subtitle2),
+                              Container(
+                                width:container_item_text_width,
+                                child: Text(
+                                    "${hvac.isSolved ? "Employee Name :${hvac.employeeName}" :""}",
+                                    maxLines: 3,
                                     softWrap: false,
                                     style: Theme.of(context).textTheme.subtitle2),
-                                Container(
-                                  width:container_item_text_width*1.4,
-                                  child: Text(
-                                      "${hvac.isSolved ? "Employee Name: ${hvac.employeeName}" :""}",
-                                      maxLines: 3,
-                                      softWrap: false,
-                                      style: Theme.of(context).textTheme.subtitle2),
-                                ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
+                        ),
 
                         widget.userType == Constants.employee?  Container(
                           height: 50,
@@ -278,12 +300,12 @@ class _ListHVACWidgettState extends State<ListHVACWidget> {
           .child("HVAC Requests")
           .child(hvac.key)
           .update(hvac.toMap()).whenComplete(() {
-           widget.onCheckedValue(true);
-           hvac.isSolved = true;
-           hvac.price=_priceController.text;
-           _priceController.text="";
-           Navigator.of(dialogContext).pop();
-          });
+        widget.onCheckedValue(true);
+        hvac.isSolved = true;
+        hvac.price=_priceController.text;
+        _priceController.text="";
+        Navigator.of(dialogContext).pop();
+      });
     } catch (e) {
       print("update request error =${e.toString()}");
     }

@@ -18,7 +18,7 @@ class RepositoryImpl implements Repository {
   User get getUserData {
     Map<dynamic, dynamic> valueMap =
         json.decode(sharedPreference.getString(Preferences.UserData));
-    print("user values from pref =${valueMap}");
+   // print("user values from pref =${valueMap}");
     User user = User.fromMap(valueMap);
    // print("test values from pref =${user.name}");
 
@@ -27,11 +27,10 @@ class RepositoryImpl implements Repository {
 
   @override
   void saveUserData(Map<dynamic, dynamic> value) {
-   // print("==================saveUserData=====================\n $value");
 
     String valueJson = json.encode(value);
-   // print("==================saveUserData valueJson=====================\n $value");
-    sharedPreference.setString(Preferences.UserData, valueJson);
+   // print("==================saveUserData valueJson=====================\n ${json.encode(value)}");
+    sharedPreference.setString(Preferences.UserData, json.encode(value));
   }
 
   @override
