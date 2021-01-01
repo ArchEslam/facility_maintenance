@@ -43,9 +43,22 @@ class _HVACRequestsState extends State<HVACRequests> {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: [
-                listHVAC.length == 0
-                    ? Container()
-                    : ListHVACWidget(
+                listHVAC.length <=0?Center(
+                  child: Container(
+                    decoration: BoxDecoration(
+                        color: Colors.grey[100],
+                        borderRadius: BorderRadius.circular(8)),
+                    child:
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Text(
+                        //hvac.customer,
+                          "No Requests Add yet",
+                          style: Theme.of(context).textTheme.headline5
+                      ),
+                    ),
+                  ),
+                ): ListHVACWidget(
                   listHVAC: listHVAC,
                   getSelectedValues: ({HVAC hvac}) {
                     print("selected = ${hvac.toMap()}");

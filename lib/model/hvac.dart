@@ -28,15 +28,15 @@ class HVAC {
       this.thumbnailUrl});
 
   factory HVAC.fromMap({key, Map<dynamic, dynamic> map}) => HVAC(
-        building: map["building"],
+        building: map["building"]??"",
         key: key,
-        customer: map["customer"],
-        customerId: map["customerID"],
-        date: map["date"],
-        description: map["description"],
-        employeeName: map["employeeName"],
-        flat: map["flat"],
-        phone: map["phone"],
+        customer: map["customer"]??"",
+        customerId: map["customerID"]??"",
+        date: map["date"]??"",
+        description: map["description"]??"",
+        employeeName: map["employeeName"]??"",
+        flat: map["flat"]??"",
+        phone: map["phone"]??"",
         price: map["price"],
         isSolved: map["isSolved"],
         thumbnailUrl: map["thumbnailUrl"],

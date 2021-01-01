@@ -31,62 +31,18 @@ class _ListHVACWidgettState extends State<ListHVACWidget> {
   TextEditingController _priceController = TextEditingController();
   bool checkedValue = false;
   Repository _repository = sl<Repository>();
-  List<HVAC> listHVAC=[];
-
-
-  bool _isloading=false;
-  filterList(){
-    print("listHVAC befor filter = ${widget.listHVAC.length}");
-    print("my id = ${_repository.getUserData.id}");
-    setState(() {
-      listHVAC=widget.listHVAC;
-    for (int i = 0; i < widget.listHVAC.length; i++) {
-      if(widget.listHVAC[i].customerId ==_repository.getUserData.id){
-         // listHVAC.add(widget.listHVAC[i]);
-
-        print(
-            "*********************************$i******************************\n customerId is equal\n"
-                "** my id ${_repository.getUserData.id} ** hvac customerId = ${widget.listHVAC[i].customerId} ** name ${widget.listHVAC[i].customer} ** description=${widget.listHVAC[i].description}\n"
-                "======================================================"
-        );
-      }else if(widget.listHVAC[i].customerId !=_repository.getUserData.id){
-        //  listHVAC.add(hvac);
-        print(
-            "*********************************$i******************************customerId is equal\n"
-                "** my id ${_repository.getUserData.id} ** hvac customerId = ${widget.listHVAC[i].customerId} ** name ${widget.listHVAC[i].customer} ** description=${widget.listHVAC[i].description}\n"
-                "======================================================"
-        );
-      }
-    }
-    });
-  }
   @override
   void initState() {
     super.initState();
-    if(widget.userType==Constants.user){
-      filterList();
-    }
+    print("listHVAC befor filter = ${widget.listHVAC.length}");
+
   }
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    return widget.listHVAC.length==0?Center(
-      child: Container(
-        decoration: BoxDecoration(
-            color: Colors.grey[100],
-            borderRadius: BorderRadius.circular(8)),
-        child:
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Text(
-            //hvac.customer,
-              "No Requests Add yet",
-              style: Theme.of(context).textTheme.headline5
-          ),
-        ),
-      ),
-    ):_cardListItem(context);
+    print("listHVAC befor filter = ${widget.listHVAC.length}");
+
+    return _cardListItem(context);
   }
 
   Widget _cardListItem(BuildContext context) {

@@ -7,6 +7,7 @@ import 'package:facility_maintenance/data/repository.dart';
 import 'package:facility_maintenance/model/hvac.dart';
 import 'package:facility_maintenance/model/user.dart';
 import 'package:facility_maintenance/widgets/list_hvac_widget.dart';
+import 'package:facility_maintenance/widgets/progress_indicator_widget.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -27,10 +28,8 @@ class _CreateHVACRequestState extends State<CreateHVACRequest>
 
   bool get wantKeepAlive => true;
   List<HVAC> listHVAC = [];
-  DatabaseReference requestsRef =
-      FirebaseDatabase.instance.reference().child("HVAC Requests");
-
   File file;
+  var dbRef = FirebaseDatabase.instance.reference().child("HVAC Requests");
 
   TextEditingController _detailsTextEditingController = TextEditingController();
   TextEditingController _priceTextEditingController = TextEditingController();
@@ -45,16 +44,43 @@ class _CreateHVACRequestState extends State<CreateHVACRequest>
     super.initState();
     print("previous Id =${_repository.getUserData.id}");
 
-    getData();
+   // getData();
   }
 
   @override
   Widget build(BuildContext context) {
-    return file == null
-        ? displayUserRequestScreen()
-        : displayRequestCreationScreen();
-  }
+    return StreamBuilder(
+        stream: dbRef.onValue,
+        builder: (context, AsyncSnapshot<Event> snapshot) {
+          if (snapshot.hasData) {
+            listHVAC.clear();
+            DataSnapshot dataValues = snapshot.data.snapshot;
+            var val = dataValues.value;
+            val.forEach((individualKey, values) {
+              HVAC requests =
+              new HVAC.fromMap(key: individualKey, map: val[individualKey]);
+              print("get requests id =>${requests.customerId} | ${_repository.getUserData.id} <==my id");
 
+              if(requests.customerId.contains(_repository.getUserData.id)){
+              //  print("get list data in condition =${values[individualKey]["customerID"]}");
+               // setState(() {
+                  listHVAC.add(requests);
+
+               // });
+              }
+            });
+            print("listHVAC length = ${listHVAC.length}");
+
+            return Container(
+                child:file == null
+                    ? displayUserRequestScreen()
+                    : displayRequestCreationScreen());
+          }else{
+            return Container(child: CustomProgressIndicatorWidget(),);
+          }
+
+        });
+  }
   displayUserRequestScreen() {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
@@ -343,9 +369,22 @@ class _CreateHVACRequestState extends State<CreateHVACRequest>
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  listHVAC.length == 0
-                      ? Container()
-                      : ListHVACWidget(
+                  listHVAC.length <=0?Center(
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: Colors.grey[100],
+                          borderRadius: BorderRadius.circular(8)),
+                      child:
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Text(
+                          //hvac.customer,
+                            "No Requests Add yet",
+                            style: Theme.of(context).textTheme.headline5
+                        ),
+                      ),
+                    ),
+                  ):ListHVACWidget(
                           listHVAC: listHVAC,
                           getSelectedValues: ({HVAC hvac}) {
                             print("selected = ${hvac.toMap()}");
@@ -375,26 +414,31 @@ class _CreateHVACRequestState extends State<CreateHVACRequest>
   getData() {
     var KEYS ;
     var DATA ;
-    requestsRef.once().then((DataSnapshot snap) {
-       KEYS = snap.value.keys;
-       DATA = snap.value;
-      listHVAC.clear();
 
-        setState(() {
-       for (var individualKey in KEYS) {
+    var dbRef = FirebaseDatabase.instance.reference().child("HVAC Requests");
 
-         HVAC requests =
-         new HVAC.fromMap(key: individualKey, map: DATA[individualKey]);
-         print("get requests id =>${requests.customerId} | ${_repository.getUserData.id} <==my id");
+    dbRef.orderByKey().equalTo(_repository.getUserData.id).once().then((DataSnapshot snapshot){
+      if(snapshot.value !=""){
+        var ref = FirebaseDatabase.instance.reference();
+        ref.child("HVAC Requests").once().then((DataSnapshot snap){
+          print(snap.value);
+          KEYS = snap.value.keys;
+          DATA = snap.value;
+          setState(() {
+            for (var individualKey in KEYS) {
 
-         if(requests.customerId.contains(_repository.getUserData.id)){
-           print("get list data in condition =${DATA[individualKey]["customerID"]}");
-           listHVAC.add(requests);
+              HVAC requests =
+              new HVAC.fromMap(key: individualKey, map: DATA[individualKey]);
+              print("get requests id =>${requests.customerId} | ${_repository.getUserData.id} <==my id");
 
-         }}
-       });
-    }).whenComplete((){
+              if(requests.customerId.contains(_repository.getUserData.id)){
+                print("get list data in condition =${DATA[individualKey]["customerID"]}");
+                listHVAC.add(requests);
 
+              }}
+          });
+        });
+      }
     });
   }
 
