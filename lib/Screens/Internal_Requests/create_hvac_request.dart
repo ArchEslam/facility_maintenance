@@ -56,19 +56,22 @@ class _CreateHVACRequestState extends State<CreateHVACRequest>
             listHVAC.clear();
             DataSnapshot dataValues = snapshot.data.snapshot;
             var val = dataValues.value;
-            val.forEach((individualKey, values) {
-              HVAC requests =
-              new HVAC.fromMap(key: individualKey, map: val[individualKey]);
-              print("get requests id =>${requests.customerId} | ${_repository.getUserData.id} <==my id");
+            if(val!=null){
+              val.forEach((individualKey, values) {
+                HVAC requests =
+                new HVAC.fromMap(key: individualKey, map: val[individualKey]);
+                print("get requests id =>${requests.customerId} | ${_repository.getUserData.id} <==my id");
 
-              if(requests.customerId.contains(_repository.getUserData.id)){
-              //  print("get list data in condition =${values[individualKey]["customerID"]}");
-               // setState(() {
+                if(requests.customerId.contains(_repository.getUserData.id)){
+                  //  print("get list data in condition =${values[individualKey]["customerID"]}");
+                  // setState(() {
                   listHVAC.add(requests);
 
-               // });
-              }
-            });
+                  // });
+                }
+              });
+            }
+
             print("listHVAC length = ${listHVAC.length}");
 
             return Container(
