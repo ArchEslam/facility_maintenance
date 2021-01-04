@@ -46,7 +46,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:facility_maintenance/constants.dart';
-import 'package:facility_maintenance/data/repository.dart';
+import 'package:facility_maintenance/data/repositories/shared_preferences.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -68,7 +68,7 @@ class _CreateHVACRequestState extends State<CreateHVACRequest> {
   String _documentId = "HVAC";
   String _price = "The price has not yet been determined";
   bool uploading = false;
-  Repository _repository = sl<Repository>();
+  MySharedPreferences _mySharedPreferences = sl<MySharedPreferences>();
 
   @override
   Widget build(BuildContext context) {
@@ -133,7 +133,7 @@ class _CreateHVACRequestState extends State<CreateHVACRequest> {
                                   onPressed: uploading
                                       ? null
                                       : () => uploadImageAndSaveItemInfo(),
-                                  //{Navigator.of(context).pushNamed('userhome');},
+                                  //{Navigator.of(context).pushNamed('/userhome');},
                                 ),
                                 contentPadding: EdgeInsets.all(5),
                                 border: OutlineInputBorder(
@@ -279,9 +279,9 @@ class _CreateHVACRequestState extends State<CreateHVACRequest> {
   }
 
   saveItemInfo(String downloadUrl) async {
-    String customerName = _repository.getUserData.name;
-    String customerBuilding = _repository.getUserData.id;
-    String customerPhone = _repository.getUserData.phone;
+    String customerName = _mySharedPreferences.getUserData.name;
+    String customerBuilding = _mySharedPreferences.getUserData.id;
+    String customerPhone = _mySharedPreferences.getUserData.phone;
 
     final itemsRef =
         FirebaseFirestore.instance.collection("$_documentId Items");

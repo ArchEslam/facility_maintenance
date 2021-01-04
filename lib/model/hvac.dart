@@ -1,5 +1,4 @@
 class HVAC {
-
   String building;
   final key;
   String customer;
@@ -12,6 +11,7 @@ class HVAC {
   String phone;
   String price;
   String thumbnailUrl;
+  String deviceRegId;
 
   HVAC(
       {this.building,
@@ -25,18 +25,20 @@ class HVAC {
       this.phone,
       this.price,
       this.isSolved,
-      this.thumbnailUrl});
+      this.thumbnailUrl,
+      this.deviceRegId});
 
   factory HVAC.fromMap({key, Map<dynamic, dynamic> map}) => HVAC(
-        building: map["building"]??"",
+        building: map["building"] ?? "",
         key: key,
-        customer: map["customer"]??"",
-        customerId: map["customerID"]??"",
-        date: map["date"]??"",
-        description: map["description"]??"",
-        employeeName: map["employeeName"]??"",
-        flat: map["flat"]??"",
-        phone: map["phone"]??"",
+        customer: map["customer"] ?? "",
+        customerId: map["customerID"] ?? "",
+        deviceRegId: map["deviceRegId"] ?? "",
+        date: map["date"] ?? "",
+        description: map["description"] ?? "",
+        employeeName: map["employeeName"] ?? "",
+        flat: map["flat"] ?? "",
+        phone: map["phone"] ?? "",
         price: map["price"],
         isSolved: map["isSolved"],
         thumbnailUrl: map["thumbnailUrl"],
@@ -46,6 +48,7 @@ class HVAC {
         "building": building,
         "customer": customer,
         "customerID": customerId,
+        "deviceRegId": deviceRegId,
         "date": date,
         "description": description,
         "employeeName": employeeName,
