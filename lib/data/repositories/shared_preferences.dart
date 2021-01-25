@@ -1,7 +1,6 @@
 import 'package:facility_maintenance/model/user.dart';
 
-abstract class Repository {
-
+abstract class MySharedPreferences {
   void setLogedIn(bool value);
 
   bool get isLogedIn;
@@ -13,4 +12,8 @@ abstract class Repository {
   void saveUserData(Map<dynamic, dynamic> userMap);
 
   User get getUserData;
+
+  void setToke(String value);
+
+  String get getToken;
 }

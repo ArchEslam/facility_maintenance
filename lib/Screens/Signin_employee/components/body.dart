@@ -4,7 +4,7 @@ import 'package:facility_maintenance/components/already_have_an_account_acheck.d
 import 'package:facility_maintenance/components/rounded_button.dart';
 import 'package:facility_maintenance/components/rounded_input_field.dart';
 import 'package:facility_maintenance/components/rounded_password_field.dart';
-import 'package:facility_maintenance/data/repository.dart';
+import 'package:facility_maintenance/data/repositories/shared_preferences.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
@@ -21,11 +21,10 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
-
-  String employeeID;// = "E001";
-  String password;// = "qwerty";
-  String parentDbName;// = "Employees";
-  Repository _repository = sl<Repository>();
+  String employeeID; // = "E001";
+  String password; // = "qwerty";
+  String parentDbName; // = "Employees";
+  MySharedPreferences _mySharedPreferences = sl<MySharedPreferences>();
 
   @override
   Widget build(BuildContext context) {
@@ -107,10 +106,10 @@ class _BodyState extends State<Body> {
         _mapItems = element;
         if (_mapItems["id"] == employeeID &&
             _mapItems["password"] == password) {
-          Navigator.of(context).pushNamed('employeehome');
-          _repository.saveUserData(_mapItems);
-          _repository.setLogedIn(true);
-          _repository.setUserType(Constants.employee);
+          Navigator.of(context).pushNamed('/employeehome');
+          _mySharedPreferences.saveUserData(_mapItems);
+          _mySharedPreferences.setLogedIn(true);
+          _mySharedPreferences.setUserType(Constants.employee);
         } else {
           print("Error");
         }

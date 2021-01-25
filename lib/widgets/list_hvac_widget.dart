@@ -1,7 +1,11 @@
-import 'package:facility_maintenance/data/repository.dart';
+import 'package:facility_maintenance/data/repositories/notification_handler.dart';
+import 'package:facility_maintenance/data/repositories/shared_preferences.dart';
+import 'package:facility_maintenance/model/fcm_notification_model.dart';
 import 'package:facility_maintenance/model/hvac.dart';
+import 'package:facility_maintenance/model/user.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:material_dialog/material_dialog.dart';
 
 import '../constants.dart';
@@ -30,30 +34,20 @@ class _ListHVACWidgettState extends State<ListHVACWidget> {
   bool isSolved;
   TextEditingController _priceController = TextEditingController();
   bool checkedValue = false;
-  Repository _repository = sl<Repository>();
+  DateTime _now = DateTime.now();
+  NotificationsHandler _notificationsHandler = sl<NotificationsHandler>();
+  MySharedPreferences _mySharedPreferences = sl<MySharedPreferences>();
 
-  filterList(){
-    print("listHVAC befor filter = ${widget.listHVAC.length}");
-    print("customerId = ${_repository.getUserData.id}");
-
-    if (widget.userType == Constants.user) {
-      setState(() {
-        widget.listHVAC.removeWhere((HVAC hvac) => hvac.customerId != _repository.getUserData.id);
-      });
-      print("listHVAC after filter = ${widget.listHVAC.length}");
-    }
-  }
   @override
   void initState() {
     super.initState();
-    filterList();
-    print("listHVAC length =${widget.listHVAC.length}");
-
+    print("listHVAC befor filter = ${widget.listHVAC.length}");
   }
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
+    print("listHVAC befor filter = ${widget.listHVAC.length}");
+
     return _cardListItem(context);
   }
 
@@ -150,46 +144,35 @@ class _ListHVACWidgettState extends State<ListHVACWidget> {
                         ),
                         Padding(
                           padding: const EdgeInsets.all(4.0),
-                          child: Container(
-                            width: 210,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  alignment: Alignment.topLeft,
-                                   width: 210,//container_item_text_width,
-                                  child: Text(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                alignment: Alignment.topLeft,
+                                width: container_item_text_width,
+                                child: Text(
                                     //hvac.customer,
                                     hvac.customer ?? "",
-                                      style: Theme.of(context).textTheme.headline6
-                                  ),
-                                ),
-                                Container(
-                                  width: 210,//container_item_text_width,
-                                  alignment: Alignment.topLeft,
-                                  // width: _container_item_height,
-                                  child: Text(
-                                    hvac.date??"",
-                                      style: Theme.of(context).textTheme.subtitle1
+                                    style:
+                                        Theme.of(context).textTheme.headline4),
+                              ),
+                              Container(
+                                width: container_item_text_width,
+                                alignment: Alignment.topLeft,
+                                // width: _container_item_height,
+                                child: Text(
                                     //hvac.description,
-                                    // hvac.description??"",
-                                    //   style: Theme.of(context).textTheme.subtitle1
-
-                                  ),
-                                ),
-                              ],
-                            ),
+                                    hvac.description ?? "",
+                                    style:
+                                        Theme.of(context).textTheme.subtitle1),
+                              ),
+                            ],
                           ),
                         ),
                       ]),
                 ),
                 //------------------------------------------------------------
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 10),
-                  child: Text(hvac.description??"",
-                      style: Theme.of(context).textTheme.subtitle1),
-                ),
                 Padding(
                   padding: const EdgeInsets.all(2.0),
                   child: Image(
@@ -210,58 +193,64 @@ class _ListHVACWidgettState extends State<ListHVACWidget> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-
-                         Container(
-                            width:container_item_text_width*1.4,
-                            child: Column(
-                              children: [
-                                Text(
-                                    "${hvac.isSolved ? "Cost: ${hvac.price} SAR " :"N/A"}",
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    softWrap: false,
-                                    style: Theme.of(context).textTheme.subtitle2),
-                                Container(
-                                  width:container_item_text_width*1.4,
-                                  child: Text(
-                                      "${hvac.isSolved ? "Employee Name: ${hvac.employeeName}" :""}",
-                                      maxLines: 3,
-                                      softWrap: false,
-                                      style: Theme.of(context).textTheme.subtitle2),
-                                ),
-                              ],
-                            ),
-                          ),
-
-                        widget.userType == Constants.employee?  Container(
-                          height: 50,
-                          width: 2,
-                          color: Colors.grey[200],
-                        ):Container(),
-                        widget.userType == Constants.employee? Container(
-                          // width: _container_item_height,
-                          child: Row(
+                        Container(
+                          width: container_item_text_width,
+                          child: Column(
                             children: [
-                              Checkbox(
-                                value: hvac.isSolved ?? false,
-                                onChanged: (newValue) {
-                                  if(!hvac.isSolved){
-                                    if (widget.userType == Constants.employee) {
-                                      _buildEditPriceDialog(context, hvac);
-                                    }
-                                  }
-                                },
-                                // controlAffinity: ListTileControlAffinity.leading,  //  <-- leading Checkbox
-                              ),
                               Text(
-                                  "${hvac.isSolved ? "Solved" :"N/A"}",
+                                  "${hvac.isSolved ? "Cost ${hvac.price} " : "N/A"}",
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   softWrap: false,
                                   style: Theme.of(context).textTheme.subtitle2),
+                              Container(
+                                width: container_item_text_width,
+                                child: Text(
+                                    "${hvac.isSolved ? "Employee Name :${hvac.employeeName}" : ""}",
+                                    maxLines: 3,
+                                    softWrap: false,
+                                    style:
+                                        Theme.of(context).textTheme.subtitle2),
+                              ),
                             ],
                           ),
-                        ):Container(),
+                        ),
+                        widget.userType == Constants.employee
+                            ? Container(
+                                height: 50,
+                                width: 2,
+                                color: Colors.grey[200],
+                              )
+                            : Container(),
+                        widget.userType == Constants.employee
+                            ? Container(
+                                // width: _container_item_height,
+                                child: Row(
+                                  children: [
+                                    Checkbox(
+                                      value: hvac.isSolved ?? false,
+                                      onChanged: (newValue) {
+                                        if (!hvac.isSolved) {
+                                          if (widget.userType ==
+                                              Constants.employee) {
+                                            _buildEditPriceDialog(
+                                                context, hvac);
+                                          }
+                                        }
+                                      },
+                                      // controlAffinity: ListTileControlAffinity.leading,  //  <-- leading Checkbox
+                                    ),
+                                    Text("${hvac.isSolved ? "Solved" : "N/A"}",
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        softWrap: false,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .subtitle2),
+                                  ],
+                                ),
+                              )
+                            : Container(),
                       ]),
                 ),
               ],
@@ -270,23 +259,38 @@ class _ListHVACWidgettState extends State<ListHVACWidget> {
         ));
   }
 
-  Future<void> _changeLis(HVAC hvac ,BuildContext dialogContext) async {
-    try {
-      print(hvac.key);
-      await FirebaseDatabase.instance
-          .reference()
-          .child("HVAC Requests")
-          .child(hvac.key)
-          .update(hvac.toMap()).whenComplete(() {
-           widget.onCheckedValue(true);
-           hvac.isSolved = true;
-           hvac.price=_priceController.text;
-           _priceController.text="";
-           Navigator.of(dialogContext).pop();
-          });
-    } catch (e) {
-      print("update request error =${e.toString()}");
-    }
+  Future<void> _changeLis(HVAC hvac, BuildContext dialogContext) async {
+    print(hvac.deviceRegId);
+    User user = _mySharedPreferences.getUserData;
+    FcmNotificationModel notify = new FcmNotificationModel(
+      type: FCMpayload.user.toString(),
+      messageBody: "your request changed",
+      messageTitle: "${user.customer} recieve your request",
+      customerId: user.id.toString(),
+      customerName: hvac.customer,
+      itemId: "null",
+      deviceRegId: hvac.deviceRegId,
+      senderName: user.name,
+      sentAt: DateFormat('yyyy-MM-dd – kk:mm').format(_now),
+    );
+
+    print(hvac.key);
+    await FirebaseDatabase.instance
+        .reference()
+        .child("HVAC Requests")
+        .child(hvac.key)
+        .update(hvac.toMap())
+        .whenComplete(() {
+      widget.onCheckedValue(true);
+      hvac.isSolved = true;
+      hvac.price = _priceController.text;
+      _priceController.text = "";
+      Navigator.of(dialogContext).pop();
+    }).whenComplete(() {
+      _notificationsHandler.sendAndRetrieveMessage(notify).then((value) {
+        print("value on sendAndRetrieveMessage = ${value}");
+      });
+    });
   }
 
   _buildEditPriceDialog(BuildContext context, HVAC hvac) {
@@ -324,9 +328,9 @@ class _ListHVACWidgettState extends State<ListHVACWidget> {
                 onPressed: () {
                   setState(() {
                     hvac.price = _priceController.text.toString();
-                    hvac.isSolved=true;
-                    hvac.employeeName= _repository.getUserData.name;
-                    _changeLis(hvac,context);
+                    hvac.isSolved = true;
+                    hvac.employeeName = _mySharedPreferences.getUserData.name;
+                    _changeLis(hvac, context);
                   });
                 },
                 child: new Text("confirm change",

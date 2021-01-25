@@ -3,15 +3,18 @@ import 'dart:io';
 import 'package:facility_maintenance/components/loadingWidget.dart';
 import 'package:facility_maintenance/components/rounded_button.dart';
 import 'package:facility_maintenance/constants.dart';
-import 'package:facility_maintenance/data/repository.dart';
+import 'package:facility_maintenance/data/repositories/notification_handler.dart';
+import 'package:facility_maintenance/data/repositories/shared_preferences.dart';
+import 'package:facility_maintenance/model/fcm_notification_model.dart';
 import 'package:facility_maintenance/model/hvac.dart';
 import 'package:facility_maintenance/model/user.dart';
 import 'package:facility_maintenance/widgets/list_hvac_widget.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:facility_maintenance/widgets/progress_indicator_widget.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 
 import '../../injection_container.dart';
 
@@ -22,15 +25,14 @@ class CreateHVACRequest extends StatefulWidget {
 
 class _CreateHVACRequestState extends State<CreateHVACRequest>
     with AutomaticKeepAliveClientMixin<CreateHVACRequest> {
-  final Future<FirebaseApp> _initialization = Firebase.initializeApp();
-  Repository _repository = sl<Repository>();
+  MySharedPreferences _mySharedPreferences = sl<MySharedPreferences>();
+  NotificationsHandler _notificationsHandler = sl<NotificationsHandler>();
+  DateTime _now = DateTime.now();
 
   bool get wantKeepAlive => true;
   List<HVAC> listHVAC = [];
-  DatabaseReference requestsRef =
-      FirebaseDatabase.instance.reference().child("HVAC Requests");
-
   File file;
+  var dbRef = FirebaseDatabase.instance.reference().child("HVAC Requests");
 
   TextEditingController _detailsTextEditingController = TextEditingController();
   TextEditingController _priceTextEditingController = TextEditingController();
@@ -43,14 +45,50 @@ class _CreateHVACRequestState extends State<CreateHVACRequest>
   @override
   void initState() {
     super.initState();
-    getData();
+    print("previous Id =${_mySharedPreferences.getUserData.id}");
+
+    // getData();
   }
 
   @override
   Widget build(BuildContext context) {
-    return file == null
-        ? displayUserRequestScreen()
-        : displayRequestCreationScreen();
+    return StreamBuilder(
+        stream: dbRef.onValue,
+        builder: (context, AsyncSnapshot<Event> snapshot) {
+          if (snapshot.hasData) {
+            listHVAC.clear();
+            DataSnapshot dataValues = snapshot.data.snapshot;
+            var val = dataValues.value;
+            if (val != null) {
+              val.forEach((individualKey, values) {
+                HVAC requests = new HVAC.fromMap(
+                    key: individualKey, map: val[individualKey]);
+                print(
+                    "get requests id =>${requests.customerId} | ${_mySharedPreferences.getUserData.id} <==my id");
+
+                if (requests.customerId
+                    .contains(_mySharedPreferences.getUserData.id)) {
+                  //  print("get list data in condition =${values[individualKey]["customerID"]}");
+                  // setState(() {
+                  listHVAC.add(requests);
+
+                  // });
+                }
+              });
+            }
+
+            print("listHVAC length = ${listHVAC.length}");
+
+            return Container(
+                child: file == null
+                    ? displayUserRequestScreen()
+                    : displayRequestCreationScreen());
+          } else {
+            return Container(
+              child: CustomProgressIndicatorWidget(),
+            );
+          }
+        });
   }
 
   displayUserRequestScreen() {
@@ -62,10 +100,14 @@ class _CreateHVACRequestState extends State<CreateHVACRequest>
           backgroundColor: kPrimaryColor,
           elevation: 0,
           leading: IconButton(
-              icon: Icon(Icons.arrow_back),
-              onPressed: () {
-                Navigator.of(context).pushNamed('user_in_sections');
-              }),
+            icon: Icon(Icons.arrow_back),
+            onPressed: () async {
+              var nav = await Navigator.of(context).pushNamed("/userhome");
+              if (nav == true || nav == null) {
+                //change the state
+              }
+            },
+          ),
         ),
         body: SafeArea(
           child: Container(
@@ -272,33 +314,45 @@ class _CreateHVACRequestState extends State<CreateHVACRequest>
   }
 
   saveItemInfo(String downloadUrl) async {
-    User user = _repository.getUserData;
-    print("Uploading user name =${user.customer}");
+    User user = _mySharedPreferences.getUserData;
+    FcmNotificationModel notify = new FcmNotificationModel(
+      messageBody: "new request",
+      messageTitle: "from ${user.customer}",
+      customerId: user.id.toString(),
+      customerName: user.customer,
+      itemId: "null",
+      deviceRegId: user.deviceRegId,
+      senderName: user.customer,
+      type: FCMpayload.employee.toString(),
+      sentAt: DateFormat('yyyy-MM-dd – kk:mm').format(_now),
+    );
 
     var setItem = FirebaseDatabase.instance
         .reference()
         .child("$_documentId Requests")
         .child(_requestId)
         .set({
-      "customerID": _repository.getUserData.id.toString(),
+      "customerID": user.id.toString(),
       "description": _detailsTextEditingController.text.trim(),
       "date": _requestDate.trim(),
-      "customer": _repository.getUserData.name,
-      "phone": _repository.getUserData.phone,
-      "building": _repository.getUserData.building,
-      "flat": _repository.getUserData.flat,
+      "customer": user.customer,
+      "phone": user.phone,
+      "deviceRegId": _mySharedPreferences.getToken,
+      "building": user.building,
+      "flat": user.flat,
       "price": _price.trim(),
       "employeeName": "N/A",
       "isSolved": false,
       "thumbnailUrl": downloadUrl,
-      "customerID": user.id,
+    }).whenComplete(() {
+      //TODO to push notification to employees now is canceled because want complex logic
+      //_notificationsHandler.sendAndRetrieveMessage(notify);
     });
     setState(() {
       file = null;
       uploading = false;
       _requestId = DateTime.now().millisecondsSinceEpoch.toString();
       _detailsTextEditingController.clear();
-      getData();
     });
 
     // saveItemInfo(String downloadUrl)
@@ -344,8 +398,21 @@ class _CreateHVACRequestState extends State<CreateHVACRequest>
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  listHVAC.length == 0
-                      ? Container()
+                  listHVAC.length <= 0
+                      ? Center(
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: Colors.grey[100],
+                                borderRadius: BorderRadius.circular(8)),
+                            child: Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Text(
+                                  //hvac.customer,
+                                  "No Requests Add yet",
+                                  style: Theme.of(context).textTheme.headline5),
+                            ),
+                          ),
+                        )
                       : ListHVACWidget(
                           listHVAC: listHVAC,
                           getSelectedValues: ({HVAC hvac}) {
@@ -374,19 +441,39 @@ class _CreateHVACRequestState extends State<CreateHVACRequest>
   }
 
   getData() {
-    requestsRef.once().then((DataSnapshot snap) {
-      var KEYS = snap.value.keys;
-      var DATA = snap.value;
-      listHVAC.clear();
+    var KEYS;
+    var DATA;
 
-      print("previous Id =${_repository.getUserData.id}");
-      setState(() {
-        for (var individualKey in KEYS) {
-            HVAC requests =
-                new HVAC.fromMap(key: individualKey, map: DATA[individualKey]);
-            listHVAC.add(requests);
-        }
-      });
+    var dbRef = FirebaseDatabase.instance.reference().child("HVAC Requests");
+
+    dbRef
+        .orderByKey()
+        .equalTo(_mySharedPreferences.getUserData.id)
+        .once()
+        .then((DataSnapshot snapshot) {
+      if (snapshot.value != "") {
+        var ref = FirebaseDatabase.instance.reference();
+        ref.child("HVAC Requests").once().then((DataSnapshot snap) {
+          print(snap.value);
+          KEYS = snap.value.keys;
+          DATA = snap.value;
+          setState(() {
+            for (var individualKey in KEYS) {
+              HVAC requests = new HVAC.fromMap(
+                  key: individualKey, map: DATA[individualKey]);
+              print(
+                  "get requests id =>${requests.customerId} | ${_mySharedPreferences.getUserData.id} <==my id");
+
+              if (requests.customerId
+                  .contains(_mySharedPreferences.getUserData.id)) {
+                print(
+                    "get list data in condition =${DATA[individualKey]["customerID"]}");
+                listHVAC.add(requests);
+              }
+            }
+          });
+        });
+      }
     });
   }
 

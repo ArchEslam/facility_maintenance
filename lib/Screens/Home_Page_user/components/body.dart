@@ -14,7 +14,6 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
-
   String selectedBuilding = 'Building No.01';
 
   @override
@@ -104,7 +103,7 @@ class _BodyState extends State<Body> {
             ),
             InkWell(
               onTap: () {
-                Navigator.of(context).pushNamed('user_in_sections');
+                Navigator.of(context).pushNamed('/user_in_sections');
               },
               child: buildButton(
                   Icons.store,

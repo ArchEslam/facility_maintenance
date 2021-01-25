@@ -1,6 +1,5 @@
 import 'package:facility_maintenance/components/rounded_button.dart';
-import 'package:facility_maintenance/data/repository.dart';
-import 'package:facility_maintenance/model/user.dart';
+import 'package:facility_maintenance/data/repositories/shared_preferences.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
@@ -59,11 +58,10 @@ String validphone(String val) {
 }
 
 class Body extends StatelessWidget {
-
   TextEditingController phoneController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController nameController = TextEditingController();
-  Repository _repository = sl<Repository>();
+  MySharedPreferences _mySharedPreferences = sl<MySharedPreferences>();
 
   @override
   Widget build(BuildContext context) {
@@ -147,26 +145,27 @@ class Body extends StatelessWidget {
   }
 
   onChangePersonalData(String name, String email, String phone) async {
-    print("onChangePersonalData ==== name = $name ,,, email =$email ,,,  phone=$phone");
+    print(
+        "onChangePersonalData ==== name = $name ,,, email =$email ,,,  phone=$phone");
     var updatedItem = FirebaseDatabase.instance
         .reference()
         .child("Users")
-        .child(_repository.getUserData.id.toString());
+        .child(_mySharedPreferences.getUserData.id.toString());
     updatedItem.update({
       'name': name,
       'mail': email,
       'phone': phone,
-    }).whenComplete((){
+    }).whenComplete(() {
       Map<String, dynamic> map = <String, dynamic>{
-        'id': _repository.getUserData.id,
+        'id': _mySharedPreferences.getUserData.id,
         'mail': email,
         'phone': phone,
-        'building': _repository.getUserData.building,
-        'dicipline': _repository.getUserData.dicipline,
+        'building': _mySharedPreferences.getUserData.building,
+        'dicipline': _mySharedPreferences.getUserData.dicipline,
         'customer': name,
-        'flat': _repository.getUserData.flat,
+        'flat': _mySharedPreferences.getUserData.flat,
       };
-      _repository.saveUserData(map);
+      _mySharedPreferences.saveUserData(map);
     });
   }
 }

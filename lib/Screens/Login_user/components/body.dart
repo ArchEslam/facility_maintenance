@@ -4,7 +4,7 @@ import 'package:facility_maintenance/components/already_have_an_account_acheck.d
 import 'package:facility_maintenance/components/rounded_button.dart';
 import 'package:facility_maintenance/components/rounded_input_field.dart';
 import 'package:facility_maintenance/components/rounded_password_field.dart';
-import 'package:facility_maintenance/data/repository.dart';
+import 'package:facility_maintenance/data/repositories/shared_preferences.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
@@ -21,13 +21,20 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
-
   // final _userid;
-  Repository _repository = sl<Repository>();
+  MySharedPreferences _mySharedPreferences = sl<MySharedPreferences>();
 
-  String selectedBuilding;// = 'Building No.01';
-  String userID;// = "00101B01";
-  String password;// = "qwerty1";
+  String selectedBuilding; // = 'Building No.01';
+  String userID = "";
+
+//  String userID = "00101B01";
+  // String userID =  "00102B01";
+
+  String password = "";
+
+  // String password = "qwerty1";
+  // String password = "qwerty2";
+
   String parentDbName = "Users";
 
   // String _userName;
@@ -166,18 +173,23 @@ class _BodyState extends State<Body> {
         .then((DataSnapshot snapshot) {
       //print('Data : ${snapshot.value}');
       Map _map = snapshot.value;
-      Map filteredMap = Map.from(_map)..forEach((k, v) => print(v.toString()));
+      Map filteredMap = Map.from(_map)
+        ..forEach((k, v) {
+          print(v.toString());
+        });
       Iterable _iterable = filteredMap.values;
       Map _mapItems;
       _iterable.forEach((element) async {
         _mapItems = element;
         if (_mapItems["id"] == userID &&
             _mapItems["password"] == password &&
-            _mapItems["building"] == selectedBuilding)
-          Navigator.of(context).pushNamed('userhome');
-        _repository.saveUserData(_mapItems);
-        _repository.setLogedIn(true);
-        _repository.setUserType(Constants.user);
+            _mapItems["building"] == selectedBuilding) {
+          Navigator.of(context).pushNamed('/userhome');
+          _mySharedPreferences.saveUserData(_mapItems);
+          _mySharedPreferences.setLogedIn(true);
+          _mySharedPreferences.setUserType(Constants.user);
+          return;
+        }
       });
     });
     // Navigator.of(context).pushNamed('userhome');

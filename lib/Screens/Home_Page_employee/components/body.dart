@@ -14,7 +14,6 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -97,7 +96,7 @@ class _BodyState extends State<Body> {
             ),
             InkWell(
               onTap: () {
-                Navigator.of(context).pushNamed('employee_in_sections');
+                Navigator.of(context).pushNamed('/employee_in_sections');
               },
               child: buildButton(
                   Icons.store,

@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:facility_maintenance/components/rounded_button.dart';
 import 'package:facility_maintenance/constants.dart';
-import 'package:facility_maintenance/data/repository.dart';
+import 'package:facility_maintenance/data/repositories/shared_preferences.dart';
 import 'package:facility_maintenance/injection_container.dart';
 import 'package:facility_maintenance/model/user.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -14,9 +14,8 @@ class InfoPage extends StatefulWidget {
   _InfoPageState createState() => new _InfoPageState();
 }
 
-
 class _InfoPageState extends State<InfoPage> {
-  Repository _repository = sl<Repository>();
+  MySharedPreferences _mySharedPreferences = sl<MySharedPreferences>();
 
   savePref() {
     User user = new User(
@@ -26,9 +25,9 @@ class _InfoPageState extends State<InfoPage> {
         building: _infoFlat);
     print(
         "user data in InfoPage ============================================\n ${user.toMap()}"
-            "\n============================================");
+        "\n============================================");
     Map<dynamic, dynamic> userMap = user.toMap();
-    _repository.saveUserData(userMap);
+    _mySharedPreferences.saveUserData(userMap);
   }
 
   StreamSubscription __subscriptionInfo;
@@ -44,7 +43,7 @@ class _InfoPageState extends State<InfoPage> {
     //FirebaseInfos.getInfo("-KriJ8Sg4lWIoNswKWc4").then(_updateInfo);
 
     FirebaseInfos.getInfoStream(
-        "-KriJ8Sg4lWIoNswKWc4", _updateInfo, _repository)
+            "-KriJ8Sg4lWIoNswKWc4", _updateInfo, _mySharedPreferences)
         .then((StreamSubscription s) => __subscriptionInfo = s);
     super.initState();
   }
@@ -62,42 +61,42 @@ class _InfoPageState extends State<InfoPage> {
     var nameItemTile = new ListTile(
       title: Center(
           child: new Text(
-            "$_infoName",
-            style: TextStyle(
-                fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
-          )),
+        "$_infoName",
+        style: TextStyle(
+            fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
+      )),
     );
     var phoneItemTile = new ListTile(
       title: Center(
           child: new Text(
-            "$_infoPhone",
-            style: TextStyle(
-                fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
-          )),
+        "$_infoPhone",
+        style: TextStyle(
+            fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
+      )),
     );
     var mailItemTile = new ListTile(
       title: Center(
           child: new Text(
-            "$_infoMail",
-            style: TextStyle(
-                fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
-          )),
+        "$_infoMail",
+        style: TextStyle(
+            fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
+      )),
     );
     var buildingItemTile = new ListTile(
       title: Center(
           child: new Text(
-            "$_infoBuilding",
-            style: TextStyle(
-                fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
-          )),
+        "$_infoBuilding",
+        style: TextStyle(
+            fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
+      )),
     );
     var flatItemTile = new ListTile(
       title: Center(
           child: new Text(
-            "$_infoFlat",
-            style: TextStyle(
-                fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
-          )),
+        "$_infoFlat",
+        style: TextStyle(
+            fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
+      )),
     );
 
     return new Scaffold(
@@ -166,7 +165,7 @@ class _InfoPageState extends State<InfoPage> {
             child: RoundedButton(
               text: "Edit Your Data",
               press: () {
-                Navigator.of(context).pushNamed('user_personal_data');
+                Navigator.of(context).pushNamed('/user_personal_data');
               },
             ),
           )
@@ -194,8 +193,8 @@ class _InfoPageState extends State<InfoPage> {
 class FirebaseInfos {
   /// FirebaseInfos.getInfoStream("-KriJ8Sg4lWIoNswKWc4", _updateInfo)
   /// .then((StreamSubscription s) => __subscriptionInfo = s);
-  static Future<StreamSubscription<Event>> getInfoStream(
-      String UserKey, void onData(User info), Repository repository) async {
+  static Future<StreamSubscription<Event>> getInfoStream(String UserKey,
+      void onData(User info), MySharedPreferences repository) async {
     //String UserKey = await Preferences.getUserKey();
 
     StreamSubscription<Event> subscription = FirebaseDatabase.instance
@@ -205,14 +204,14 @@ class FirebaseInfos {
         .onValue
         .listen((Event event) {
       var info =
-      new User.fromJson(key: event.snapshot.key, map: event.snapshot.value);
+          new User.fromJson(key: event.snapshot.key, map: event.snapshot.value);
       onData(info);
     });
 
     return subscription;
   }
 
-  static Future<User> getInfo(String UserKey, Repository repository) {
+  static Future<User> getInfo(String UserKey, MySharedPreferences repository) {
     Completer<User> completer = new Completer<User>();
 
     print(
