@@ -1,5 +1,5 @@
 name: facility_maintenance
-description: Application for maintenance request and Fix.
+description: This application is to report the problems of any of the public utilities in your building, and Internal Maintenances of Your Apartment  (electricity, HVAC, plumbing and others) and request to fix them, and the employee will through the application know the problem and go to the place of the problem after solving it, the price of fixing the problem is determined. Thus, it guarantees the speed of solving any problem in your facility.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
