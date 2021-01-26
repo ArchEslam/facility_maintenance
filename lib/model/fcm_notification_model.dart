@@ -3,6 +3,7 @@
 //     final welcome = welcomeFromJson(jsonString);
 
 import 'dart:convert';
+import 'dart:io' show Platform;
 
 String FcmNotificationToJson(FcmNotificationModel data) {
   if (data != null) {
@@ -15,7 +16,7 @@ String FcmNotificationToJson(FcmNotificationModel data) {
 class FcmNotificationModel {
   String isFCM;
   String type;
-  String deviceRegId;
+  String token;
   String messageTitle;
   String messageBody;
   String senderName;
@@ -27,7 +28,7 @@ class FcmNotificationModel {
   FcmNotificationModel(
       {this.isFCM,
       this.type,
-      this.deviceRegId,
+      this.token,
       this.messageTitle,
       this.messageBody,
       this.senderName,
@@ -38,20 +39,20 @@ class FcmNotificationModel {
 
   factory FcmNotificationModel.fromJson(Map<String, dynamic> json) =>
       FcmNotificationModel(
-        isFCM: json["data"]["isFCM"] ?? "",
-        type: json["data"]["type"] ?? "",
-        deviceRegId: json["data"]["deviceRegId"] ?? "",
-        messageTitle: json["data"]["messageTitle"] ?? "",
-        messageBody: json["data"]["messageBody"] ?? "",
-        senderName: json["data"]["senderName"] ?? "",
-        sentAt: json["data"]["sentAt"] ?? "",
-        customerId: json["data"]["customerId"] ?? "",
-        customerName: json["data"]["customerName"] ?? "",
+        isFCM:Platform.isAndroid?json["data"]["isFCM"] ?? "": json["isFCM"] ?? "",
+        type:Platform.isAndroid?json["data"]["type"] ?? "": json["type"] ?? "",
+        token: Platform.isAndroid?json["data"]["token"] ?? "":json["token"] ?? "",
+        messageTitle:Platform.isAndroid?json["data"]["messageTitle"] ?? "": json["messageTitle"] ?? "",
+        messageBody: Platform.isAndroid?json["data"]["messageBody"] ?? "":json["messageBody"] ?? "",
+        senderName: Platform.isAndroid?json["data"]["senderName"] ?? "":json["senderName"] ?? "",
+        sentAt: Platform.isAndroid?json["data"]["sentAt"] ?? "":json["sentAt"] ?? "",
+        customerId: Platform.isAndroid?json["data"]["customerId"] ?? "":json["customerId"] ?? "",
+        customerName: Platform.isAndroid?json["data"]["customerName"] ?? "":json["customerName"] ?? "",
       );
 
   Map<String, dynamic> toJson() => {
         "type": type,
-        "deviceRegId": deviceRegId,
+        "token": token,
         "messageTitle": messageTitle,
         "messageBody": messageBody,
         "senderName": senderName,

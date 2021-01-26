@@ -180,14 +180,27 @@ class _BodyState extends State<Body> {
       Iterable _iterable = filteredMap.values;
       Map _mapItems;
       _iterable.forEach((element) async {
-        _mapItems = element;
+        _mapItems=element;
         if (_mapItems["id"] == userID &&
             _mapItems["password"] == password &&
             _mapItems["building"] == selectedBuilding) {
-          Navigator.of(context).pushNamed('/userhome');
-          _mySharedPreferences.saveUserData(_mapItems);
-          _mySharedPreferences.setLogedIn(true);
-          _mySharedPreferences.setUserType(Constants.user);
+
+          print(_mySharedPreferences.getToken);
+          _mapItems["token"] = _mySharedPreferences.getToken;
+          Map<String, dynamic> stringQueryParameters =
+          _mapItems.map((key, value) => MapEntry(key, value?.toString()));
+          FirebaseDatabase.instance
+              .reference()
+              .child("Users")
+              .child(_mapItems["id"])
+              .update(stringQueryParameters)
+              .whenComplete(() {
+            Navigator.of(context).pushNamed('/userhome');
+            _mySharedPreferences.saveUserData(_mapItems);
+            _mySharedPreferences.setLogedIn(true);
+            _mySharedPreferences.setUserType(Constants.user);
+          });
+
           return;
         }
       });

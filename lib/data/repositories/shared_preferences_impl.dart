@@ -56,7 +56,7 @@ class MySharedPreferencesImpl implements MySharedPreferences {
   }
 
   @override
-  String get getToken =>
+  dynamic get getToken =>
       sharedPreference.getString(PreferencesConstatns.token) ?? "";
 
   @override
