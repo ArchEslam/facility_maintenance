@@ -73,8 +73,8 @@ class NotificationsHandlerImpl implements NotificationsHandler {
 
   @override
   Future<Map<String, dynamic>> sendAndRetrieveMessage(
-      FcmNotificationModel notify) async {
-    print(" deviceRegId on sendAndRetrieveMessage ${notify.deviceRegId}");
+      FcmNotificationModel notify,dynamic token) async {
+    print(" token on sendAndRetrieveMessage ${token}");
 
     await firebaseMessaging.requestNotificationPermissions(
       const IosNotificationSettings(
@@ -116,7 +116,7 @@ class NotificationsHandlerImpl implements NotificationsHandler {
             'senderName': notify.senderName,
             'sentAt': notify.sentAt,
           },
-          'to': notify.deviceRegId,
+          'to': token,
         },
       ),
     );

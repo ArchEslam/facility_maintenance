@@ -106,10 +106,20 @@ class _BodyState extends State<Body> {
         _mapItems = element;
         if (_mapItems["id"] == employeeID &&
             _mapItems["password"] == password) {
-          Navigator.of(context).pushNamed('/employeehome');
-          _mySharedPreferences.saveUserData(_mapItems);
-          _mySharedPreferences.setLogedIn(true);
-          _mySharedPreferences.setUserType(Constants.employee);
+           _mapItems["token"] = _mySharedPreferences.getToken;
+           Map<String, dynamic> stringQueryParameters =
+           _mapItems.map((key, value) => MapEntry(key, value?.toString()));
+           FirebaseDatabase.instance
+              .reference()
+              .child("Employees")
+              .child(_mapItems["id"])
+              .update(stringQueryParameters)
+              .whenComplete(() {
+            Navigator.of(context).pushNamed('/employeehome');
+            _mySharedPreferences.saveUserData(_mapItems);
+            _mySharedPreferences.setLogedIn(true);
+            _mySharedPreferences.setUserType(Constants.employee);
+          });
         } else {
           print("Error");
         }

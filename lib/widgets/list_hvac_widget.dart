@@ -231,11 +231,10 @@ class _ListHVACWidgettState extends State<ListHVACWidget> {
                                       value: hvac.isSolved ?? false,
                                       onChanged: (newValue) {
                                         if (!hvac.isSolved) {
-                                          if (widget.userType ==
-                                              Constants.employee) {
+                                          if (widget.userType == Constants.employee) {
                                             _buildEditPriceDialog(
                                                 context, hvac);
-                                          }
+                                         }
                                         }
                                       },
                                       // controlAffinity: ListTileControlAffinity.leading,  //  <-- leading Checkbox
@@ -260,7 +259,7 @@ class _ListHVACWidgettState extends State<ListHVACWidget> {
   }
 
   Future<void> _changeLis(HVAC hvac, BuildContext dialogContext) async {
-    print(hvac.deviceRegId);
+    print(hvac.token);
     User user = _mySharedPreferences.getUserData;
     FcmNotificationModel notify = new FcmNotificationModel(
       type: FCMpayload.user.toString(),
@@ -269,7 +268,7 @@ class _ListHVACWidgettState extends State<ListHVACWidget> {
       customerId: user.id.toString(),
       customerName: hvac.customer,
       itemId: "null",
-      deviceRegId: hvac.deviceRegId,
+      token: hvac.token,
       senderName: user.name,
       sentAt: DateFormat('yyyy-MM-dd – kk:mm').format(_now),
     );
@@ -287,7 +286,7 @@ class _ListHVACWidgettState extends State<ListHVACWidget> {
       _priceController.text = "";
       Navigator.of(dialogContext).pop();
     }).whenComplete(() {
-      _notificationsHandler.sendAndRetrieveMessage(notify).then((value) {
+      _notificationsHandler.sendAndRetrieveMessage(notify,notify.token).then((value) {
         print("value on sendAndRetrieveMessage = ${value}");
       });
     });

@@ -15,5 +15,5 @@ abstract class MySharedPreferences {
 
   void setToke(String value);
 
-  String get getToken;
+  dynamic get getToken;
 }
