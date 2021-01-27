@@ -91,15 +91,19 @@ class _BodyState extends State<Body> {
                   ),
                 );
               }, //{Navigator.of(context).pushNamed('user_personal_data');},
-              child: buildButton(Icons.person, "Personal Data",
+              child: buildButton(Icons.person,
+                  "Personal Data",
                   "Provide us with your name, email and phone number to contact you."),
             ),
             InkWell(
-              onTap: () {},
+              onTap: () {
+                Navigator.of(context)
+                    .pushNamed('/create_gnl_request');
+              },
               child: buildButton(
                   Icons.settings,
-                  "General Maintenances of Your Facility",
-                  "You can request maintenance for any of the public utilites in your building."),
+                  "General Maintenance of Your Facility",
+                  "You can request maintenance for any of the public utilities in your building."),
             ),
             InkWell(
               onTap: () {
@@ -107,8 +111,8 @@ class _BodyState extends State<Body> {
               },
               child: buildButton(
                   Icons.store,
-                  "Internal Maintenances of Your Appartment",
-                  "You can request maintenance for Plumbing, HVAC and Electricity in your appartment."),
+                  "Internal Maintenance of Your Apartment",
+                  "You can request maintenance for Plumbing, HVAC and Electricity in your apartment."),
             ),
           ],
         ),

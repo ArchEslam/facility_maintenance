@@ -80,19 +80,12 @@ class _BodyState extends State<Body> {
           children: <Widget>[
             InkWell(
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return ViewRequests();
-                    },
-                  ),
-                );
+                Navigator.of(context).pushNamed('/gnl_requests');
               },
               child: buildButton(
                   Icons.settings,
-                  "General Maintenances of All Facilities",
-                  "View all costumers' maintenance requests for any of the public utilites in all buildings."),
+                  "General Maintenance of All Facilities",
+                  "View all costumers' maintenance requests for any of the public utilities in all buildings."),
             ),
             InkWell(
               onTap: () {
@@ -100,8 +93,8 @@ class _BodyState extends State<Body> {
               },
               child: buildButton(
                   Icons.store,
-                  "Internal Maintenances of Your Appartment",
-                  "View all costumers' maintenance requests for Plumbing, HVAC and Electricity in all appartments."),
+                  "Internal Maintenance of All Apartments",
+                  "View all costumers' maintenance requests for Plumbing, HVAC and Electricity in all apartments."),
             ),
           ],
         ),

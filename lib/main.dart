@@ -1,4 +1,11 @@
-
+import 'package:facility_maintenance/Screens/Internal_Requests/create_ele_request.dart';
+import 'package:facility_maintenance/Screens/Internal_Requests/create_gnl_request.dart';
+import 'package:facility_maintenance/Screens/Internal_Requests/create_other_request.dart';
+import 'package:facility_maintenance/Screens/Internal_Requests/create_plb_request.dart';
+import 'package:facility_maintenance/Screens/Internal_Requests/ele_requests.dart';
+import 'package:facility_maintenance/Screens/Internal_Requests/gnl_requests.dart';
+import 'package:facility_maintenance/Screens/Internal_Requests/other_requests.dart';
+import 'package:facility_maintenance/Screens/Internal_Requests/plb_requests.dart';
 import 'package:facility_maintenance/Screens/Personal_Data_user/personal_data_user.dart';
 import 'package:facility_maintenance/constants.dart';
 import 'package:facility_maintenance/injection_container.dart' as di;
@@ -58,6 +65,14 @@ class _MyAppState extends State<MyApp> {
         '/user_personal_data': (context) => PersonalDataScreen(),
         '/hvac_requests': (context) => HVACRequests(),
         '/create_hvac_request': (context) => CreateHVACRequest(),
+        '/ele_requests': (context) => ELERequests(),
+        '/plb_requests': (context)  => PLBRequests(),
+        '/gnl_requests': (context) => GNLRequests(),
+        '/other_requests': (context) => OTHERRequests(),
+        '/create_ele_request': (context) => CreateELERequest(),
+        '/create_plb_request': (context) => CreatePLBRequest(),
+        '/create_gnl_request': (context) => CreateGNLRequest(),
+        '/create_other_request': (context) => CreateOTHERRequest(),
       },
     );
   }

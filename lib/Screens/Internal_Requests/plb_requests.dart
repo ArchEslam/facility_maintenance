@@ -1,23 +1,23 @@
 import 'package:facility_maintenance/constants.dart';
 import 'package:facility_maintenance/data/repositories/shared_preferences.dart';
-import 'package:facility_maintenance/model/hvac.dart';
-import 'package:facility_maintenance/widgets/list_hvac_widget.dart';
+import 'package:facility_maintenance/model/plb.dart';
+import 'package:facility_maintenance/widgets/list_plb_widget.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
 import '../../injection_container.dart';
 
-class HVACRequests extends StatefulWidget {
+class PLBRequests extends StatefulWidget {
   @override
-  _HVACRequestsState createState() => _HVACRequestsState();
+  _PLBRequestsState createState() => _PLBRequestsState();
 }
 
-class _HVACRequestsState extends State<HVACRequests> {
-  List<HVAC> listHVAC = [];
+class _PLBRequestsState extends State<PLBRequests> {
+  List<PLB> listPLB = [];
   MySharedPreferences _mySharedPreferences = sl<MySharedPreferences>();
 
   DatabaseReference requestsRef =
-      FirebaseDatabase.instance.reference().child("HVAC Requests");
+      FirebaseDatabase.instance.reference().child("PLB Requests");
 
   @override
   void initState() {
@@ -30,7 +30,7 @@ class _HVACRequestsState extends State<HVACRequests> {
     bool checkedBoxValue = false;
     return Scaffold(
         appBar: AppBar(
-          title: Text("HVAC Requests", style: TextStyle(color: Colors.white)),
+          title: Text("PLB Requests", style: TextStyle(color: Colors.white)),
           centerTitle: true,
           backgroundColor: kPrimaryColor,
           elevation: 0,
@@ -51,7 +51,7 @@ class _HVACRequestsState extends State<HVACRequests> {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: [
-                listHVAC.length <= 0
+                listPLB.length <= 0
                     ? Center(
                         child: Container(
                           decoration: BoxDecoration(
@@ -60,16 +60,16 @@ class _HVACRequestsState extends State<HVACRequests> {
                           child: Padding(
                             padding: const EdgeInsets.all(16.0),
                             child: Text(
-                                //hvac.customer,
+                                //plb.customer,
                                 "No Requests Add yet",
                                 style: Theme.of(context).textTheme.headline5),
                           ),
                         ),
                       )
-                    : ListHVACWidget(
-                        listHVAC: listHVAC,
-                        getSelectedValues: ({HVAC hvac}) {
-                          print("selected = ${hvac.toMap()}");
+                    : ListPLBWidget(
+                        listPLB: listPLB,
+                        getSelectedValues: ({PLB plb}) {
+                          print("selected = ${plb.toMap()}");
                         },
                         onCheckedValue: (bool value) {},
                         userType: Constants.employee,
@@ -86,13 +86,13 @@ class _HVACRequestsState extends State<HVACRequests> {
       var KEYS = snap.value.keys;
       var DATA = snap.value;
 
-      listHVAC.clear();
+      listPLB.clear();
       print("previous Id =${_mySharedPreferences.getUserData.id}");
       setState(() {
         for (var individualKey in KEYS) {
-          HVAC requests =
-              new HVAC.fromMap(key: individualKey, map: DATA[individualKey]);
-          listHVAC.add(requests);
+          PLB requests =
+              new PLB.fromMap(key: individualKey, map: DATA[individualKey]);
+          listPLB.add(requests);
         }
       });
     });

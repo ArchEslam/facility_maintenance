@@ -30,7 +30,7 @@ class _BodyState extends State<Body> {
                 Expanded(flex: 15, child: Image.asset(imagePath)),
                 Expanded(flex: 1, child: SizedBox()),
                 Expanded(
-                    flex: 4,
+                    flex: 5,
                     child: Text(
                       buttonTitle,
                       style: TextStyle(
@@ -73,7 +73,10 @@ class _BodyState extends State<Body> {
                             Expanded(
                                 flex: 3,
                                 child: InkWell(
-                                  onTap: () {},
+                                  onTap: () {
+                                    Navigator.of(context)
+                                        .pushNamed('/ele_requests');
+                                  },
                                   child: buildButton2(
                                       "assets/images/elec.png", "Electricity"),
                                 )),
@@ -108,11 +111,33 @@ class _BodyState extends State<Body> {
                             Expanded(
                                 flex: 3,
                                 child: InkWell(
-                                  onTap: () {},
+                                  onTap: () {
+                                    Navigator.of(context)
+                                        .pushNamed('/plb_requests');
+                                  },
                                   child: buildButton2(
                                       "assets/images/plumbing.png", "Plumbing"),
                                 )),
                             Expanded(flex: 2, child: Container()),
+                          ],
+                        ),
+                      ),
+                      Expanded(flex: 1, child: SizedBox()),
+                      Expanded(
+                        flex: 20,
+                        child: Row(
+                          children: [
+                            Expanded(flex: 2, child: Container()),
+                            Expanded(
+                                flex: 3,
+                                child: InkWell(
+                                  onTap: () {
+                                    Navigator.of(context)
+                                        .pushNamed('/other_requests');
+                                  },
+                                  child: buildButton2(
+                                      "assets/images/other.png", "Other"),
+                                )),
                           ],
                         ),
                       ),
