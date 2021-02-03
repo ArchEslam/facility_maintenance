@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:facility_maintenance/Screens/Login_user/components/background.dart';
 import 'package:facility_maintenance/Screens/Signin_employee/signin_screen.dart';
 import 'package:facility_maintenance/components/already_have_an_account_acheck.dart';
@@ -84,7 +86,7 @@ class _BodyState extends State<Body> {
                       ),
                     ),
                     Text(
-                      'Your Building is: ',
+                      'Building: ',
                       style: TextStyle(
                           fontSize: 15.0,
                           color: kPrimaryColor,
@@ -177,30 +179,33 @@ class _BodyState extends State<Body> {
         ..forEach((k, v) {
           print(v.toString());
         });
-      Iterable _iterable = filteredMap.values;
-      Map _mapItems;
-      _iterable.forEach((element) async {
-        _mapItems=element;
-        if (_mapItems["id"] == userID &&
-            _mapItems["password"] == password &&
-            _mapItems["building"] == selectedBuilding) {
 
+      Iterable _iterable = filteredMap.values;
+      Map _allMapItems;
+      _iterable.forEach((element) async {
+        _allMapItems = element;
+        if (_allMapItems["id"] == userID &&
+            _allMapItems["password"] == password &&
+            _allMapItems["building"] == selectedBuilding) {
+          Map _lastMapItem = element;
           print(_mySharedPreferences.getToken);
-          _mapItems["token"] = _mySharedPreferences.getToken;
-          Map<String, dynamic> stringQueryParameters =
-          _mapItems.map((key, value) => MapEntry(key, value?.toString()));
+          _lastMapItem["token"] = _mySharedPreferences.getToken;
+          Map<String, dynamic> stringQueryParameters = _allMapItems
+              .map((key, value) => MapEntry(key, value?.toString()));
           FirebaseDatabase.instance
               .reference()
               .child("Users")
-              .child(_mapItems["id"])
+              .child(_lastMapItem["id"])
               .update(stringQueryParameters)
               .whenComplete(() {
-            Navigator.of(context).pushNamed('/userhome');
-            _mySharedPreferences.saveUserData(_mapItems);
+            print(
+                "==================lastMapItem user=====================\n ${json.encode(_lastMapItem)}");
+
+            _mySharedPreferences.saveUserData(_lastMapItem);
             _mySharedPreferences.setLogedIn(true);
             _mySharedPreferences.setUserType(Constants.user);
+            Navigator.of(context).pushNamed('/userhome');
           });
-
           return;
         }
       });

@@ -61,11 +61,11 @@ class _ListHVACWidgettState extends State<ListHVACWidget> {
     if (mediaQueryData.orientation == Orientation.landscape) {
       _container_lis_height = MediaQuery.of(context).size.width / 3.0;
       _container_item_height = MediaQuery.of(context).size.width / 5.5;
-      _container_item_text_width = MediaQuery.of(context).size.width / 4.5;
+      _container_item_text_width = MediaQuery.of(context).size.width / 3;
     } else {
       _container_lis_height = MediaQuery.of(context).size.height / 5.0;
       _container_item_height = MediaQuery.of(context).size.height / 5.5;
-      _container_item_text_width = MediaQuery.of(context).size.height / 4.5;
+      _container_item_text_width = MediaQuery.of(context).size.height / 3;
     }
     // if(_sections !=null){
 
@@ -141,32 +141,32 @@ class _ListHVACWidgettState extends State<ListHVACWidget> {
                         Padding(
                           padding: const EdgeInsets.all(4.0),
                           child: Container(
-                            width: 210,
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Container(
                                   alignment: Alignment.topLeft,
-                                  width: 210,//container_item_text_width,
+                                  width: container_item_text_width / 1.1,
                                   child: Text(
-                                    //hvac.customer,
+                                      //hvac.customer,
                                       hvac.customer ?? "",
-                                      style: Theme.of(context).textTheme.headline6
-                                  ),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headline6),
                                 ),
                                 Container(
-                                  width: 210,//container_item_text_width,
+                                  width: container_item_text_width / 1.1,
                                   alignment: Alignment.topLeft,
                                   // width: _container_item_height,
-                                  child: Text(
-                                      hvac.date??"",
-                                      style: Theme.of(context).textTheme.subtitle1
-                                    //hvac.description,
-                                    // hvac.description??"",
-                                    //   style: Theme.of(context).textTheme.subtitle1
+                                  child: Text(hvac.date ?? "",
+                                      style:
+                                          Theme.of(context).textTheme.subtitle1
+                                      //hvac.description,
+                                      // hvac.description??"",
+                                      //   style: Theme.of(context).textTheme.subtitle1
 
-                                  ),
+                                      ),
                                 ),
                               ],
                             ),
@@ -176,8 +176,9 @@ class _ListHVACWidgettState extends State<ListHVACWidget> {
                 ),
                 //------------------------------------------------------------
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 10),
-                  child: Text(hvac.description??"",
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10),
+                  child: Text(hvac.description ?? "",
                       style: Theme.of(context).textTheme.subtitle1),
                 ),
                 Padding(
@@ -238,10 +239,11 @@ class _ListHVACWidgettState extends State<ListHVACWidget> {
                                       value: hvac.isSolved ?? false,
                                       onChanged: (newValue) {
                                         if (!hvac.isSolved) {
-                                          if (widget.userType == Constants.employee) {
+                                          if (widget.userType ==
+                                              Constants.employee) {
                                             _buildEditPriceDialog(
                                                 context, hvac);
-                                         }
+                                          }
                                         }
                                       },
                                       // controlAffinity: ListTileControlAffinity.leading,  //  <-- leading Checkbox
@@ -293,7 +295,9 @@ class _ListHVACWidgettState extends State<ListHVACWidget> {
       _priceController.text = "";
       Navigator.of(dialogContext).pop();
     }).whenComplete(() {
-      _notificationsHandler.sendAndRetrieveMessage(notify,notify.token).then((value) {
+      _notificationsHandler
+          .sendAndRetrieveMessage(notify, notify.token)
+          .then((value) {
         print("value on sendAndRetrieveMessage = ${value}");
       });
     });

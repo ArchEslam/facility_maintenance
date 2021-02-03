@@ -5,6 +5,7 @@ import '../constants.dart';
 
 class MessageDialog extends StatefulWidget {
   final FcmNotificationModel fcmNotificationModel;
+
   MessageDialog({this.fcmNotificationModel});
 
   @override

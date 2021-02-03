@@ -1,13 +1,19 @@
 import 'package:facility_maintenance/Screens/Login_user/login_screen.dart';
 import 'package:facility_maintenance/Screens/Welcome/components/background.dart';
 import 'package:facility_maintenance/components/rounded_button.dart';
+import 'package:facility_maintenance/data/repositories/shared_preferences.dart';
 import 'package:flutter/material.dart';
+
+import '../../../constants.dart';
+import '../../../injection_container.dart';
 
 //import 'package:flutter_svg/svg.dart';
 
 class Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    MySharedPreferences _mySharedPreferences = sl<MySharedPreferences>();
+
     Size size = MediaQuery.of(context).size;
     // This size provide us total height and width of our screen
     return OrientationBuilder(builder: (context, orientation) {
@@ -29,14 +35,22 @@ class Body extends StatelessWidget {
               RoundedButton(
                 text: "START",
                 press: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return LoginScreen();
-                      },
-                    ),
-                  );
+                  if (_mySharedPreferences.isLogedIn) {
+                    if (_mySharedPreferences.getUserType == Constants.user) {
+                      Navigator.of(context).pushNamed('/userhome');
+                    } else {
+                      Navigator.of(context).pushNamed('/employeehome');
+                    }
+                  } else {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return LoginScreen();
+                        },
+                      ),
+                    );
+                  }
                 },
               ),
               /*RoundedButton(

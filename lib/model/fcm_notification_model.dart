@@ -39,15 +39,33 @@ class FcmNotificationModel {
 
   factory FcmNotificationModel.fromJson(Map<String, dynamic> json) =>
       FcmNotificationModel(
-        isFCM:Platform.isAndroid?json["data"]["isFCM"] ?? "": json["isFCM"] ?? "",
-        type:Platform.isAndroid?json["data"]["type"] ?? "": json["type"] ?? "",
-        token: Platform.isAndroid?json["data"]["token"] ?? "":json["token"] ?? "",
-        messageTitle:Platform.isAndroid?json["data"]["messageTitle"] ?? "": json["messageTitle"] ?? "",
-        messageBody: Platform.isAndroid?json["data"]["messageBody"] ?? "":json["messageBody"] ?? "",
-        senderName: Platform.isAndroid?json["data"]["senderName"] ?? "":json["senderName"] ?? "",
-        sentAt: Platform.isAndroid?json["data"]["sentAt"] ?? "":json["sentAt"] ?? "",
-        customerId: Platform.isAndroid?json["data"]["customerId"] ?? "":json["customerId"] ?? "",
-        customerName: Platform.isAndroid?json["data"]["customerName"] ?? "":json["customerName"] ?? "",
+        isFCM: Platform.isAndroid
+            ? json["data"]["isFCM"] ?? ""
+            : json["isFCM"] ?? "",
+        type: Platform.isAndroid
+            ? json["data"]["type"] ?? ""
+            : json["type"] ?? "",
+        token: Platform.isAndroid
+            ? json["data"]["token"] ?? ""
+            : json["token"] ?? "",
+        messageTitle: Platform.isAndroid
+            ? json["data"]["messageTitle"] ?? ""
+            : json["messageTitle"] ?? "",
+        messageBody: Platform.isAndroid
+            ? json["data"]["messageBody"] ?? ""
+            : json["messageBody"] ?? "",
+        senderName: Platform.isAndroid
+            ? json["data"]["senderName"] ?? ""
+            : json["senderName"] ?? "",
+        sentAt: Platform.isAndroid
+            ? json["data"]["sentAt"] ?? ""
+            : json["sentAt"] ?? "",
+        customerId: Platform.isAndroid
+            ? json["data"]["customerId"] ?? ""
+            : json["customerId"] ?? "",
+        customerName: Platform.isAndroid
+            ? json["data"]["customerName"] ?? ""
+            : json["customerName"] ?? "",
       );
 
   Map<String, dynamic> toJson() => {

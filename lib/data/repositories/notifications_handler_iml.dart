@@ -73,7 +73,7 @@ class NotificationsHandlerImpl implements NotificationsHandler {
 
   @override
   Future<Map<String, dynamic>> sendAndRetrieveMessage(
-      FcmNotificationModel notify,dynamic token) async {
+      FcmNotificationModel notify, dynamic token) async {
     print(" token on sendAndRetrieveMessage ${token}");
 
     await firebaseMessaging.requestNotificationPermissions(

@@ -16,26 +16,25 @@ class MySharedPreferencesImpl implements MySharedPreferences {
 
   @override
   User get getUserData {
+    print(
+        "test values from usermodel =${sharedPreference.getString(PreferencesConstatns.UserData)}");
     Map<dynamic, dynamic> valueMap =
         json.decode(sharedPreference.getString(PreferencesConstatns.UserData));
-    // print("user values from pref =${valueMap}");
     User user = User.fromMap(valueMap);
-    // print("test values from pref =${user.name}");
-
+    //print("test values from usermodel =${user.name}");
     return user;
   }
 
   @override
   void saveUserData(Map<dynamic, dynamic> value) {
-    String valueJson = json.encode(value);
-    // print("==================saveUserData valueJson=====================\n ${json.encode(value)}");
+    //print("==================saveUserData valueJson=====================\n ${json.encode(value)}");
     sharedPreference.setString(
         PreferencesConstatns.UserData, json.encode(value));
   }
 
   @override
   bool get isLogedIn {
-    return sharedPreference.getString(PreferencesConstatns.isLoggedIn) ?? false;
+    return sharedPreference.getBool(PreferencesConstatns.isLoggedIn) ?? false;
   }
 
   @override

@@ -1,15 +1,15 @@
 class User {
   final String key;
-  String id;
-  String mail;
-  String name;
-  String password;
-  String phone;
-  String building;
-  String dicipline;
-  String customer;
-  String flat;
-  String token;
+  dynamic id;
+  dynamic mail;
+  dynamic name;
+  dynamic password;
+  dynamic phone;
+  dynamic building;
+  dynamic dicipline;
+  dynamic customer;
+  dynamic flat;
+  dynamic token;
 
   User(
       {this.key,
@@ -28,7 +28,7 @@ class User {
     return new User(
       key: key,
       id: map["id"],
-      token: map["token"],
+      //token: map["token"],
       mail: map["mail"],
       name: map["name"],
       password: map["password"],
@@ -42,7 +42,7 @@ class User {
 
   factory User.fromMap(Map<dynamic, dynamic> map) => User(
         id: map["id"] ?? "",
-        token: map["token"],
+        // token: map["token"]??"",
         mail: map["mail"] ?? "",
         name: map["name"] ?? "",
         password: map["password"] ?? "",
@@ -53,10 +53,9 @@ class User {
         flat: map["flat"] ?? "",
       );
 
-  Map<String, dynamic> toJson() => <String, dynamic>{
+  Map<dynamic, dynamic> toJson() => <String, dynamic>{
         'id': id,
         "token": token,
-        'mail': mail,
         'mail': mail,
         'phone': phone,
         'building': building,
@@ -68,7 +67,6 @@ class User {
   Map<dynamic, dynamic> toMap() => {
         'id': id,
         "token": token,
-        'mail': mail,
         'mail': mail,
         'phone': phone,
         'building': building,

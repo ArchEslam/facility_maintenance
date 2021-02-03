@@ -1,7 +1,7 @@
 import 'package:facility_maintenance/data/repositories/notification_handler.dart';
 import 'package:facility_maintenance/data/repositories/shared_preferences.dart';
-import 'package:facility_maintenance/model/fcm_notification_model.dart';
 import 'package:facility_maintenance/model/ele.dart';
+import 'package:facility_maintenance/model/fcm_notification_model.dart';
 import 'package:facility_maintenance/model/user.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -61,11 +61,11 @@ class _ListELEWidgettState extends State<ListELEWidget> {
     if (mediaQueryData.orientation == Orientation.landscape) {
       _container_lis_height = MediaQuery.of(context).size.width / 3.0;
       _container_item_height = MediaQuery.of(context).size.width / 5.5;
-      _container_item_text_width = MediaQuery.of(context).size.width / 4.5;
+      _container_item_text_width = MediaQuery.of(context).size.width / 3;
     } else {
       _container_lis_height = MediaQuery.of(context).size.height / 5.0;
       _container_item_height = MediaQuery.of(context).size.height / 5.5;
-      _container_item_text_width = MediaQuery.of(context).size.height / 4.5;
+      _container_item_text_width = MediaQuery.of(context).size.height / 3;
     }
     // if(_sections !=null){
 
@@ -123,7 +123,7 @@ class _ListELEWidgettState extends State<ListELEWidget> {
               children: [
                 //------------------------------------------------------------
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(6.0),
                   child: Row(
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -141,32 +141,32 @@ class _ListELEWidgettState extends State<ListELEWidget> {
                         Padding(
                           padding: const EdgeInsets.all(4.0),
                           child: Container(
-                            width: 210,
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Container(
                                   alignment: Alignment.topLeft,
-                                  width: 210,//container_item_text_width,
+                                  width: container_item_text_width / 1.1,
                                   child: Text(
-                                    //ele.customer,
+                                      //ele.customer,
                                       ele.customer ?? "",
-                                      style: Theme.of(context).textTheme.headline6
-                                  ),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headline6),
                                 ),
                                 Container(
-                                  width: 210,//container_item_text_width,
+                                  width: container_item_text_width / 1.1,
                                   alignment: Alignment.topLeft,
                                   // width: _container_item_height,
-                                  child: Text(
-                                      ele.date??"",
-                                      style: Theme.of(context).textTheme.subtitle1
-                                    //ele.description,
-                                    // ele.description??"",
-                                    //   style: Theme.of(context).textTheme.subtitle1
+                                  child: Text(ele.date ?? "",
+                                      style:
+                                          Theme.of(context).textTheme.subtitle1
+                                      //ele.description,
+                                      // ele.description??"",
+                                      //   style: Theme.of(context).textTheme.subtitle1
 
-                                  ),
+                                      ),
                                 ),
                               ],
                             ),
@@ -176,8 +176,9 @@ class _ListELEWidgettState extends State<ListELEWidget> {
                 ),
                 //------------------------------------------------------------
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 10),
-                  child: Text(ele.description??"",
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10),
+                  child: Text(ele.description ?? "",
                       style: Theme.of(context).textTheme.subtitle1),
                 ),
                 Padding(
@@ -238,10 +239,10 @@ class _ListELEWidgettState extends State<ListELEWidget> {
                                       value: ele.isSolved ?? false,
                                       onChanged: (newValue) {
                                         if (!ele.isSolved) {
-                                          if (widget.userType == Constants.employee) {
-                                            _buildEditPriceDialog(
-                                                context, ele);
-                                         }
+                                          if (widget.userType ==
+                                              Constants.employee) {
+                                            _buildEditPriceDialog(context, ele);
+                                          }
                                         }
                                       },
                                       // controlAffinity: ListTileControlAffinity.leading,  //  <-- leading Checkbox
@@ -293,7 +294,9 @@ class _ListELEWidgettState extends State<ListELEWidget> {
       _priceController.text = "";
       Navigator.of(dialogContext).pop();
     }).whenComplete(() {
-      _notificationsHandler.sendAndRetrieveMessage(notify,notify.token).then((value) {
+      _notificationsHandler
+          .sendAndRetrieveMessage(notify, notify.token)
+          .then((value) {
         print("value on sendAndRetrieveMessage = ${value}");
       });
     });

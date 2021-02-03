@@ -61,11 +61,11 @@ class _ListGNLWidgettState extends State<ListGNLWidget> {
     if (mediaQueryData.orientation == Orientation.landscape) {
       _container_lis_height = MediaQuery.of(context).size.width / 3.0;
       _container_item_height = MediaQuery.of(context).size.width / 5.5;
-      _container_item_text_width = MediaQuery.of(context).size.width / 4.5;
+      _container_item_text_width = MediaQuery.of(context).size.width / 3;
     } else {
       _container_lis_height = MediaQuery.of(context).size.height / 5.0;
       _container_item_height = MediaQuery.of(context).size.height / 5.5;
-      _container_item_text_width = MediaQuery.of(context).size.height / 4.5;
+      _container_item_text_width = MediaQuery.of(context).size.height / 3;
     }
     // if(_sections !=null){
 
@@ -141,32 +141,32 @@ class _ListGNLWidgettState extends State<ListGNLWidget> {
                         Padding(
                           padding: const EdgeInsets.all(4.0),
                           child: Container(
-                            width: 210,
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Container(
+                                  width: container_item_text_width / 1.1,
                                   alignment: Alignment.topLeft,
-                                  width: 210,//container_item_text_width,
                                   child: Text(
-                                    //gnl.customer,
+                                      //gnl.customer,
                                       gnl.customer ?? "",
-                                      style: Theme.of(context).textTheme.headline6
-                                  ),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headline6),
                                 ),
                                 Container(
-                                  width: 210,//container_item_text_width,
+                                  width: container_item_text_width / 1.1,
                                   alignment: Alignment.topLeft,
                                   // width: _container_item_height,
-                                  child: Text(
-                                      gnl.date??"",
-                                      style: Theme.of(context).textTheme.subtitle1
-                                    //gnl.description,
-                                    // gnl.description??"",
-                                    //   style: Theme.of(context).textTheme.subtitle1
+                                  child: Text(gnl.date ?? "",
+                                      style:
+                                          Theme.of(context).textTheme.subtitle1
+                                      //gnl.description,
+                                      // gnl.description??"",
+                                      //   style: Theme.of(context).textTheme.subtitle1
 
-                                  ),
+                                      ),
                                 ),
                               ],
                             ),
@@ -176,8 +176,9 @@ class _ListGNLWidgettState extends State<ListGNLWidget> {
                 ),
                 //------------------------------------------------------------
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 10),
-                  child: Text(gnl.description??"",
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10),
+                  child: Text(gnl.description ?? "",
                       style: Theme.of(context).textTheme.subtitle1),
                 ),
                 Padding(
@@ -238,10 +239,10 @@ class _ListGNLWidgettState extends State<ListGNLWidget> {
                                       value: gnl.isSolved ?? false,
                                       onChanged: (newValue) {
                                         if (!gnl.isSolved) {
-                                          if (widget.userType == Constants.employee) {
-                                            _buildEditPriceDialog(
-                                                context, gnl);
-                                         }
+                                          if (widget.userType ==
+                                              Constants.employee) {
+                                            _buildEditPriceDialog(context, gnl);
+                                          }
                                         }
                                       },
                                       // controlAffinity: ListTileControlAffinity.leading,  //  <-- leading Checkbox
@@ -293,7 +294,9 @@ class _ListGNLWidgettState extends State<ListGNLWidget> {
       _priceController.text = "";
       Navigator.of(dialogContext).pop();
     }).whenComplete(() {
-      _notificationsHandler.sendAndRetrieveMessage(notify,notify.token).then((value) {
+      _notificationsHandler
+          .sendAndRetrieveMessage(notify, notify.token)
+          .then((value) {
         print("value on sendAndRetrieveMessage = ${value}");
       });
     });

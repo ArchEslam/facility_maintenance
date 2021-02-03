@@ -5,8 +5,8 @@ import 'package:facility_maintenance/components/rounded_button.dart';
 import 'package:facility_maintenance/constants.dart';
 import 'package:facility_maintenance/data/repositories/notification_handler.dart';
 import 'package:facility_maintenance/data/repositories/shared_preferences.dart';
-import 'package:facility_maintenance/model/fcm_notification_model.dart';
 import 'package:facility_maintenance/model/ele.dart';
+import 'package:facility_maintenance/model/fcm_notification_model.dart';
 import 'package:facility_maintenance/model/user.dart';
 import 'package:facility_maintenance/widgets/list_ele_widget.dart';
 import 'package:facility_maintenance/widgets/progress_indicator_widget.dart';
@@ -102,7 +102,8 @@ class _CreateELERequestState extends State<CreateELERequest>
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed: () async {
-              var nav = await Navigator.of(context).pushNamed("/user_in_sections");
+              var nav =
+                  await Navigator.of(context).pushNamed("/user_in_sections");
               if (nav == true || nav == null) {
                 //change the state
               }
@@ -459,8 +460,8 @@ class _CreateELERequestState extends State<CreateELERequest>
           DATA = snap.value;
           setState(() {
             for (var individualKey in KEYS) {
-              ELE requests = new ELE.fromMap(
-                  key: individualKey, map: DATA[individualKey]);
+              ELE requests =
+                  new ELE.fromMap(key: individualKey, map: DATA[individualKey]);
               print(
                   "get requests id =>${requests.customerId} | ${_mySharedPreferences.getUserData.id} <==my id");
 

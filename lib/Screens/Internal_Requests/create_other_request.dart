@@ -102,7 +102,8 @@ class _CreateOTHERRequestState extends State<CreateOTHERRequest>
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed: () async {
-              var nav = await Navigator.of(context).pushNamed("/user_in_sections");
+              var nav =
+                  await Navigator.of(context).pushNamed("/user_in_sections");
               if (nav == true || nav == null) {
                 //change the state
               }

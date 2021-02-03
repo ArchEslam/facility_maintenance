@@ -102,7 +102,8 @@ class _CreateGNLRequestState extends State<CreateGNLRequest>
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed: () async {
-              var nav = await Navigator.of(context).pushNamed("/user_in_sections");
+              var nav =
+                  await Navigator.of(context).pushNamed("/user_in_sections");
               if (nav == true || nav == null) {
                 //change the state
               }
@@ -459,8 +460,8 @@ class _CreateGNLRequestState extends State<CreateGNLRequest>
           DATA = snap.value;
           setState(() {
             for (var individualKey in KEYS) {
-              GNL requests = new GNL.fromMap(
-                  key: individualKey, map: DATA[individualKey]);
+              GNL requests =
+                  new GNL.fromMap(key: individualKey, map: DATA[individualKey]);
               print(
                   "get requests id =>${requests.customerId} | ${_mySharedPreferences.getUserData.id} <==my id");
 

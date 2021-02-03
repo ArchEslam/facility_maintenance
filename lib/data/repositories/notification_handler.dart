@@ -6,5 +6,5 @@ abstract class NotificationsHandler {
   Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message);
 
   Future<Map<String, dynamic>> sendAndRetrieveMessage(
-      FcmNotificationModel notify,dynamic token);
+      FcmNotificationModel notify, dynamic token);
 }

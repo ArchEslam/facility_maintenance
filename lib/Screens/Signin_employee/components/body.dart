@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:facility_maintenance/Screens/Login_user/login_screen.dart';
 import 'package:facility_maintenance/Screens/Signin_employee/components/background.dart';
 import 'package:facility_maintenance/components/already_have_an_account_acheck.dart';
@@ -91,7 +93,7 @@ class _BodyState extends State<Body> {
   }
 
   onSignIn() {
-    /* final  db = */ FirebaseDatabase.instance
+    FirebaseDatabase.instance
         .reference()
         .child("Employees")
         .orderByChild('id')
@@ -99,34 +101,39 @@ class _BodyState extends State<Body> {
         .then((DataSnapshot snapshot) {
       //print('Data : ${snapshot.value}');
       Map _map = snapshot.value;
-      Map filteredMap = Map.from(_map)..forEach((k, v) => print(v.toString()));
+      Map filteredMap = Map.from(_map)
+        ..forEach((k, v) {
+          print(v.toString());
+        });
+
       Iterable _iterable = filteredMap.values;
-      Map _mapItems;
+      Map _allMapItems;
       _iterable.forEach((element) async {
-        _mapItems = element;
-        if (_mapItems["id"] == employeeID &&
-            _mapItems["password"] == password) {
-           _mapItems["token"] = _mySharedPreferences.getToken;
-           Map<String, dynamic> stringQueryParameters =
-           _mapItems.map((key, value) => MapEntry(key, value?.toString()));
-           FirebaseDatabase.instance
+        _allMapItems = element;
+        if (_allMapItems["id"] == employeeID &&
+            _allMapItems["password"] == password) {
+          Map _lastMapItem = element;
+          print(_mySharedPreferences.getToken);
+          _lastMapItem["token"] = _mySharedPreferences.getToken;
+          Map<String, dynamic> stringQueryParameters = _allMapItems
+              .map((key, value) => MapEntry(key, value?.toString()));
+          FirebaseDatabase.instance
               .reference()
               .child("Employees")
-              .child(_mapItems["id"])
+              .child(_lastMapItem["id"])
               .update(stringQueryParameters)
               .whenComplete(() {
-            Navigator.of(context).pushNamed('/employeehome');
-            _mySharedPreferences.saveUserData(_mapItems);
+            print(
+                "==================lastMapItem employee=====================\n ${json.encode(_lastMapItem)}");
+
+            _mySharedPreferences.saveUserData(_lastMapItem);
             _mySharedPreferences.setLogedIn(true);
             _mySharedPreferences.setUserType(Constants.employee);
+            Navigator.of(context).pushNamed('/employeehome');
           });
-        } else {
-          print("Error");
+          return;
         }
-
-        print(_mapItems["id"]);
       });
     });
-    // Navigator.of(context).pushNamed('employeehome');
   }
 }
