@@ -38,7 +38,7 @@ class _GNLRequestsState extends State<GNLRequests> {
             icon: Icon(Icons.arrow_back),
             onPressed: () async {
               var nav = await Navigator.of(context)
-                  .pushNamed("/employee_in_sections");
+                  .pushNamed("/employeehome");
               if (nav == true || nav == null) {
                 //change the state
               }

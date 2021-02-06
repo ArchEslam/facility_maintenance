@@ -103,7 +103,7 @@ class _CreateGNLRequestState extends State<CreateGNLRequest>
             icon: Icon(Icons.arrow_back),
             onPressed: () async {
               var nav =
-                  await Navigator.of(context).pushNamed("/user_in_sections");
+                  await Navigator.of(context).pushNamed("/userhome");
               if (nav == true || nav == null) {
                 //change the state
               }

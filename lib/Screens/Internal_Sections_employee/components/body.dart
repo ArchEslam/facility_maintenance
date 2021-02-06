@@ -52,6 +52,16 @@ class _BodyState extends State<Body> {
           centerTitle: true,
           backgroundColor: kPrimaryColor,
           elevation: 0,
+          leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () async {
+            var nav = await Navigator.of(context)
+                .pushNamed("/employeehome");
+            if (nav == true || nav == null) {
+              //change the state
+            }
+          },
+        ),
         ),
         body: Background(
           child: Padding(
