@@ -3,6 +3,7 @@ import 'package:facility_maintenance/data/repositories/shared_preferences.dart';
 import 'package:facility_maintenance/model/fcm_notification_model.dart';
 import 'package:facility_maintenance/model/plb.dart';
 import 'package:facility_maintenance/model/user.dart';
+import 'package:facility_maintenance/utils/date_reformate.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -141,14 +142,13 @@ class _ListPLBWidgettState extends State<ListPLBWidget> {
                         Padding(
                           padding: const EdgeInsets.all(4.0),
                           child: Container(
-                            width: container_item_text_width / 1.2,
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Container(
                                   alignment: Alignment.topLeft,
-                                  width: container_item_text_width / 1.1,
+                                  width: container_item_text_width / 1.3,
                                   child: Text(
                                       //plb.customer,
                                       plb.customer ?? "",
@@ -157,10 +157,10 @@ class _ListPLBWidgettState extends State<ListPLBWidget> {
                                           .headline6),
                                 ),
                                 Container(
-                                  width: container_item_text_width / 1.1,
+                                  width: container_item_text_width / 1.3,
                                   alignment: Alignment.topLeft,
                                   // width: _container_item_height,
-                                  child: Text(plb.date ?? "",
+                                  child: Text(DateReformat.reformatYMD(plb.date) ?? "",
                                       style:
                                           Theme.of(context).textTheme.subtitle1
                                       //plb.description,

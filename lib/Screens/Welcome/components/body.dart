@@ -14,61 +14,67 @@ class Body extends StatelessWidget {
   Widget build(BuildContext context) {
     MySharedPreferences _mySharedPreferences = sl<MySharedPreferences>();
 
-    Size size = MediaQuery.of(context).size;
-    // This size provide us total height and width of our screen
+    double height;
+    double width;
+    height = MediaQuery.of(context).size.height;
+    width = MediaQuery.of(context).size.width;
     return OrientationBuilder(builder: (context, orientation) {
-      return Background(
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text(
-                "WELCOME TO FIX IT",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15.0),
-              ),
-              SizedBox(height: size.height * 0.02),
-              SizedBox(
-                width: size.width * 0.95,
-                child: Image.asset("assets/images/chat01.png"),
-              ),
-              SizedBox(height: size.height * 0.02),
-              RoundedButton(
-                text: "START",
-                press: () {
-                  if (_mySharedPreferences.isLogedIn) {
-                    if (_mySharedPreferences.getUserType == Constants.user) {
-                      Navigator.of(context).pushNamed('/userhome');
+      return Container(
+        height: height,
+        width: width,
+        child: Background(
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  "WELCOME TO FIX IT",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15.0),
+                ),
+                SizedBox(height: height * 0.02),
+                SizedBox(
+                  height: height * 0.85,
+                  child: Image.asset("assets/images/chat01.png"),
+                ),
+                SizedBox(height: height * 0.02),
+                RoundedButton(
+                  text: "START",
+                  press: () {
+                    if (_mySharedPreferences.isLogedIn) {
+                      if (_mySharedPreferences.getUserType == Constants.user) {
+                        Navigator.of(context).pushNamed('/userhome');
+                      } else {
+                        Navigator.of(context).pushNamed('/employeehome');
+                      }
                     } else {
-                      Navigator.of(context).pushNamed('/employeehome');
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return LoginScreen();
+                          },
+                        ),
+                      );
                     }
-                  } else {
+                  },
+                ),
+                /*RoundedButton(
+                  text: "SIGN UP",
+                  color: kPrimaryLightColor,
+                  textColor: Colors.black,
+                  press: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) {
-                          return LoginScreen();
+                          return SignUpScreen();
                         },
                       ),
                     );
-                  }
-                },
-              ),
-              /*RoundedButton(
-                text: "SIGN UP",
-                color: kPrimaryLightColor,
-                textColor: Colors.black,
-                press: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return SignUpScreen();
-                      },
-                    ),
-                  );
-                },
-              ),*/
-            ],
+                  },
+                ),*/
+              ],
+            ),
           ),
         ),
       );

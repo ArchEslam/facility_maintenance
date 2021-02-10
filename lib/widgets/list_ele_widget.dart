@@ -3,6 +3,7 @@ import 'package:facility_maintenance/data/repositories/shared_preferences.dart';
 import 'package:facility_maintenance/model/ele.dart';
 import 'package:facility_maintenance/model/fcm_notification_model.dart';
 import 'package:facility_maintenance/model/user.dart';
+import 'package:facility_maintenance/utils/date_reformate.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -147,7 +148,7 @@ class _ListELEWidgettState extends State<ListELEWidget> {
                               children: [
                                 Container(
                                   alignment: Alignment.topLeft,
-                                  width: container_item_text_width / 1.1,
+                                  width: container_item_text_width / 1.3,
                                   child: Text(
                                       //ele.customer,
                                       ele.customer ?? "",
@@ -156,10 +157,10 @@ class _ListELEWidgettState extends State<ListELEWidget> {
                                           .headline6),
                                 ),
                                 Container(
-                                  width: container_item_text_width / 1.1,
+                                  width: container_item_text_width / 1.3,
                                   alignment: Alignment.topLeft,
                                   // width: _container_item_height,
-                                  child: Text(ele.date ?? "",
+                                  child: Text(DateReformat.reformatYMD(ele.date) ?? "",
                                       style:
                                           Theme.of(context).textTheme.subtitle1
                                       //ele.description,

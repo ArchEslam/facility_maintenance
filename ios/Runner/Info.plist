@@ -40,7 +40,7 @@
 	<key>NSCalendarsUsageDescription</key>
 	<string>Calendars</string>
 	<key>NSCameraUsageDescription</key>
-	<string>Take a picture to send to database</string>
+	<string>If you do not allow camera usage, Facility maintenance app not be able to capture photo, Please allow Facility maintenance app to camera usage to capture photo of the malfunction and send it with the request so that we can know the malfunction more accurately</string>
 	<key>NSContactsUsageDescription</key>
 	<string>To make call phone </string>
 	<key>NSLocationAlwaysUsageDescription</key>
@@ -49,10 +49,8 @@
 	<string>To facilitate access to application services on the map to enable the addition of home and work addresses and to determine the closest services provided.</string>
 	<key>NSMotionUsageDescription</key>
 	<string>motion</string>
-	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>Get his photos from the gallery to be sent to the database</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Get his photos from the gallery to be sent to the database</string>
+	<string>If you do not allow photo library usage, Facility maintenance app not be able to use photo library,Please allow Facility maintenance app photo library usage to choose a picture from one of the malfunctions that you have been captured to send this malfunction's image with the request so that we can know the malfunction more accurately</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
 	<string>speech</string>
 	<key>UILaunchStoryboardName</key>

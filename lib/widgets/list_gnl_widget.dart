@@ -3,6 +3,7 @@ import 'package:facility_maintenance/data/repositories/shared_preferences.dart';
 import 'package:facility_maintenance/model/fcm_notification_model.dart';
 import 'package:facility_maintenance/model/gnl.dart';
 import 'package:facility_maintenance/model/user.dart';
+import 'package:facility_maintenance/utils/date_reformate.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -146,7 +147,7 @@ class _ListGNLWidgettState extends State<ListGNLWidget> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Container(
-                                  width: container_item_text_width / 1.1,
+                                  width: container_item_text_width / 1.3,
                                   alignment: Alignment.topLeft,
                                   child: Text(
                                       //gnl.customer,
@@ -156,10 +157,10 @@ class _ListGNLWidgettState extends State<ListGNLWidget> {
                                           .headline6),
                                 ),
                                 Container(
-                                  width: container_item_text_width / 1.1,
+                                  width: container_item_text_width / 1.3,
                                   alignment: Alignment.topLeft,
                                   // width: _container_item_height,
-                                  child: Text(gnl.date ?? "",
+                                  child: Text(DateReformat.reformatYMD(gnl.date) ?? "",
                                       style:
                                           Theme.of(context).textTheme.subtitle1
                                       //gnl.description,
